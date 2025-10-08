@@ -6,11 +6,13 @@ import usjrLogo from '../../assets/universities/usjr-logo.png'
 import phoneMockup from '../../assets/illustrations/phone-mockup.png'
 import Footer from '../../components/common/Footer'
 import Steps from '../../components/tenant/Steps'
+import Navbar from '../../components/common/Navbar'
 
 export default function TenantLanding() {
   return (
     <div class = "flex flex-col">
-
+        {/* NAVBAR */}
+        <Navbar userType="tenant" />
         {/* TENANT HERO SECTION */}
         <section class="relative min-h-[100vh] flex items-center justify-center px-4 overflow-hidden bg-gradient-to-bl from-[#FFF1EB] to-[#FFFDFA]">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-10 relative z-20 ">
