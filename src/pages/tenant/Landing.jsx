@@ -4,6 +4,8 @@ import ucLogo from '../../assets/universities/uc-logo.png'
 import uscLogo from '../../assets/universities/usc-logo.png'
 import usjrLogo from '../../assets/universities/usjr-logo.png'
 import phoneMockup from '../../assets/illustrations/phone-mockup.png'
+import Footer from '../../components/common/Footer'
+import Steps from '../../components/tenant/Steps'
 
 export default function TenantLanding() {
   return (
@@ -97,7 +99,7 @@ export default function TenantLanding() {
                 </div>
 
                 <div class = "md:text-6xl text-5xl text-[30px] font-bold text-[var(--text-title)] text-center leading-20 my-8">
-                    Why Students Choose Arinda
+                    Why Students Choose <span class = "bg-[#ffeae0] px-2 text-[#F35E27]">Arinda</span>
                 </div>
 
                 <div class =" max-w-[750px] md:text-[20px] text-center flex text-[#666666]">Everything you need to find safe, affordable housing in a new city.</div>
@@ -148,59 +150,20 @@ export default function TenantLanding() {
                 </div>
 
                 <div class = "md:text-6xl text-5xl text-[30px] font-bold text-[var(--text-title)] text-center leading-20 my-8">
-                    How Arinda Works
+                    How <span class = "bg-[#ffeae0] px-2 text-[#F35E27]">Arinda</span> Works
                 </div>
 
                 <div class =" max-w-[750px] md:text-[20px] text-center flex text-[#666666]">
                     Everything you need to find safe, affordable housing in a new city
                 </div>
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-10 relative z-20 ">
-                 <div class = "grid grid-cols-1 md:grid-cols-2 gap-32 items-start">
-                    <div className="hidden md:block">
-                        <div className="bg-white border border-black rounded w-full h-110">
-                           
-                        </div>
-                    </div>
+                
                 <div class="pt-2">
 
-                <div class="flex relative">
-                    <ol class="relative border-s-2 border-dashed border-[#F35E27] text-gray-700">
-
-                    <li class="mb-10 ms-6 relative">
-                        <span class="absolute flex items-center justify-center w-10 h-10 bg-[#F35E27] text-white font-bold rounded-full -start-5 ring-4 ring-white">
-                        1
-                        </span>
-                        <h3 class="text-lg font-semibold text-gray-900">Search & Filter</h3>
-                        <p class="text-gray-600 mt-1">
-                        Use our advanced search tools to find properties that match your budget, preferences, and school location.
-                        </p>
-                    </li>
-
-
-                    <li class="mb-10 ms-6 relative">
-                        <span class="absolute flex items-center justify-center w-10 h-10 bg-[#F35E27] text-white font-bold rounded-full -start-5 ring-4 ring-white">
-                        2
-                        </span>
-                        <h3 class="text-lg font-semibold text-gray-900">Connect & Review</h3>
-                        <p class="text-gray-600 mt-1">
-                        Read student reviews, view detailed photos, and message landlords directly to get all your questions answered.
-                        </p>
-                    </li>
-
-                    <li class="ms-6 relative">
-                        <span class="absolute flex items-center justify-center w-10 h-10 bg-[#F35E27] text-white font-bold rounded-full -start-5 ring-4 ring-white">
-                        3
-                        </span>
-                        <h3 class="text-lg font-semibold text-gray-900">Book Securely</h3>
-                        <p class="text-gray-600 mt-1">
-                        Complete your booking with confidence through our secure platform and receive all necessary documentation.
-                        </p>
-                    </li>
-                    </ol>
-                </div>
+                <Steps/>
                 </div>
 
-            </div>
+         
 
                     
                 </div>
@@ -258,7 +221,7 @@ export default function TenantLanding() {
 
                 <div class = "relative mx-auto items-center justify-center flex flex-col text-center py-8">
                     <div class = "border border-[#FFF5F2] rounded-full w-fit my-4 px-4 py-1 text-[#FFEBE4] font-medium text-[12px] bg-white/20">
-                        <i class="fa-solid fa-graduation-cap pr-3"></i>
+                        <i class="fa-solid fa-road pr-3"></i>
                             Begin Here
                     </div>
 
@@ -268,7 +231,7 @@ export default function TenantLanding() {
 
                     <div class =" text-center flex text-white md:text-[20px]">Join thousands of students who have found safe, affordable housing through Arinda</div>
 
-                    <div class = "flex flex-col md:flex-row font-semibold gap-8 items-center my-8">
+                    <div class = "flex flex-col md:flex-row font-semibold gap-8 items-center my-12">
                   
                             <button class ="bg-[white] rounded-[6px] px-6 py-3 text-[#F35E27] cursor-pointer shadow-xl">
                                 <i class="fa-solid fa-magnifying-glass-location pr-3"></i>
@@ -286,7 +249,7 @@ export default function TenantLanding() {
                 </div>
         </section>
         <div class = "relative h-5 bg-gradient-to-b from-[#ff792b] to-[#F6F9FC] max-w-screen overflow-hidden"></div>
-        
+        <Footer/>
     </div>
   )
 }
