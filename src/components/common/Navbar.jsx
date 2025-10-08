@@ -38,11 +38,14 @@ const Navbar = ({ userType }) => {
           ) : (
             <li><a href="/tenant" className="hover:text-[#F35E27] transition-colors">For Tenants</a></li>
           )}
-          <li>
-            <a href="/signup" className="font-semibold bg-gradient-to-r text-white p-3 rounded-full px-6 from-[#F35E27] to-[#ff8f4e] hover:opacity-90 transition-opacity">
-              Get Started
-            </a>
-          </li>
+
+          {userType === 'tenant' ? (
+            <li><a href="/tenant/login" className="font-semibold bg-gradient-to-r text-white p-3 rounded-full px-6 from-[#F35E27] to-[#ff8f4e] hover:opacity-90 transition-opacity">Get Started</a></li>
+          ) : (
+            <li><a href="/landlord/login" className="font-semibold bg-gradient-to-r text-white p-3 rounded-full px-6 from-[#F35E27] to-[#ff8f4e] hover:opacity-90 transition-opacity">Get Started</a></li>
+          )}
+          
+          
         </ul>
 
         {/* Mobile hamburger */}
