@@ -1,14 +1,15 @@
 import overviewMockUp from '../../assets/illustrations/phone-mockup-1.png'
 import messageMockUp from '../../assets/illustrations/phone-mockup-2.png'
 import rentalMockUp from '../../assets/illustrations/phone-mockup-3.png'
-
 import Footer from '../../components/common/Footer'
 import Steps from '../../components/landlord/Steps'
-
+import Navbar from '../../components/common/Navbar'
 export default function LandlordLanding() {
   return (
+    
       <div class = "flex flex-col">
-  
+        {/* NAVBAR */}
+        <Navbar userType="landlord" />
           {/* TENANT HERO SECTION */}
           <section class="relative min-h-[100vh] flex items-center justify-center px-4 overflow-hidden bg-gradient-to-bl from-[#FFF1EB] to-[#FFFDFA]">
               <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-10 relative z-20 ">
