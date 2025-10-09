@@ -40,7 +40,7 @@ const LoginForm = ({ userType = 'tenant' }) => {
 
           <i
             onClick={togglePasswordVisibility}
-            className="fa-solid fa-eye absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer"
+            className={`fa-solid ${showPassword ? 'fa-eye-slash' : 'fa-eye'} absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer transition-colors`}
           ></i>
         </div>
       </div>
@@ -78,10 +78,6 @@ const LoginForm = ({ userType = 'tenant' }) => {
             Continue with Google
         </button>
 
-        <button type="submit" class="font-semibold w-full py-3 text-[14px] bg-white border-[#989494] border text-black rounded flex items-center justify-center relative">
-            <i className="fa-brands fa-facebook absolute left-4 text-[#DD4912]"></i>
-            Continue with Facebook
-        </button>
 
 
         

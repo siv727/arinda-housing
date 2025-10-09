@@ -31,7 +31,11 @@ const Navbar = ({ userType }) => {
 
         {/* Desktop links */}
         <ul className="hidden md:flex items-center space-x-8">
-          <li><a href="/" className="hover:text-[#F35E27] transition-colors">Home</a></li>
+          {userType === 'tenant' ? (
+            <li><a href="/" className="hover:text-[#F35E27] transition-colors">Home</a></li>
+          ) : (
+            <li><a href="/landlord" className="hover:text-[#F35E27] transition-colors">Home</a></li>
+          )}
           <li><a href="/about" className="hover:text-[#F35E27] transition-colors">About</a></li>
           {userType === 'tenant' ? (
             <li><a href="/landlord" className="hover:text-[#F35E27] transition-colors">For Landlords</a></li>
