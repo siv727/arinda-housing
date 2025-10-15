@@ -30,7 +30,7 @@ export default function TenantLanding() {
                            Skip the door-to-door search. Discover verified, safe, and affordable rentals designed specifically for students moving to new cities.
                         </p>
 
-                        <a href="{% url 'register' %}">
+                        <a href="/tenant/register">
                             <button class="flex items-center justify-center cursor-pointer gap-2 bg-gradient-to-r from-[#F35E27] to-[#ff792b] w-full text-white p-4 rounded-[6px] text-[18px] font-semibold hover:bg-[#892728] transition shadow-lg">
                                 <i class="fa-solid fa-flag-checkered"></i>
                                 <span>Start Your Search</span>
