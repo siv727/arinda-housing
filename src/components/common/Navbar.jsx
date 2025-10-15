@@ -19,7 +19,7 @@ const Navbar = ({ userType }) => {
   }, [])
 
   return (
-    <nav className={`fixed top-0 left-0 w-full z-50 border-b transition-all  ${
+    <nav className={`fixed w-full z-50 border-b transition-all  ${
       scrolled 
         ? 'border-gray-300 bg-white/90 backdrop-blur-md' 
         : 'border-transparent bg-transparent'
