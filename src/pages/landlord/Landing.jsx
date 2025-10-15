@@ -11,7 +11,7 @@ export default function LandlordLanding() {
       <Navbar userType="landlord" />
       <div class="flex flex-col">
         {/* TENANT HERO SECTION */}
-        <section class="relative min-h-[100vh] flex items-center justify-center px-4 overflow-hidden bg-gradient-to-bl from-[#FFF1EB] to-[#FFFDFA]">
+        <section class="relative min-h-[100vh] flex items-center justify-center pt-25 px-4 overflow-hidden bg-gradient-to-bl from-[#FFF1EB] to-[#FFFDFA]">
           <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-10 relative z-20 ">
             <div class="text-center m-5 mx-auto absolute -top-24 inset-x-0 border-[1.5px] border-[#EAD1C7] rounded-full w-fit px-4 py-1 text-[#45352E] font-medium text-[12px] bg-white/10">
               <i class="fa-regular fa-comments-dollar pr-3"></i>
