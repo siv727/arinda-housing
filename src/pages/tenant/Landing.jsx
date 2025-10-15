@@ -116,11 +116,11 @@ export default function TenantLanding() {
             Everything you need to find safe, affordable housing in a new city.
           </div>
 
-          <flex class="flex flex-col md:flex-row gap-8 justify-center my-12 max-w-[1250px]">
+          <div class="flex flex-col md:flex-row gap-8 justify-center my-12 max-w-[1250px]">
             <div class="flex md:items-center items-start">
               <img src={phoneMockup} alt="cit-u" class="h-96 object-contain" />
             </div>
-          </flex>
+          </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-32 text-center">
             <div class="flex flex-col items-center w-64 gap-y-3">
