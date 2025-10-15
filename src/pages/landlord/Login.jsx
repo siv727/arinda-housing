@@ -16,7 +16,7 @@ const LandlordLogin = () => {
           </h1>
           <p className="text-center mb-6 ">{description}</p>
           <hr></hr>
-          <LoginForm userType="tenant" />
+          <LoginForm userType="landlord" />
           <div class=" text-[14px] text-center text-gray-600 mb-6">
             Don’t have an account?
             <a
