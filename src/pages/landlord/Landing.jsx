@@ -4,6 +4,7 @@ import rentalMockUp from "../../assets/illustrations/phone-mockup-3.png";
 import Footer from "../../components/common/Footer";
 import Steps from "../../components/landlord/Steps";
 import Navbar from "../../components/common/Navbar";
+
 export default function LandlordLanding() {
   return (
     <>
@@ -130,8 +131,8 @@ export default function LandlordLanding() {
         </section>
 
         {/* HOW IT WORKS SECTION */}
-        <section class="flex flex-col items-center justify-center py-20 bg-gradient-to-b from-[#FFFDFA] via-[#FFF1EB] to-[#FFFDFA] relative overflow-hidden">
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-10 relative z-20 "></div>
+        <section class="flex flex-col items-center justify-center py-15 bg-gradient-to-b from-[#FFFDFA] via-[#FFF1EB] to-[#FFFDFA] relative overflow-hidden">
+          {/* <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-10 relative z-20 "></div> */}
           <div class="border border-[#EAD1C7] rounded-full w-fit px-4 py-1 text-[#45352E] font-medium text-[12px]">
             <i class="fa-regular fa-arrow-progress pr-3"></i>
             Simple Process
@@ -146,7 +147,7 @@ export default function LandlordLanding() {
             Everything you need to list, manage, and rent out your properties
             efficiently and securely.
           </div>
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-10 relative z-20 ">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 relative z-20 ">
             <div class="pt-2">
               <Steps />
             </div>
@@ -155,7 +156,7 @@ export default function LandlordLanding() {
 
         {/* PROPERTY OWNERS SECTION */}
         <section class="flex flex-col items-center justify-center py-20 bg-gradient-to-t from-[#FFF1EB] to-[#FFFDFA] relative overflow-hidden">
-          <div class="border border-[#EAD1C7] rounded-full w-fit px-4 py-1 text-[#45352E] font-medium text-[12px]">
+          <div class="border border-[#EAD1C7] rounded-full w-fit px-4  text-[#45352E] font-medium text-[12px]">
             <i class="fa-regular fa-mobile pr-3"></i>
             Your Rentals, Simplified
           </div>
