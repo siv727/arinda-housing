@@ -8,7 +8,7 @@ const TenantRegister = () => {
   return (
     <>
       <Navbar userType="landlord" />
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-bl from-[#FFF1EB] to-[#FFFDFA] p-4">
+      <div className="min-h-screen pt-18 flex flex-col items-center justify-center bg-gradient-to-bl from-[#FFF1EB] to-[#FFFDFA] p-4">
         <OrangeHatCard>
           <h1 className="text-3xl font-bold pt-8 py-4 text-center">
             Create an account
