@@ -9,7 +9,7 @@ const LandlordLogin = () => {
   return (
     <>
       <Navbar userType="landlord" />
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-bl from-[#FFF1EB] to-[#FFFDFA]">
+      <div className="min-h-screen flex flex-col pt-12 items-center justify-center bg-gradient-to-bl from-[#FFF1EB] to-[#FFFDFA]">
         <OrangeHatCard>
           <h1 className="text-3xl font-bold pt-8 py-4 text-center">
             Login with your Email
