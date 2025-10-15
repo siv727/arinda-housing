@@ -168,8 +168,8 @@ export default function TenantLanding() {
         </section>
 
         {/* HOW IT WORKS SECTION */}
-        <section class="flex flex-col items-center justify-center py-20 bg-gradient-to-b from-[#FFFDFA] via-[#FFF1EB] to-[#FFFDFA] relative overflow-hidden">
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-10 relative z-20 "></div>
+        <section class="flex flex-col items-center justify-center py-15 bg-gradient-to-b from-[#FFFDFA] via-[#FFF1EB] to-[#FFFDFA] relative overflow-hidden">
+          {/* <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-10 relative z-20 "></div> */}
           <div class="border border-[#EAD1C7] rounded-full w-fit px-4 py-1 text-[#45352E] font-medium text-[12px]">
             <i class="fa-regular fa-hexagon-nodes pr-3"></i>
             Arinda in Action
@@ -183,7 +183,7 @@ export default function TenantLanding() {
           <div class=" max-w-[750px] md:text-[20px] text-center flex text-[#666666]">
             Everything you need to find safe, affordable housing in a new city
           </div>
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-10 relative z-20 ">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 relative z-20 ">
             <div class="pt-2">
               <Steps />
             </div>
@@ -192,7 +192,7 @@ export default function TenantLanding() {
 
         {/* PROPERTY OWNERS SECTION */}
         <section class="flex flex-col items-center justify-center py-20 bg-gradient-to-tr from-[#FFF1EB] to-[#FFFDFA] relative overflow-hidden">
-          <div class="border border-[#EAD1C7] rounded-full w-fit px-4 py-1 text-[#45352E] font-medium text-[12px]">
+          <div class="border border-[#EAD1C7] rounded-full w-fit px-4 text-[#45352E] font-medium text-[12px]">
             <i class="fa-regular fa-filter-list pr-3"></i>
             List With Us
           </div>
