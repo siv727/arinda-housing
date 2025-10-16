@@ -15,11 +15,11 @@ const TenantRegister = () => {
           </h1>
           <p className="text-center mb-6 ">{description}</p>
           <hr></hr>
-          <RegisterForm userType="landlord" />
+          <RegisterForm userType="tenant" />
           <div class=" text-[14px] text-center text-gray-600 mb-6">
             Already have an account?
             <a
-              href="/landlord/login"
+              href="/tenant/login"
               class="text-[#DD4912] hover:underline font-semibold pl-2"
             >
               Sign In
