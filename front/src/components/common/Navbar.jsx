@@ -1,56 +1,75 @@
 import { useState, useEffect } from 'react'
 
 const Navbar = ({ userType }) => {
-  const [open, setOpen] = useState(false)
+   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 0) {
-        setScrolled(true)
-      } else {
-        setScrolled(false)
-      }
+      setScrolled(window.scrollY > 0)
     }
 
     window.addEventListener('scroll', handleScroll)
-    
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Handle smooth scroll animation
+  const handleSmoothScroll = (e, targetId) => {
+    e.preventDefault()
+    const target = document.querySelector(targetId)
+    if (target) {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+      setOpen(false) // close mobile menu after click
+    }
+  }
+
+  
+
   return (
-    <nav className={`fixed w-full z-50 border-b transition-all  ${
+    <nav className={`fixed w-full z-50 border-b transition-all ${
       scrolled 
-        ? 'border-gray-300 bg-white/90 backdrop-blur-md' 
+        ? 'border-gray-300 bg-white/90 backdrop-blur-md'  
         : 'border-transparent bg-transparent'
     }`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between p-5">
+      <div className="max-w-[1350px] mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between p-5">
         <div className="flex items-center gap-4">
           <div className="logo font-bold text-xl text-[#F35E27]">Arinda</div>
         </div>
 
         {/* Desktop links */}
-        <ul className="hidden md:flex items-center space-x-8">
+        <ul className="hidden md:flex items-center space-x-12">
           {userType === 'tenant' ? (
-            <li><a href="/" className="hover:text-[#F35E27] transition-colors">Home</a></li>
+            <li><a href="#home" onClick={(e) => handleSmoothScroll(e, '#home')} className="hover:text-[#F35E27] transition-colors"><i class="fa-regular fa-house pr-2"></i>Home</a></li>
           ) : (
-            <li><a href="/landlord" className="hover:text-[#F35E27] transition-colors">Home</a></li>
+            <li><a href="#home" onClick={(e) => handleSmoothScroll(e, '#home')} className="hover:text-[#F35E27] transition-colors"><i class="fa-regular fa-house pr-2"></i>Home</a></li>
           )}
-          <li><a href="/about" className="hover:text-[#F35E27] transition-colors">About</a></li>
+          <li><a href="#about" onClick={(e) => handleSmoothScroll(e, '#about')} className="hover:text-[#F35E27] transition-colors"><i class="fa-regular fa-lightbulb pr-2"></i>About</a></li>
+          <li><a href="#how-it-works" onClick={(e) => handleSmoothScroll(e, '#how-it-works')} className="hover:text-[#F35E27] transition-colors"><i class="fa-regular fa-list-ol pr-2"></i>How It Works</a></li>
           {userType === 'tenant' ? (
-            <li><a href="/landlord" className="hover:text-[#F35E27] transition-colors">For Landlords</a></li>
+            <li><a href="/landlord" className="hover:text-[#F35E27] transition-colors"><i class="fa-regular fa-user-tie pr-2"></i>For Landlords</a></li>
           ) : (
-            <li><a href="/tenant" className="hover:text-[#F35E27] transition-colors">For Tenants</a></li>
+            <li><a href="/tenant" className="hover:text-[#F35E27] transition-colors"><i class="fa-regular fa-user pr-2"></i>For Tenants</a></li>
           )}
-
-          {userType === 'tenant' ? (
-            <li><a href="/tenant/login" className="font-semibold bg-gradient-to-r text-white p-3 rounded-full px-6 from-[#F35E27] to-[#ff8f4e] hover:opacity-90 transition-opacity">Get Started</a></li>
-          ) : (
-            <li><a href="/landlord/login" className="font-semibold bg-gradient-to-r text-white p-3 rounded-full px-6 from-[#F35E27] to-[#ff8f4e] hover:opacity-90 transition-opacity">Get Started</a></li>
-          )}
+          <li><a href="#download-app" onClick={(e) => handleSmoothScroll(e, '#download-app')} className="hover:text-[#F35E27] transition-colors"><i class="fa-regular fa-mobile pr-2"></i>Download App</a></li>
+  
           
           
         </ul>
+
+        <div className="hidden md:block">
+          {userType === 'tenant' ? (
+            <a href="/tenant/login" className="font-semibold bg-gradient-to-r text-white p-3 rounded-full px-6 from-[#F35E27]  to-[#ff8f4e] hover:opacity-90 transition-opacity">
+              Get Started
+            </a>
+          ) : (
+            <a href="/landlord/login" className="font-semibold bg-gradient-to-r text-white p-3 rounded-full px-6 from-[#F35E27] to-[#ff8f4e] hover:opacity-90 transition-opacity">
+              Get Started
+            </a>
+          )}
+        </div>
 
         {/* Mobile hamburger */}
         <div className="md:hidden">
@@ -74,8 +93,9 @@ const Navbar = ({ userType }) => {
       {/* Mobile menu panel */}
       <div className={`${open ? 'block' : 'hidden'} md:hidden bg-white/30 backdrop-blur-md border-b border-t border-black`}>
         <div className="px-4 pt-4 pb-6 space-y-4">
-          <a href="/" className="block hover:text-[#F35E27] transition-colors">Home</a>
-          <a href="/about" className="block hover:text-[#F35E27] transition-colors">About</a>
+          <a href="#home" className="block hover:text-[#F35E27] transition-colors">Home</a>
+          <a href="#about" className="block hover:text-[#F35E27] transition-colors">About</a>
+          <a href="#how-it-works" className="block hover:text-[#F35E27] transition-colors">How It Works</a>
           {userType === 'tenant' ? (
             <a href="/landlord" className="block hover:text-[#F35E27] transition-colors">For Landlords</a>
           ) : (
