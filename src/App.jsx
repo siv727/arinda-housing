@@ -1,18 +1,31 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import LandlordLanding from './pages/landlord/Landing'
+
+// Tenant pages
 import TenantLanding from './pages/tenant/Landing'
 import TenantLogin from './pages/tenant/Login'
 import TenantRegister from './pages/tenant/Register'
+
+// Landlord pages
+import LandlordLanding from './pages/landlord/Landing'
 import LandlordLogin from './pages/landlord/Login'
 import LandlordRegister from './pages/landlord/Register'
 
+// Landlord dashboard pages
+import LandlordDashboardLayout from './pages/landlord/dashboard/LandlordDashboardLayout'
+import LandlordOverview from './pages/landlord/dashboard/Overview'
+import LandlordBookings from './pages/landlord/dashboard/Bookings'
+import LandlordProperties from './pages/landlord/dashboard/Properties'
+import LandlordTenants from './pages/landlord/dashboard/Tenants'
 
 function App() {
   return (
      <Router>
       <Routes>
+        {/* Default */}
         <Route path="/" element={<Navigate to="/tenant" replace />} />
+
+        {/* Public Landing Pages */}
         <Route path="/landlord" element={<LandlordLanding />} />
         <Route path="/tenant" element={<TenantLanding />} />
 
@@ -21,6 +34,15 @@ function App() {
         <Route path="/tenant/register" element={<TenantRegister />} />
         <Route path="/landlord/login" element={<LandlordLogin />} />
         <Route path="/landlord/register" element={<LandlordRegister />} />
+
+        {/* Landlord dashboard routes */}
+        <Route path="/landlord/dashboard" element={<LandlordDashboardLayout />}>
+          <Route path="" element={<LandlordOverview />} />
+          <Route path="overview" element={<LandlordOverview />} />
+          <Route path="bookings" element={<LandlordBookings />} />
+          <Route path="properties" element={<LandlordProperties />} />
+          <Route path="tenants" element={<LandlordTenants />} />
+        </Route>
       </Routes>
     </Router>
   )
