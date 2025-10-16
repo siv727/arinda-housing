@@ -12,7 +12,7 @@ export default function LandlordLanding() {
       <Navbar userType="landlord" />
       <div class="flex flex-col">
         {/* TENANT HERO SECTION */}
-        <section class="relative min-h-[100vh] flex items-center justify-center pt-25 px-4 overflow-hidden bg-gradient-to-bl from-[#FFF1EB] to-[#FFFDFA]">
+        <section id = "home" class="relative min-h-[100vh] flex items-center justify-center pt-25 px-4 overflow-hidden bg-gradient-to-bl from-[#FFF1EB] to-[#FFFDFA]">
           <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-10 relative z-20 ">
             <div class="text-center m-5 mx-auto absolute -top-24 inset-x-0 border-[1.5px] border-[#EAD1C7] rounded-full w-fit px-4 py-1 text-[#45352E] font-medium text-[12px] bg-white/10">
               <i class="fa-regular fa-comments-dollar pr-3"></i>
@@ -69,7 +69,7 @@ export default function LandlordLanding() {
         </section>
 
         {/* FEATURES SECTION */}
-        <section class="flex flex-col items-center justify-center py-15 bg-[#FFFDFA] relative overflow-hidden">
+        <section id = "about" class="flex flex-col items-center justify-center py-15 bg-[#FFFDFA] relative overflow-hidden">
           <div class="border border-[#EAD1C7] rounded-full w-fit px-4 py-1 text-[#45352E] font-medium text-[12px]">
             <i class="fa-regular fa-face-thinking pr-3"></i>
             Why Choose Arinda
@@ -131,7 +131,7 @@ export default function LandlordLanding() {
         </section>
 
         {/* HOW IT WORKS SECTION */}
-        <section class="flex flex-col items-center justify-center py-15 bg-gradient-to-b from-[#FFFDFA] via-[#FFF1EB] to-[#FFFDFA] relative overflow-hidden">
+        <section id = "how-it-works" class="flex flex-col items-center justify-center py-15 bg-gradient-to-b from-[#FFFDFA] via-[#FFF1EB] to-[#FFFDFA] relative overflow-hidden">
           {/* <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-10 relative z-20 "></div> */}
           <div class="border border-[#EAD1C7] rounded-full w-fit px-4 py-1 text-[#45352E] font-medium text-[12px]">
             <i class="fa-regular fa-arrow-progress pr-3"></i>
@@ -156,7 +156,7 @@ export default function LandlordLanding() {
 
         {/* PROPERTY OWNERS SECTION */}
         <section class="flex flex-col items-center justify-center py-20 bg-gradient-to-t from-[#FFF1EB] to-[#FFFDFA] relative overflow-hidden">
-          <div class="border border-[#EAD1C7] rounded-full w-fit px-4  text-[#45352E] font-medium text-[12px]">
+          <div class="border border-[#EAD1C7] rounded-full w-fit px-4 py-1 text-[#45352E] font-medium text-[12px]">
             <i class="fa-regular fa-mobile pr-3"></i>
             Your Rentals, Simplified
           </div>
@@ -214,7 +214,7 @@ export default function LandlordLanding() {
         </section>
 
         {/* FINAL SELECTION */}
-        <section class="relative ">
+        <section class="relative" id = "download-app">
           <div class="bg-gradient-to-b from-[#F35E27] to-[#ff792b] transform -skew-y-2 absolute -top-4 -bottom-10 inset-0 "></div>
 
           <div class="relative mx-auto items-center justify-center flex flex-col text-center py-8">
