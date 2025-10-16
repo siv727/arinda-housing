@@ -1,47 +1,31 @@
-export default function Tenants(){
-    return (
-        <div className="p-6 space-y-6">
-            <h1 className="text-3xl font-bold text-gray-800">Tenants Management</h1>
-            <p className="text-gray-600">Manage tenant information and lease agreements.</p>
+export default function Tenants() {
+  return (
+    <div className="p-6 space-y-6">
+      <h1 className="text-3xl font-bold text-gray-800">Tenants Management</h1>
+      <p className="text-gray-600">
+        Manage tenant information and lease agreements.
+      </p>
 
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-white rounded-2xl shadow p-5">
-                    <h2 className="text-sm text-gray-500">Total Properties</h2>
-                    <p className="text-3xl font-semibold mt-1">8</p>
-                </div>
-                <div className="bg-white rounded-2xl shadow p-5">
-                    <h2 className="text-sm text-gray-500">Active Bookings</h2>
-                    <p className="text-3xl font-semibold mt-1">12</p>
-                </div>
-                <div className="bg-white rounded-2xl shadow p-5">
-                    <h2 className="text-sm text-gray-500">Pending Requests</h2>
-                    <p className="text-3xl font-semibold mt-1">3</p>
-                </div>
-                <div className="bg-white rounded-2xl shadow p-5">
-                    <h2 className="text-sm text-gray-500">Monthly Earnings</h2>
-                    <p className="text-3xl font-semibold mt-1">₱42,500</p>
-                </div>
-            </div>
+      <form method="POST">
+        <div className="flex space-x-2">
+          <div className="relative flex-grow">
+            <i className="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            <input
+              type="text"
+              name="search"
+              placeholder="Search tenants"
+              className="w-full border rounded-full border-gray-300 bg-white pl-11 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-400"
+            />
+          </div>
 
-            
-            <div className="bg-white rounded-2xl shadow p-6">
-                <h2 className="text-xl font-semibold mb-4 text-gray-800">Recent Bookings</h2>
-                <ul className="divide-y divide-gray-200">
-                    <li className="py-3 flex justify-between">
-                        <span className="text-gray-700">John Cruz - Unit 301</span>
-                        <span className="text-gray-500 text-sm">2 days ago</span>
-                    </li>
-                    <li className="py-3 flex justify-between">
-                        <span className="text-gray-700">Anna Santos - Studio B</span>
-                        <span className="text-gray-500 text-sm">5 days ago</span>
-                    </li>
-                    <li className="py-3 flex justify-between">
-                        <span className="text-gray-700">Mark Tan - Room 204</span>
-                        <span className="text-gray-500 text-sm">1 week ago</span>
-                    </li>
-                </ul>
-            </div>
+          <button
+            type="submit"
+            className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition"
+          >
+            Search
+          </button>
         </div>
-    );
+      </form>
+    </div>
+  );
 }
