@@ -12,6 +12,7 @@ import java.util.List;
 
 public class Student extends User {
     // The 'id' is inherited from User
+
     @Column(nullable = false)
     private String firstName;
 
