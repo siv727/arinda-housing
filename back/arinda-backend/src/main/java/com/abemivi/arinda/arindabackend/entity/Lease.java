@@ -13,6 +13,10 @@ public class Lease {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToOne
+    @JoinColumn(name="student_id")
+    private Student student;
     private LocalDate startDate;
     private LocalDate endDate;
     @Column(name = "document_url")
