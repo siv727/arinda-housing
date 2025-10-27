@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -32,9 +34,14 @@ public class Listing {
     @OneToMany
     private List<Review> reviews;
 
-    @OneToMany
+    @OneToMany(mappedBy = "listing")
     private List<Application> applications;
 
     @ManyToMany
+    @JoinTable(
+            name = "listing_amenity",
+            joinColumns = @JoinColumn(name = "listing_id"),
+            inverseJoinColumns = @JoinColumn(name = "amenity_id")
+    )
     private Set<Amenity> amenities;
 }
