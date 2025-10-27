@@ -24,4 +24,8 @@ public class Review {
     @JoinColumn(name = "listing_id", nullable = false) // Creates the 'listing_id' column
     private Listing listing;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id") // optional: explicit FK column name
+    private Student student;
+
 }
