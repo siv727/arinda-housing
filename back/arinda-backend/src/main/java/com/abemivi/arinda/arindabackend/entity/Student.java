@@ -26,6 +26,6 @@ public class Student extends User {
     @OneToMany(mappedBy = "student")
     private List<Review> reviews;
 
-    @OneToOne(mappedBy = "student") // Assuming Lease links to Student
+    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL) // Assuming Lease links to Student
     private Lease lease;
 }
