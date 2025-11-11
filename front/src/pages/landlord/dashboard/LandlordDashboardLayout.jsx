@@ -8,7 +8,7 @@ function LandlordDashboardLayout() {
         <LandlordNavbar />
 
         {/* Page content stuff */}
-        <main className="flex-1  mx-auto px-[50px] w-full pt-20 ">
+        <main className="flex-1  mx-auto px-6 2xl:px-[50px] w-full pt-20 ">
           <Outlet /> {/* This is where child pages (Overview, Bookings, etc.) show up */}
         </main>
       </div>

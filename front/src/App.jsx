@@ -17,6 +17,7 @@ import LandlordOverview from './pages/landlord/dashboard/Overview'
 import LandlordBookings from './pages/landlord/dashboard/Bookings'
 import LandlordProperties from './pages/landlord/dashboard/Properties'
 import LandlordTenants from './pages/landlord/dashboard/Tenants'
+import AddPropertyPage from './pages/landlord/dashboard/AddProperty'
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
           <Route path="overview" element={<LandlordOverview />} />
           <Route path="bookings" element={<LandlordBookings />} />
           <Route path="properties" element={<LandlordProperties />} />
+          <Route path="properties/add" element={<AddPropertyPage />} />
           <Route path="tenants" element={<LandlordTenants />} />
         </Route>
       </Routes>

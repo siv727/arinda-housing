@@ -42,18 +42,18 @@ const Navbar = ({ userType }) => {
         {/* Desktop links */}
         <ul className="hidden md:flex items-center space-x-12 text-sm">
           {userType === 'tenant' ? (
-            <li><a href="#home" onClick={(e) => handleSmoothScroll(e, '#home')} className="hover:text-[#F35E27] transition-colors"><i class="fa-regular fa-house pr-2"></i>Home</a></li>
+            <li><a href="#home" onClick={(e) => handleSmoothScroll(e, '#home')} className="hover:text-[#F35E27] transition-colors"><i className="fa-regular fa-house pr-2"></i>Home</a></li>
           ) : (
-            <li><a href="#home" onClick={(e) => handleSmoothScroll(e, '#home')} className="hover:text-[#F35E27] transition-colors"><i class="fa-regular fa-house pr-2"></i>Home</a></li>
+            <li><a href="#home" onClick={(e) => handleSmoothScroll(e, '#home')} className="hover:text-[#F35E27] transition-colors"><i className="fa-regular fa-house pr-2"></i>Home</a></li>
           )}
-          <li><a href="#about" onClick={(e) => handleSmoothScroll(e, '#about')} className="hover:text-[#F35E27] transition-colors"><i class="fa-regular fa-lightbulb pr-2"></i>About</a></li>
-          <li><a href="#how-it-works" onClick={(e) => handleSmoothScroll(e, '#how-it-works')} className="hover:text-[#F35E27] transition-colors"><i class="fa-regular fa-list-ol pr-2"></i>How It Works</a></li>
+          <li><a href="#about" onClick={(e) => handleSmoothScroll(e, '#about')} className="hover:text-[#F35E27] transition-colors"><i className="fa-regular fa-lightbulb pr-2"></i>About</a></li>
+          <li><a href="#how-it-works" onClick={(e) => handleSmoothScroll(e, '#how-it-works')} className="hover:text-[#F35E27] transition-colors"><i className="fa-regular fa-list-ol pr-2"></i>How It Works</a></li>
           {userType === 'tenant' ? (
-            <li><a href="/landlord" className="hover:text-[#F35E27] transition-colors"><i class="fa-regular fa-user-tie pr-2"></i>For Landlords</a></li>
+            <li><a href="/landlord" className="hover:text-[#F35E27] transition-colors"><i className="fa-regular fa-user-tie pr-2"></i>For Landlords</a></li>
           ) : (
-            <li><a href="/tenant" className="hover:text-[#F35E27] transition-colors"><i class="fa-regular fa-user pr-2"></i>For Tenants</a></li>
+            <li><a href="/tenant" className="hover:text-[#F35E27] transition-colors"><i className="fa-regular fa-user pr-2"></i>For Tenants</a></li>
           )}
-          <li><a href="#download-app" onClick={(e) => handleSmoothScroll(e, '#download-app')} className="hover:text-[#F35E27] transition-colors"><i class="fa-regular fa-mobile pr-2"></i>Download App</a></li>
+          <li><a href="#download-app" onClick={(e) => handleSmoothScroll(e, '#download-app')} className="hover:text-[#F35E27] transition-colors"><i className="fa-regular fa-mobile pr-2"></i>Download App</a></li>
   
           
           
