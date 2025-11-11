@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react'
 import ProfileMenuToggle from '../common/ProfileMenuToggle'
 import NotificationBell from '../common/NotificationBell'
 
+// eslint-disable-next-line no-unused-vars
 const Navbar = ({ userType }) => {
+  // eslint-disable-next-line no-unused-vars
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
