@@ -2,22 +2,24 @@ package com.abemivi.arinda.arindabackend.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import java.util.Collection;
 import java.util.List;
 
-@Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "students")
-@DiscriminatorValue("ROLE_STUDENT")
-
+@Data
+@DiscriminatorValue("STUDENT")
 public class Student extends User {
-    // The 'id' is inherited from User
+    private String school;
+    private String studentid;
 
-    @Column(nullable = false)
-    private String firstName;
-
-    @Column(nullable = false)
-    private String lastName;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // This defines the "role" for this user.
+        return List.of(new SimpleGrantedAuthority("ROLE_STUDENT"));
+    }
 
     // --- Relationships ---
     @OneToMany(mappedBy = "student")
@@ -25,7 +27,4 @@ public class Student extends User {
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<Review> reviews;
-
-    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL) // Assuming Lease links to Student
-    private Lease lease;
 }

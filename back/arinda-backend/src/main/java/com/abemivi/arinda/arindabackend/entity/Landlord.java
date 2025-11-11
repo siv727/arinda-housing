@@ -3,26 +3,23 @@ package com.abemivi.arinda.arindabackend.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.Collection;
 import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "landlords")
-@DiscriminatorValue("ROLE_LANDLORD")
+@DiscriminatorValue("LANDLORD")
 public class Landlord extends User {
-    // The 'id' is inherited from User
 
-    @Column(nullable = false)
-    private String firstName;
-
-    @Column(nullable = false)
-    private String lastName;
-
-    private String contactPhone;
-
-    @Lob // For longer text
-    private String profileInfo;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // This defines the "role" for this user.
+        return List.of(new SimpleGrantedAuthority("ROLE_LANDLORD"));
+    }
 
     // --- Relationships ---
 

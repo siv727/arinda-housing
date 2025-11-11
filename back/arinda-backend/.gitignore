@@ -14,10 +14,14 @@ target/
 .sts4-cache
 
 ### IntelliJ IDEA ###
+.idea/
 .idea
 *.iws
 *.iml
 *.ipr
+
+# Maven
+.mvn/
 
 ### NetBeans ###
 /nbproject/private/
@@ -31,3 +35,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+back/arinda-backend/src/main/resources/application.properties
+/src/main/resources/application.properties
