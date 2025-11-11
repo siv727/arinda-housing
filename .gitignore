@@ -15,6 +15,7 @@ front/dist/
 front/dist-ssr/
 front/*.local
 front/.vite/
+.vite/
 front/.cache/
 
 # Editor directories and files (frontend)
@@ -38,11 +39,9 @@ back/arinda-backend/.settings
 back/arinda-backend/.springBeans
 back/arinda-backend/.sts4-cache
 
-### IntelliJ IDEA (from various .gitignore files)
-# Ignore any IntelliJ project metadata repository-wide. If you intend to share
-# specific config files, add exceptions intentionally.
+### IntelliJ IDEA
 .idea/
-# Keep legacy patterns (from module-level gitignore)
+.idea
 *.iws
 *.iml
 *.ipr
