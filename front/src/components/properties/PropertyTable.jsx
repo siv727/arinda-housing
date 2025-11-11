@@ -9,12 +9,12 @@ const StatusBadge = ({ status }) => (
   </span>
 )
 
-const PropertyTable = ({ properties }) => {
+const PropertyTable = ({ properties, onRowClick = () => {} }) => {
   return (
     <div className="w-full overflow-auto bg-white border border-[#EAD1C7] rounded-lg">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-white">
-          <tr class = "text-sm">
+          <tr className="text-sm">
             <th className="px-6 py-3 text-left  font-semibold text-gray-500 ">Property</th>
             <th className="px-6 py-3 text-left  font-semibold text-gray-500 ">Type</th>
             <th className="px-6 py-3 text-left  font-semibold text-gray-500">Location</th>
@@ -24,7 +24,7 @@ const PropertyTable = ({ properties }) => {
         </thead>
         <tbody className="bg-white divide-y divide-gray-100">
           {properties.map((property, idx) => (
-            <tr key={idx} className="hover:bg-gray-50 transition-colors">
+            <tr key={idx} className="hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => onRowClick(property)}>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="flex items-center gap-4">
                   <div className="w-20 h-14 rounded-md overflow-hidden bg-gray-100 flex-shrink-0">

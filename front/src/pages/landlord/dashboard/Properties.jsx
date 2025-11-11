@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import PropertyGrid from '@/components/properties/PropertyGrid'
 import PropertyTable from '@/components/properties/PropertyTable'
+import PropertyDialog from '@/components/properties/PropertyDialog'
 import { useNavigate } from 'react-router-dom'
 
 export default function Properties() {
@@ -61,6 +62,8 @@ export default function Properties() {
   const [sortBy, setSortBy] = useState("Latest");
   const [isGridView, setIsGridView] = useState(true)
   const [isFading, setIsFading] = useState(false)
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [selectedProperty, setSelectedProperty] = useState(null)
   const navigate = useNavigate()
 
   const handleToggleView = (targetIsGrid) => {
@@ -86,7 +89,7 @@ export default function Properties() {
         </div>
 
         {/* Add Property + View Toggle */}
-        <div className="flex flex-row items-center justify-center gap-2">
+        <div className="flex flex-row items-center justify-center gap-2 ">
             {/* Single view toggle button (shows the other view's icon) */}
             <button
               onClick={() => handleToggleView(!isGridView)}
@@ -134,12 +137,15 @@ export default function Properties() {
       {/* Properties Section (with fade animation on toggle) */}
       <div className={`transition-all duration-200 ${isFading ? 'opacity-0 ' : 'opacity-100'}`}>
         {isGridView ? (
-          <PropertyGrid properties={properties} />
+          <PropertyGrid properties={properties} onCardClick={(p) => { setSelectedProperty(p); setDialogOpen(true); }} />
         ) : (
           <div className="mt-2">
-            <PropertyTable properties={properties} />
+            <PropertyTable properties={properties} onRowClick={(p) => { setSelectedProperty(p); setDialogOpen(true); }} />
           </div>
         )}
+        
+        {/* Property details dialog */}
+        <PropertyDialog open={dialogOpen} onOpenChange={setDialogOpen} property={selectedProperty} onEdit={(p) => navigate('/landlord/dashboard/properties/edit')} onRemove={(p) => { console.log('remove', p); setDialogOpen(false); }} />
       </div>
     </div>
   );

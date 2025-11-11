@@ -1,12 +1,13 @@
 import React from 'react'
 
-const PropertyGrid = ({ properties }) => {
+const PropertyGrid = ({ properties, onCardClick = () => {} }) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 transition-all">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 transition-all ">
       {properties.map((property, index) => (
         <div
           key={index}
-          className="w-full overflow-hidden rounded-xl bg-white border border-[#EAD1C7] relative transform hover:-translate-y-1 transition-transform duration-150"
+          className="w-full overflow-hidden rounded-xl bg-white border border-[#EAD1C7] relative transform hover:-translate-y-1 transition-transform duration-150 cursor-pointer"
+          onClick={() => onCardClick(property)}
         >
           <div className="h-64 text-center justify-center flex items-center relative">
             <img
