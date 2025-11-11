@@ -19,16 +19,16 @@ const Navbar = ({ userType }) => {
     <nav
       className={`fixed w-full z-50 border-b transition-all ${
         scrolled
-          ? 'border-gray-300 bg-white/90 backdrop-blur-md'
-          : 'border-transparent bg-transparent'
+          ? 'border-[#EAD1C7] bg-white/90 backdrop-blur-md'
+          : 'border-[#EAD1C7] bg-white'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between p-5">
+      <div className="max-w-[1900px] mx-auto px-12 w-full flex items-center justify-between p-5">
         {/* Left: Logo */}
         <div className="logo font-bold text-xl text-[#F35E27]">Arinda</div>
 
         {/* Center: Links */}
-        <ul className="hidden md:flex items-center space-x-12 absolute left-1/2 -translate-x-1/2">
+        <ul className="hidden md:flex items-center space-x-12 absolute left-1/2 -translate-x-1/2 text-sm">
           <li>
             <a
               href="/landlord/dashboard/overview"
@@ -58,7 +58,7 @@ const Navbar = ({ userType }) => {
               href="/landlord/dashboard/tenants"
               className="hover:text-[#F35E27] transition-colors"
             >
-              <i class="fa-regular fa-people pr-2"></i>Tenants
+              <i class="fa-regular fa-people-pants-simple pr-2"></i>Tenants
             </a>
           </li>
         </ul>
@@ -67,33 +67,7 @@ const Navbar = ({ userType }) => {
         <div className="flex items-center gap-6">
           <NotificationBell />
           <ProfileMenuToggle />
-          <button
-            onClick={() => setOpen(!open)}
-            className="md:hidden p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#F35E27]"
-          >
-            <svg
-              className="h-6 w-6 text-black"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              {open ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
-          </button>
+          
         </div>
       </div>
 

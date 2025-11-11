@@ -31,7 +31,7 @@ const Navbar = ({ userType }) => {
   return (
     <nav className={`fixed w-full z-50 border-b transition-all ${
       scrolled 
-        ? 'border-gray-300 bg-white/90 backdrop-blur-md'  
+        ? 'border-[#EAD1C7] bg-white/90 backdrop-blur-md'  
         : 'border-transparent bg-transparent'
     }`}>
       <div className="max-w-[1350px] mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between p-5">
@@ -40,7 +40,7 @@ const Navbar = ({ userType }) => {
         </div>
 
         {/* Desktop links */}
-        <ul className="hidden md:flex items-center space-x-12">
+        <ul className="hidden md:flex items-center space-x-12 text-sm">
           {userType === 'tenant' ? (
             <li><a href="#home" onClick={(e) => handleSmoothScroll(e, '#home')} className="hover:text-[#F35E27] transition-colors"><i class="fa-regular fa-house pr-2"></i>Home</a></li>
           ) : (
