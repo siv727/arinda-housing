@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import TenantLanding from './pages/tenant/Landing'
 import TenantLogin from './pages/tenant/Login'
 import TenantRegister from './pages/tenant/Register'
+import TenantListings from './pages/tenant/Listings'
 
 // Landlord pages
 import LandlordLanding from './pages/landlord/Landing'
@@ -35,6 +36,9 @@ function App() {
         <Route path="/tenant/register" element={<TenantRegister />} />
         <Route path="/landlord/login" element={<LandlordLogin />} />
         <Route path="/landlord/register" element={<LandlordRegister />} />
+
+        {/* Tenant routes */}
+        <Route path="/tenant/listings" element={<TenantListings />} />
 
         {/* Landlord dashboard routes */}
         <Route path="/landlord/dashboard" element={<LandlordDashboardLayout />}>
