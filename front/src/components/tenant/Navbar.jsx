@@ -32,56 +32,51 @@ const Navbar = () => {
           Arinda
         </a>
 
-        {/* Center: Links */}
-        <ul className="hidden md:flex items-center space-x-12 absolute left-1/2 -translate-x-1/2 text-sm">
-          <li>
-            <a
-              href="/tenant/listings"
-              className="hover:text-[#F35E27] transition-colors"
-            >
-              <i className="fa-regular fa-home pr-2"></i>Listings
-            </a>
-          </li>
-          <li>
-            <a
-              href="/tenant/applications"
-              className="hover:text-[#F35E27] transition-colors"
-            >
-              <i className="fa-regular fa-file-lines pr-2"></i>My Applications
-            </a>
-          </li>
-          <li>
-            <a
-              href="/tenant/profile"
-              className="hover:text-[#F35E27] transition-colors"
-            >
-              <i className="fa-regular fa-user pr-2"></i>Profile
-            </a>
-          </li>
-        </ul>
+        <div className="flex justify-end gap-8">
+          {/* Center: Links */}
+          <ul className="hidden md:flex items-center text-sm gap-5">
+            <li>
+              <a
+                href="/tenant/listings"
+                className="hover:text-[#F35E27] transition-colors"
+              >
+                <i className="fa-regular fa-home pr-2"></i>Listings
+              </a>
+            </li>
+            <li>
+              <a
+                href="/tenant/applications"
+                className="hover:text-[#F35E27] transition-colors"
+              >
+                <i className="fa-regular fa-file-lines pr-2"></i>My Applications
+              </a>
+            </li>
+          </ul>
 
-        {/* Right: Notification & Profile */}
-        <div className="flex items-center gap-6">
-          <NotificationBell />
-          <ProfileMenuToggle />
-          
-          {/* Mobile hamburger */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setOpen(!open)}
-              aria-expanded={open}
-              aria-label={open ? 'Close menu' : 'Open menu'}
-              className="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#F35E27]"
-            >
-              <svg className="h-6 w-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                {open ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
-            </button>
+          {/* Right: Notification & Profile */}
+          <div className="flex items-center gap-6">
+            <NotificationBell />
+            <ProfileMenuToggle />
+            
+            {/* Mobile hamburger */}
+            <div className="md:hidden">
+              <button
+                onClick={() => setOpen(!open)}
+                aria-expanded={open}
+                aria-label={open ? 'Close menu' : 'Open menu'}
+                className="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#F35E27]"
+              >
+                <svg className="h-6 w-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  {open ? (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  ) : (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  )}
+                </svg>
+              </button>
+            </div>
           </div>
+
         </div>
       </div>
 
@@ -103,12 +98,6 @@ const Navbar = () => {
             className="block hover:text-[#F35E27] transition-colors"
           >
             My Applications
-          </a>
-          <a
-            href="/tenant/profile"
-            className="block hover:text-[#F35E27] transition-colors"
-          >
-            Profile
           </a>
         </div>
       </div>
