@@ -64,7 +64,7 @@ const ListingDetail = () => {
                 </span>
                 <span className="flex items-center">
                   <i className="fa-solid fa-star text-yellow-500 mr-1"></i>
-                  {listing.rating} ({listing.reviews} reviews)
+                  {listing.rating} ({listing.reviews?.length || listing.reviewCount || 0} reviews)
                 </span>
               </div>
 
@@ -77,10 +77,12 @@ const ListingDetail = () => {
                   <i className="fa-solid fa-bath mr-2 text-gray-400"></i>
                   {listing.bathrooms} Bathroom{listing.bathrooms > 1 ? 's' : ''}
                 </span>
-                <span className="flex items-center">
-                  <i className="fa-solid fa-ruler-combined mr-2 text-gray-400"></i>
-                  {listing.size} sqm
-                </span>
+                {listing.size && (
+                  <span className="flex items-center">
+                    <i className="fa-solid fa-ruler-combined mr-2 text-gray-400"></i>
+                    {listing.size} sqm
+                  </span>
+                )}
               </div>
             </div>
 

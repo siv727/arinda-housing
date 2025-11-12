@@ -34,11 +34,11 @@ const BookingInfoCard = ({ listing }) => {
       </div>
 
       {/* Availability */}
-      {listing.availability && (
+      {(listing.availability || listing.availableDate) && (
         <div className="mb-4 pb-4 border-b border-gray-200">
           <p className="text-sm text-gray-600">
             <i className="fa-solid fa-calendar-check mr-2 text-orange-500"></i>
-            Available from <span className="font-semibold text-gray-900">{listing.availability}</span>
+            Available from <span className="font-semibold text-gray-900">{listing.availability || listing.availableDate}</span>
           </p>
         </div>
       )}
