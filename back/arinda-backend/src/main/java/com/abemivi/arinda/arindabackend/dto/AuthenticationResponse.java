@@ -1,4 +1,6 @@
 package com.abemivi.arinda.arindabackend.dto;
 
-public record AuthenticationResponse(String token) {
+import com.abemivi.arinda.arindabackend.entity.enums.Role;
+
+public record AuthenticationResponse(String token, Role role) {
 }
