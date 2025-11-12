@@ -1,12 +1,34 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const LoginForm = ({ userType = 'tenant' }) => {
   const [showPassword, setShowPassword] = useState(false)
+  const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     console.log(`Logging in as ${userType}`)
-    // TODO: add authentication logic (API call, form validation)
+
+    const formData = new FormData(e.target)
+    const email = formData.get('email')
+    const password = formData.get('password')
+
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/api/auth/login',
+        {
+          email,
+          password
+        },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+
+      console.log('User logged in successfully:', response.data)
+      response.data.role === 'LANDLORD' ? navigate('/landlord/dashboard') : navigate('/tenant/listings')
+    } catch (error) {
+      console.error('Error logging in:', error.response?.data || error.message)
+    }
   }
 
   const togglePasswordVisibility = () => {
