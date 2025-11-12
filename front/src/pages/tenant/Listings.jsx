@@ -144,16 +144,19 @@ const Listings = () => {
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-sm text-gray-600">Sort by:</span>
-                <select
-                  value={sortBy}
-                  onChange={handleSortChange}
-                  className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F35E27] cursor-pointer"
-                >
-                  <option value="recommended">Recommended</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                  <option value="rating">Highest Rated</option>
-                </select>
+                <div className="relative">
+                  <select
+                    value={sortBy}
+                    onChange={handleSortChange}
+                    className="px-4 py-2 border bg-white border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F35E27] cursor-pointer appearance-none ..."
+                  >
+                    <option value="recommended">Recommended</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="rating">Highest Rated</option>
+                  </select>
+                  <i className="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-800 text-xs"></i>
+                </div>
               </div>
             </div>
 
