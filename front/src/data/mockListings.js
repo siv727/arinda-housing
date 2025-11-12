@@ -28,7 +28,6 @@ export const mockListings = [
       name: "Sarah Dilucca",
       avatar: "https://i.pravatar.cc/150?img=5",
       yearsHosting: 3,
-      isSuperhost: true,
       phone: "+63 912 542 1287",
       email: "landlord@gmail.com"
     },
@@ -90,7 +89,6 @@ export const mockListings = [
       name: "Campus Housing Services",
       avatar: "https://i.pravatar.cc/150?img=20",
       yearsHosting: 5,
-      isSuperhost: false,
       phone: "+63 917 654 3210",
       email: "housing@campus.edu"
     },

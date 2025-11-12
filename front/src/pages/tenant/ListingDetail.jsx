@@ -98,15 +98,7 @@ const ListingDetail = () => {
                   className="w-16 h-16 rounded-full object-cover"
                 />
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-bold text-gray-900 text-lg">Hosted by {listing.host.name}</h3>
-                    {listing.host.isSuperhost && (
-                      <span className="inline-flex items-center px-2 py-1 bg-orange-100 text-orange-800 text-xs font-semibold rounded-full">
-                        <i className="fa-solid fa-award mr-1"></i>
-                        Superhost
-                      </span>
-                    )}
-                  </div>
+                  <h3 className="font-bold text-gray-900 text-lg mb-1">Hosted by {listing.host.name}</h3>
                   <p className="text-sm text-gray-600 mb-3">
                     {listing.host.yearsHosting} year{listing.host.yearsHosting > 1 ? 's' : ''} hosting
                   </p>
