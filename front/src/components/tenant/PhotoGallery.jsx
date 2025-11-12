@@ -79,20 +79,20 @@ const PhotoGallery = ({ images, title }) => {
           {/* Close button */}
           <button
             onClick={closeModal}
-            className="absolute top-4 right-4 text-white text-3xl hover:text-gray-300 z-10"
+            className="absolute top-8 right-12 text-white text-3xl hover:text-gray-300 z-10"
             aria-label="Close gallery"
           >
-            <i className="fa-solid fa-times"></i>
+            <i className="fa-solid fa-times cursor-pointer"></i>
           </button>
 
           {/* Previous button */}
           {images.length > 1 && (
             <button
               onClick={prevImage}
-              className="absolute left-4 text-white text-4xl hover:text-gray-300 z-10"
+              className="absolute left-30 text-white text-4xl hover:text-gray-300 z-10"
               aria-label="Previous image"
             >
-              <i className="fa-solid fa-chevron-left"></i>
+              <i className="fa-solid fa-chevron-left cursor-pointer"></i>
             </button>
           )}
 
@@ -103,7 +103,7 @@ const PhotoGallery = ({ images, title }) => {
               alt={`${title} - ${currentImageIndex + 1}`}
               className="max-w-full max-h-[80vh] object-contain"
             />
-            <p className="text-white mt-4 text-sm">
+            <p className="absolute top-7 text-white text-sm bg-black/50 px-3 py-1 rounded-full">
               {currentImageIndex + 1} / {images.length}
             </p>
           </div>
@@ -112,10 +112,10 @@ const PhotoGallery = ({ images, title }) => {
           {images.length > 1 && (
             <button
               onClick={nextImage}
-              className="absolute right-4 text-white text-4xl hover:text-gray-300 z-10"
+              className="absolute right-30 text-white text-4xl hover:text-gray-300 z-10"
               aria-label="Next image"
             >
-              <i className="fa-solid fa-chevron-right"></i>
+              <i className="fa-solid fa-chevron-right cursor-pointer"></i>
             </button>
           )}
 
