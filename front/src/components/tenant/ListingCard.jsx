@@ -47,7 +47,7 @@ const ListingCard = ({ listing, onFavoriteToggle }) => {
       <div className="p-4">
         {/* Title and Rating */}
         <div className="flex justify-between items-start mb-2">
-          <h3 className="font-semibold text-lg text-gray-800 flex-1 pr-2">
+          <h3 className="font-semibold text-lg text-gray-800 flex-1 pr-2 truncate">
             {listing.title}
           </h3>
           <div className="flex items-center gap-1 text-sm whitespace-nowrap">
