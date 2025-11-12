@@ -50,14 +50,18 @@ const ListingDetail = () => {
               <div className="flex items-start justify-between mb-2">
                 <h1 className="text-3xl font-bold text-gray-900">{listing.title}</h1>
                 {listing.verified && (
-                  <span className="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-sm font-semibold rounded-full">
-                    <i className="fa-solid fa-circle-check mr-2"></i>
+                  <span className="inline-flex items-center px-3 py-1 bg-gradient-to-r from-[#DD4912] to-[#FFA500] text-white text-sm font-semibold rounded-full">
+                    <i className="fa-solid fa-check-circle mr-2"></i>
                     Verified
                   </span>
                 )}
               </div>
               
               <div className="flex items-center gap-4 text-gray-600 mb-4">
+                <span className="flex items-center">
+                  <i className="fa-solid fa-home mr-2 text-gray-500"></i>
+                  {listing.type}
+                </span>
                 <span className="flex items-center">
                   <i className="fa-solid fa-location-dot mr-2 text-orange-500"></i>
                   {listing.location}
