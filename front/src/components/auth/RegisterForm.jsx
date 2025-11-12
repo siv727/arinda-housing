@@ -110,7 +110,7 @@ const RegisterForm = ({ userType = 'tenant' }) => {
 
       <button
         type="submit"
-        className="w-full py-3 text-[14px] bg-gradient-to-r from-[#DD4912] to-[#FFA500] text-white rounded flex items-center justify-center gap-2 group"
+        className="w-full py-3 text-[14px] bg-gradient-to-r from-[#DD4912] to-[#FFA500] text-white rounded flex items-center justify-center gap-2 group cursor-pointer"
       >
         Sign Up
         <i className="fa-solid fa-arrow-right transition-transform duration-200 group-hover:translate-x-2"></i>
