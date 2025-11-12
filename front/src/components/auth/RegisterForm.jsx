@@ -115,19 +115,6 @@ const RegisterForm = ({ userType = 'tenant' }) => {
         Sign Up
         <i className="fa-solid fa-arrow-right transition-transform duration-200 group-hover:translate-x-2"></i>
       </button>
-
-      <div className="flex items-center my-4">
-        <hr className="flex-grow border-t border-gray-300" />
-        <span className="mx-4 text-gray-500 text-[14px]">or sign up with</span>
-        <hr className="flex-grow border-t border-gray-300" />
-      </div>
-
-      <div className="space-y-4">
-        <button className="font-semibold w-full py-3 text-[14px] bg-white border-[#989494] border text-black rounded flex items-center justify-center relative">
-          <i className="fa-brands fa-google absolute left-4 text-[#DD4912]"></i>
-          Continue with Google
-        </button>
-      </div>
     </form>
   )
 }
