@@ -40,12 +40,12 @@ public class AuthController {
         var jwtToken = jwtService.generateToken(user);
 
         // 3. Return the token
-        return ResponseEntity.ok(new AuthenticationResponse(jwtToken));
+        return ResponseEntity.ok(new AuthenticationResponse(jwtToken, user.getRole()));
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        try{
+        try {
             // Check if user already exists
             if (userRepository.findByEmail(request.email()).isPresent()) {
                 return ResponseEntity.status(HttpStatus.CONFLICT)
@@ -90,9 +90,8 @@ public class AuthController {
             var jwtToken = jwtService.generateToken(user);
 
             // 5. Return the token
-            return ResponseEntity.ok(new AuthenticationResponse(jwtToken));
-        }
-        catch (Exception e){
+            return ResponseEntity.ok(new AuthenticationResponse(jwtToken, user.getRole()));
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Registration failed: " + e.getMessage());
