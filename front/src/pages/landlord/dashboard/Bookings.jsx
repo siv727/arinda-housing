@@ -16,11 +16,10 @@ export default function Bookings() {
   return (
     <div className="py-6 2xl:p-6 space-y-6">
       <div className="space-y-4">
+        <h1 className="text-[32px] font-bold">Bookings Management</h1>
         <p className="text-gray-600">Manage all tenant bookings and reservations for your properties.</p>
       </div>
 
-      
-        <h2 className="text-xl font-semibold mb-4 text-gray-800">Recent Bookings</h2>
         <BookingsTable bookings={bookings} onAccept={handleAccept} onReject={handleReject} />
  
     </div>
