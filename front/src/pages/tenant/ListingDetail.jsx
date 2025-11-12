@@ -128,6 +128,28 @@ const ListingDetail = () => {
             {/* Divider */}
             <hr className="border-gray-200" />
 
+            {/* What's Included */}
+            {listing.whatsIncluded && listing.whatsIncluded.length > 0 && (
+              <>
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">What's Included</h2>
+                  <div className="bg-orange-50 border border-orange-200 rounded-lg p-6">
+                    <ul className="space-y-3">
+                      {listing.whatsIncluded.map((item, index) => (
+                        <li key={index} className="flex items-start gap-3 text-gray-700">
+                          <i className="fa-solid fa-circle-check text-orange-500 mt-1"></i>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Divider */}
+                <hr className="border-gray-200" />
+              </>
+            )}
+
             {/* Amenities */}
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Amenities</h2>
