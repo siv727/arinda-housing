@@ -1,12 +1,52 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const TenantRegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false)
+  const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     console.log('Registering as tenant')
-    // TODO: add registration logic (API call, validation)
+
+    // Gather form data
+    const formData = new FormData(e.target)
+    const firstName = formData.get('firstName')
+    const lastName = formData.get('lastName')
+    const email = formData.get('email')
+    const school = formData.get('school')
+    const studentId = formData.get('studentId')
+    const password = formData.get('password')
+    const confirmPassword = formData.get('confirmPassword')
+
+    // Password match validation
+    if (password !== confirmPassword) {
+      console.error('Passwords do not match') // replace this with a proper error display
+      return
+    }
+
+    // API call to register landlord
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/api/auth/register',
+        {
+          firstname: firstName,
+          lastname: lastName,
+          email,
+          school,
+          studentid: studentId,
+          passwordhash: password,
+          role: 'STUDENT'
+        },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+
+      console.log('Tenant registered successfully:', response.data) // remove after finalization
+      navigate('/tenant/listings')
+    } catch (error) {
+      console.error('Error registering tenant:', error.response?.data || error.message) // replace this with a proper error display
+    }
   }
 
   const togglePasswordVisibility = () => {
