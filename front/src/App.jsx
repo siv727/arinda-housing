@@ -6,6 +6,7 @@ import TenantLogin from './pages/tenant/Login'
 import TenantRegister from './pages/tenant/Register'
 import TenantListings from './pages/tenant/Listings'
 import ListingDetail from './pages/tenant/ListingDetail'
+import BookingForm from './pages/tenant/BookingForm'
 
 // Landlord pages
 import LandlordLanding from './pages/landlord/Landing'
@@ -40,6 +41,7 @@ function App() {
         {/* Tenant routes */}
         <Route path="/tenant/listings" element={<TenantListings />} />
         <Route path="/tenant/listings/:id" element={<ListingDetail />} />
+        <Route path="/tenant/listings/:id/book" element={<BookingForm />} />
 
         {/* Landlord dashboard routes */}
         <Route path="/landlord/dashboard" element={<LandlordDashboardLayout />}>
