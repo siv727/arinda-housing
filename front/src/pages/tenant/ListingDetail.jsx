@@ -81,12 +81,6 @@ const ListingDetail = () => {
                   <i className="fa-solid fa-bath mr-2 text-gray-400"></i>
                   {listing.bathrooms} Bathroom{listing.bathrooms > 1 ? 's' : ''}
                 </span>
-                {listing.size && (
-                  <span className="flex items-center">
-                    <i className="fa-solid fa-ruler-combined mr-2 text-gray-400"></i>
-                    {listing.size} sqm
-                  </span>
-                )}
               </div>
             </div>
 
