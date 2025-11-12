@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { properties as mockProperties } from '@/data/mockProperties'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,53 +12,7 @@ import PropertyDialog from '@/components/properties/PropertyDialog'
 import { useNavigate } from 'react-router-dom'
 
 export default function Properties() {
-  const properties = [
-    {
-      title: "Loy's Apartment ",
-      location: "New York, NY",
-      price: "₱2,500/month",
-      status: "Occupied",
-      type: "Apartment",
-      image:
-        "https://images.unsplash.com/photo-1560448075-bb485b067938?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      title: "Cozy Studio Near University",
-      location: "Manila, PH",
-      price: "₱8,000/month",
-      status: "Available",
-      type: "Studio",
-      image:
-        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      title: "Luxury Condo with Balcony",
-      location: "Cebu City, PH",
-      price: "₱15,000/month",
-      status: "Occupied",
-      type: "Condo",
-      image:
-        "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      title: "Affordable Dorm Room",
-      location: "Davao City, PH",
-      price: "₱5,000/month",
-      status: "Available",
-      type: "Dormitory",
-      image:
-        "https://images.unsplash.com/photo-1586105251261-72a756497a12?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      title: "Two-Bedroom Apartment",
-      location: "Quezon City, PH",
-      price: "₱12,000/month",
-      status: "Occupied",
-      type: "Apartment",
-      image:
-        "https://images.unsplash.com/photo-1599423300746-b62533397364?auto=format&fit=crop&w=800&q=80",
-    },
-  ];
+  const [properties, setProperties] = useState(mockProperties)
 
   const [sortBy, setSortBy] = useState("Latest");
   const [isGridView, setIsGridView] = useState(true)
@@ -90,7 +45,6 @@ export default function Properties() {
 
         {/* Add Property + View Toggle */}
         <div className="flex flex-row items-center justify-center gap-2 ">
-            {/* Single view toggle button (shows the other view's icon) */}
             <button
               onClick={() => handleToggleView(!isGridView)}
               aria-pressed={isGridView}
@@ -133,7 +87,7 @@ export default function Properties() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-
+      
       {/* Properties Section (with fade animation on toggle) */}
       <div className={`transition-all duration-200 ${isFading ? 'opacity-0 ' : 'opacity-100'}`}>
         {isGridView ? (
@@ -144,7 +98,6 @@ export default function Properties() {
           </div>
         )}
         
-        {/* Property details dialog */}
         <PropertyDialog open={dialogOpen} onOpenChange={setDialogOpen} property={selectedProperty} onEdit={(p) => navigate('/landlord/dashboard/properties/edit')} onRemove={(p) => { console.log('remove', p); setDialogOpen(false); }} />
       </div>
     </div>

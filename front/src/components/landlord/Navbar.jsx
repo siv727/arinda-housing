@@ -30,7 +30,7 @@ const Navbar = ({ userType }) => {
         <div className="logo font-bold text-xl text-[#F35E27]">Arinda</div>
 
         {/* Center: Links */}
-        <ul className="hidden md:flex items-center space-x-12 absolute left-1/2 -translate-x-1/2 text-sm">
+        <ul className="hidden md:flex font-medium items-center space-x-12 absolute left-1/2 -translate-x-1/2 text-sm">
           <li>
             <a
               href="/landlord/dashboard/overview"
