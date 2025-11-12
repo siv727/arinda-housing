@@ -1,7 +1,7 @@
 export const bookings = [
   {
     id: 1,
-    tenant: { name: 'Maria Santos', email: 'maria.santos@email.com' },
+    tenant: { name: 'Maria Santos', email: 'maria.santos@email.com', avatar: 'https://i.pravatar.cc/150?img=12' },
     property: { title: 'Sunset Apartments', address: '123 College Ave, Quezon City' },
     checkIn: 'Jan 15, 2024',
     status: 'Confirmed',
@@ -9,7 +9,7 @@ export const bookings = [
   },
   {
     id: 2,
-    tenant: { name: 'Juan Dela Cruz', email: 'juan.delacruz@email.com' },
+    tenant: { name: 'Juan Dela Cruz', email: 'juan.delacruz@email.com', avatar: 'https://i.pravatar.cc/150?img=32' },
     property: { title: 'Campus View Studio', address: '456 University Blvd, Manila' },
     checkIn: 'Jan 20, 2024',
     status: 'Pending',
@@ -17,7 +17,7 @@ export const bookings = [
   },
   {
     id: 3,
-    tenant: { name: 'Ana Rodriguez', email: 'ana.rodriguez@email.com' },
+    tenant: { name: 'Ana Rodriguez', email: 'ana.rodriguez@email.com', avatar: 'https://i.pravatar.cc/150?img=44' },
     property: { title: 'Downtown Loft', address: '789 Main St, Makati City' },
     checkIn: 'Jan 25, 2024',
     status: 'Confirmed',
@@ -25,7 +25,7 @@ export const bookings = [
   },
   {
     id: 4,
-    tenant: { name: 'Carlos Mendoza', email: 'carlos.mendoza@email.com' },
+    tenant: { name: 'Carlos Mendoza', email: 'carlos.mendoza@email.com', avatar: 'https://i.pravatar.cc/150?img=55' },
     property: { title: 'Student Housing Complex', address: '321 Oak St, Taguig City' },
     checkIn: 'Feb 1, 2024',
     status: 'Rejected',
@@ -33,7 +33,7 @@ export const bookings = [
   },
   {
     id: 5,
-    tenant: { name: 'Sofia Reyes', email: 'sofia.reyes@email.com' },
+    tenant: { name: 'Sofia Reyes', email: 'sofia.reyes@email.com', avatar: 'https://i.pravatar.cc/150?img=66' },
     property: { title: 'Riverside Apartments', address: '654 River Ave, Pasig City' },
     checkIn: 'Feb 5, 2024',
     status: 'Pending',
@@ -41,7 +41,7 @@ export const bookings = [
   },
   {
     id: 6,
-    tenant: { name: 'Miguel Torres', email: 'miguel.torres@email.com' },
+    tenant: { name: 'Miguel Torres', email: 'miguel.torres@email.com', avatar: 'https://i.pravatar.cc/150?img=77' },
     property: { title: 'City Center Condo', address: '987 Business St, BGC' },
     checkIn: 'Feb 10, 2024',
     status: 'Confirmed',
