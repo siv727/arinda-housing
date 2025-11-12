@@ -59,11 +59,11 @@ const ListingDetail = () => {
               
               <div className="flex items-center gap-4 text-gray-600 mb-4">
                 <span className="flex items-center">
-                  <i className="fa-solid fa-home mr-2 text-gray-500"></i>
+                  <i className="fa-solid fa-home mr-2 text-gray-400"></i>
                   {listing.type}
                 </span>
                 <span className="flex items-center">
-                  <i className="fa-solid fa-location-dot mr-2 text-orange-500"></i>
+                  <i className="fa-solid fa-location-dot mr-2 text-gray-400"></i>
                   {listing.location}
                 </span>
                 <span className="flex items-center">
@@ -72,7 +72,7 @@ const ListingDetail = () => {
                 </span>
               </div>
 
-              <div className="flex items-center gap-4 text-gray-700">
+              <div className="flex items-center gap-4 text-gray-600">
                 <span className="flex items-center">
                   <i className="fa-solid fa-bed mr-2 text-gray-400"></i>
                   {listing.bedrooms} Bedroom{listing.bedrooms > 1 ? 's' : ''}
@@ -140,7 +140,9 @@ const ListingDetail = () => {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {listing.amenities.map((amenity, index) => (
                   <div key={index} className="flex items-center gap-3 text-gray-700">
-                    <i className="fa-solid fa-check text-orange-500"></i>
+                    <div className="w-6 h-6 rounded-full bg-gradient-to-r from-[#DD4912] to-[#FFA500] flex items-center justify-center flex-shrink-0">
+                      <i className="fa-solid fa-check text-white text-xs"></i>
+                    </div>
                     <span>{amenity}</span>
                   </div>
                 ))}
