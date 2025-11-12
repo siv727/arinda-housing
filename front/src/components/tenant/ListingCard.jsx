@@ -17,7 +17,7 @@ const ListingCard = ({ listing, onFavoriteToggle }) => {
         <img 
           src={listing.images[0]} 
           alt={listing.title}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover hover:scale-115 transition-scale duration-500"
         />
         
         {/* Verified Badge */}
