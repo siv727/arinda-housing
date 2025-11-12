@@ -25,7 +25,7 @@ const LoginForm = ({ userType = 'tenant' }) => {
       );
 
       console.log('User logged in successfully:', response.data)
-      response.data.role === 'LANDLORD' ? navigate('/landlord/dashboard') : navigate('/tenant/listings')
+      response.data.role === 'LANDLORD' && userType === 'landlord' ? navigate('/landlord/dashboard') : navigate('/tenant/listings')
     } catch (error) {
       console.error('Error logging in:', error.response?.data || error.message)
     }
