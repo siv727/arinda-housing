@@ -36,7 +36,9 @@ const Navbar = ({ userType }) => {
     }`}>
       <div className="max-w-[1350px] mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between p-5">
         <div className="flex items-center gap-4">
-          <div className="logo font-bold text-xl text-[#F35E27]">Arinda</div>
+          <a href={userType === 'tenant' ? '/tenant' : '/landlord'} className="logo font-bold text-xl text-[#F35E27] cursor-pointer hover:opacity-80 transition-opacity">
+            Arinda
+          </a>
         </div>
 
         {/* Desktop links */}
