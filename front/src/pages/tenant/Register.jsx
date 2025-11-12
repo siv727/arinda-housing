@@ -1,5 +1,5 @@
 import React from "react";
-import RegisterForm from "../../components/auth/RegisterForm";
+import TenantRegisterForm from "../../components/auth/TenantRegisterForm";
 import Navbar from "../../components/common/Navbar";
 import OrangeHatCard from "../../components/common/OrangeHatCard";
 
@@ -15,7 +15,7 @@ const TenantRegister = () => {
           </h1>
           <p className="text-center mb-6 ">{description}</p>
           <hr></hr>
-          <RegisterForm userType="tenant" />
+          <TenantRegisterForm />
           <div class=" text-[14px] text-center text-gray-600 mb-6">
             Already have an account?
             <a
