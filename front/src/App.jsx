@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 
 // Tenant pages
@@ -6,6 +5,7 @@ import TenantLanding from './pages/tenant/Landing'
 import TenantLogin from './pages/tenant/Login'
 import TenantRegister from './pages/tenant/Register'
 import TenantListings from './pages/tenant/Listings'
+import ListingDetail from './pages/tenant/ListingDetail'
 
 // Landlord pages
 import LandlordLanding from './pages/landlord/Landing'
@@ -39,6 +39,7 @@ function App() {
 
         {/* Tenant routes */}
         <Route path="/tenant/listings" element={<TenantListings />} />
+        <Route path="/tenant/listings/:id" element={<ListingDetail />} />
 
         {/* Landlord dashboard routes */}
         <Route path="/landlord/dashboard" element={<LandlordDashboardLayout />}>
