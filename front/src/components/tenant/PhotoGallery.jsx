@@ -101,9 +101,9 @@ const PhotoGallery = ({ images, title }) => {
             <img
               src={images[currentImageIndex]}
               alt={`${title} - ${currentImageIndex + 1}`}
-              className="max-w-full max-h-[80vh] object-contain"
+              className="w-[800px] h-[500px] object-cover"
             />
-            <p className="absolute top-7 text-white text-sm bg-black/50 px-3 py-1 rounded-full">
+            <p className="absolute top-12 text-white text-md bg-black/50 px-3 py-1 rounded-full">
               {currentImageIndex + 1} / {images.length}
             </p>
           </div>
