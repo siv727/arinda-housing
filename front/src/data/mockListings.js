@@ -10,15 +10,59 @@ export const mockListings = [
     rating: 4.8,
     reviewCount: 127,
     verified: true,
-    availableDate: "Aug 2024",
+    availableDate: "August 15, 2024",
     bedrooms: 1,
     bathrooms: 1,
-    amenities: ["WiFi", "Laundry", "Kitchen"],
+    amenities: ["WiFi", "Laundry", "Kitchen", "Study Area", "Parking", "Gym"],
     images: [
       "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80",
-      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80"
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80",
+      "https://images.unsplash.com/photo-1502672023488-70e25813eb80?w=800&q=80",
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80",
+      "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&q=80"
     ],
-    description: "Bright and modern studio apartment with high ceilings and large windows. Perfect for students."
+    description: "This modern studio apartment is perfect for students looking for a comfortable and convenient living space near campus. Located in the heart of University District, you'll be just a 2-minute walk from classes, libraries, and campus amenities. The space features contemporary furnishings, a fully equipped kitchen, and a dedicated study area to help you succeed academically. The building offers excellent amenities including a fitness center, study lounges, and 24/7 security for peace of mind.",
+    securityDeposit: 850,
+    applicationFee: 50,
+    host: {
+      name: "Sarah Dilucca",
+      avatar: "https://i.pravatar.cc/150?img=5",
+      yearsHosting: 3,
+      isSuperhost: true,
+      phone: "+63 912 542 1287",
+      email: "landlord@gmail.com"
+    },
+    reviews: [
+      {
+        id: 1,
+        reviewerName: "Emma Wilson",
+        reviewerAvatar: "https://i.pravatar.cc/150?img=10",
+        rating: 5,
+        date: "October 2024",
+        text: "Amazing place! So close to campus and Sarah was a fantastic landlord. The apartment is exactly as described and the study area really helped during finals week."
+      },
+      {
+        id: 2,
+        reviewerName: "James Chen",
+        reviewerAvatar: "https://i.pravatar.cc/150?img=12",
+        rating: 5,
+        date: "September 2024",
+        text: "Perfect for students! The location can't be beat and the amenities are great. WiFi is super fast which was essential for my online classes."
+      },
+      {
+        id: 3,
+        reviewerName: "Maria Rodriguez",
+        reviewerAvatar: "https://i.pravatar.cc/150?img=9",
+        rating: 4,
+        date: "August 2024",
+        text: "Great apartment with everything you need. Only minor issue was the AC could be better during summer, but overall highly recommended!"
+      }
+    ],
+    mapLocation: {
+      lat: 40.7128,
+      lng: -74.0060,
+      address: "123 University Ave, University District"
+    }
   },
   {
     id: 2,
@@ -30,15 +74,32 @@ export const mockListings = [
     rating: 4.6,
     reviewCount: 89,
     verified: true,
-    availableDate: "Sep 2024",
+    availableDate: "September 1, 2024",
     bedrooms: 1,
     bathrooms: 1,
     amenities: ["WiFi", "Shared Kitchen", "Study Lounge"],
     images: [
       "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&q=80",
-      "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=800&q=80"
+      "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=800&q=80",
+      "https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800&q=80"
     ],
-    description: "Affordable shared dorm room in campus housing with access to all campus amenities."
+    description: "Affordable shared dorm room in campus housing with access to all campus amenities. Female-only floor with secure access. Great community atmosphere and study support.",
+    securityDeposit: 450,
+    applicationFee: 30,
+    host: {
+      name: "Campus Housing Services",
+      avatar: "https://i.pravatar.cc/150?img=20",
+      yearsHosting: 5,
+      isSuperhost: false,
+      phone: "+63 917 654 3210",
+      email: "housing@campus.edu"
+    },
+    reviews: [],
+    mapLocation: {
+      lat: 40.7130,
+      lng: -74.0058,
+      address: "45 Campus Drive, Campus Housing"
+    }
   },
   {
     id: 3,
