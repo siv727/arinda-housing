@@ -44,6 +44,12 @@ const BookingFormCard = ({ onSubmit }) => {
     
     if (!formData.phoneNumber.trim()) {
       newErrors.phoneNumber = 'Phone number is required'
+    } else {
+      // Validate Philippine mobile number format (09XX or +639XX)
+      const phoneDigits = formData.phoneNumber.replace(/[\s-]/g, '')
+      if (!/^(09|\+639)\d{9}$/.test(phoneDigits)) {
+        newErrors.phoneNumber = 'Please enter a valid Philippine mobile number'
+      }
     }
     
     if (!formData.moveInDate) {
