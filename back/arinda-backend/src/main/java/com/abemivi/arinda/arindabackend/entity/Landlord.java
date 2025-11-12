@@ -14,6 +14,7 @@ import java.util.List;
 @Entity
 @DiscriminatorValue("LANDLORD")
 public class Landlord extends User {
+    private String phonenumber;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

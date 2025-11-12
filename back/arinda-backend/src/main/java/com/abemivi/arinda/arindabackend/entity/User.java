@@ -37,9 +37,6 @@ public abstract class User implements UserDetails {
     @Column(nullable = false)
     private String lastname;
 
-    @Column(unique = true)
-    private String phonenumber;
-
     // UserDetails Override
     @Override
     public abstract Collection<? extends GrantedAuthority> getAuthorities();
