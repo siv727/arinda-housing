@@ -148,7 +148,7 @@ const Listings = () => {
                   <select
                     value={sortBy}
                     onChange={handleSortChange}
-                    className="px-4 py-2 border bg-white border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F35E27] cursor-pointer appearance-none ..."
+                    className="pl-4 pr-8 py-2 border bg-white border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F35E27] cursor-pointer appearance-none ..."
                   >
                     <option value="recommended">Recommended</option>
                     <option value="price-low">Price: Low to High</option>

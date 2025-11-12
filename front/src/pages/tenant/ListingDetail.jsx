@@ -2,6 +2,8 @@ import { useParams, Link } from 'react-router-dom'
 import Navbar from '../../components/tenant/Navbar'
 import PhotoGallery from '../../components/tenant/PhotoGallery'
 import BookingInfoCard from '../../components/tenant/BookingInfoCard'
+import ReviewsSection from '../../components/tenant/ReviewsSection'
+import LocationMap from '../../components/tenant/LocationMap'
 import { mockListings } from '../../data/mockListings'
 
 const ListingDetail = () => {
@@ -146,6 +148,18 @@ const ListingDetail = () => {
                 ))}
               </div>
             </div>
+
+            {/* Divider */}
+            <hr className="border-gray-200" />
+
+            {/* Reviews Section */}
+            <ReviewsSection listing={listing} />
+
+            {/* Divider */}
+            <hr className="border-gray-200" />
+
+            {/* Location Map */}
+            <LocationMap mapLocation={listing.mapLocation} title={listing.title} />
           </div>
 
           {/* Right Column - Booking Card */}
