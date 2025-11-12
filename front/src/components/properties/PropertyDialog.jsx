@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -6,32 +6,47 @@ import {
   DialogTitle,
   DialogDescription,
   DialogClose,
-} from '@/components/ui/dialog'
-export default function PropertyDialog({ open, onOpenChange, property = {}, onEdit = () => {}, onRemove = () => {} }) {
-  const [confirming, setConfirming] = useState(false)
+} from "@/components/ui/dialog";
 
-  if (!property) return null
+export default function PropertyDialog({
+  open,
+  onOpenChange,
+  property = {},
+  onEdit = () => {},
+  onRemove = () => {},
+}) {
+  const [confirming, setConfirming] = useState(false);
 
-  // Reset confirming state when the dialog is closed from parent
+  // Reset confirming state when the dialog is closed from parent. runs on every render (before any early return) to preserve hook call order across renders (both dialog)
   useEffect(() => {
-    if (!open) setConfirming(false)
-  }, [open])
+    if (!open) setConfirming(false);
+  }, [open]);
+
+  // If the dialog is not open, don't render anything... Keep hooks above this return so the hooks order remains stable
+  if (!open) return null;
 
   const handleRemove = () => {
-    onRemove(property)
-    setConfirming(false)
-    onOpenChange(false)
-  }
+    onRemove(property);
+    setConfirming(false);
+    onOpenChange(false);
+  };
 
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent showCloseButton={true} className="w-[400px] shadow-2xl rounded-3xl ">
+        <DialogContent
+          showCloseButton={true}
+          className="w-[400px] shadow-2xl rounded-3xl "
+        >
           {!confirming ? (
             <div className="mt-4">
               <div className="w-full h-56 bg-gray-100 rounded-md overflow-hidden mb-4 mt-2">
                 {property.image ? (
-                  <img src={property.image} alt={property.title} className="w-full h-full object-cover" />
+                  <img
+                    src={property.image}
+                    alt={property.title}
+                    className="w-full h-full object-cover"
+                  />
                 ) : (
                   <div className="w-full h-full bg-gray-200" />
                 )}
@@ -43,24 +58,40 @@ export default function PropertyDialog({ open, onOpenChange, property = {}, onEd
               </div>
 
               <div className="mt-6 flex flex-col gap-3 font-medium">
-                <button onClick={() => onEdit(property)} className="bg-[#F35E27] transition hover:bg-[#e7521c] text-white rounded-lg py-3 w-full cursor-pointer">Edit listing</button>
-                <button onClick={() => setConfirming(true)} className="hover:bg-[#FFF8F2] transition flex items-center justify-center gap-2 border rounded-lg py-3 w-full text-gray-700">
-                  <i class="fa-regular fa-trash-can"></i>
+                <button
+                  onClick={() => onEdit(property)}
+                  className="bg-[#F35E27] transition hover:bg-[#e7521c] text-white rounded-lg py-3 w-full cursor-pointer"
+                >
+                  Edit listing
+                </button>
+                <button
+                  onClick={() => setConfirming(true)}
+                  className="hover:bg-[#FFF8F2] transition flex items-center justify-center gap-2 border rounded-lg py-3 w-full text-gray-700"
+                >
+                  <i className="fa-regular fa-trash-can"></i>
                   Remove listing
                 </button>
               </div>
             </div>
           ) : (
-
             <div>
-              <DialogHeader class = "text-center">
-                <DialogTitle class = "text-[22px] font-semibold mt-4">Remove this listing?</DialogTitle>
-                <DialogDescription class = "text-base text-gray-600">This is permanent—you’ll no longer be able to find or edit this listing.</DialogDescription>
+              <DialogHeader className="text-center">
+                <DialogTitle className="text-[22px] font-semibold mt-4">
+                  Remove this listing?
+                </DialogTitle>
+                <DialogDescription className="text-base text-gray-600">
+                  This is permanent—you’ll no longer be able to find or edit
+                  this listing.
+                </DialogDescription>
               </DialogHeader>
 
               <div className="w-full h-40 bg-gray-100 rounded-md overflow-hidden mb-4 mt-4">
                 {property.image ? (
-                  <img src={property.image} alt={property.title} className="w-full h-full object-cover" />
+                  <img
+                    src={property.image}
+                    alt={property.title}
+                    className="w-full h-full object-cover"
+                  />
                 ) : (
                   <div className="w-full h-full bg-gray-200" />
                 )}
@@ -72,8 +103,18 @@ export default function PropertyDialog({ open, onOpenChange, property = {}, onEd
               </div>
 
               <div className="mt-6 flex flex-col gap-3 font-semibold">
-                <button onClick={handleRemove} className="bg-[#F35E27] transition hover:bg-[#e7521c] text-white rounded-lg py-3 w-full cursor-pointer">Yes, remove</button>
-                <button onClick={() => setConfirming(false)} className="hover:bg-[#FFF8F2] transition flex items-center justify-center gap-2 border rounded-lg py-3 w-full text-gray-700">Cancel</button>
+                <button
+                  onClick={handleRemove}
+                  className="bg-[#F35E27] transition hover:bg-[#e7521c] text-white rounded-lg py-3 w-full cursor-pointer"
+                >
+                  Yes, remove
+                </button>
+                <button
+                  onClick={() => setConfirming(false)}
+                  className="hover:bg-[#FFF8F2] transition flex items-center justify-center gap-2 border rounded-lg py-3 w-full text-gray-700"
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           )}
@@ -82,5 +123,5 @@ export default function PropertyDialog({ open, onOpenChange, property = {}, onEd
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }
