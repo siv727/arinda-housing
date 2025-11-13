@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 
 // Tenant pages
-import TenantLanding from './pages/tenant/Landing'
 import TenantLogin from './pages/tenant/Login'
 import TenantRegister from './pages/tenant/Register'
 import TenantListings from './pages/tenant/Listings'
@@ -9,7 +8,6 @@ import ListingDetail from './pages/tenant/ListingDetail'
 import BookingForm from './pages/tenant/BookingForm'
 
 // Landlord pages
-import LandlordLanding from './pages/landlord/Landing'
 import LandlordLogin from './pages/landlord/Login'
 import LandlordRegister from './pages/landlord/Register'
 
@@ -21,16 +19,23 @@ import LandlordProperties from './pages/landlord/dashboard/Properties'
 import LandlordTenants from './pages/landlord/dashboard/Tenants'
 import AddPropertyPage from './pages/landlord/dashboard/AddProperty'
 
+// Landing page
+import Landing from './pages/Landing'
+
 function App() {
   return (
      <Router>
       <Routes>
-        {/* Default */}
-        <Route path="/" element={<Navigate to="/tenant" replace />} />
 
-        {/* Public Landing Pages */}
-        <Route path="/landlord" element={<LandlordLanding />} />
-        <Route path="/tenant" element={<TenantLanding />} />
+        {/* Default */}
+        <Route path="/" element={<Navigate to="/landing" replace />} />
+        
+        {/* Landing */}
+        <Route path="/landing" element={<Landing />} />
+        
+        {/* Redirect old landing routes to unified landing */}
+        <Route path="/tenant" element={<Navigate to="/landing" replace />} />
+        <Route path="/landlord" element={<Navigate to="/landing" replace />} />
 
         {/* Auth routes */}
         <Route path="/tenant/login" element={<TenantLogin />} />
