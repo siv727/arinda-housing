@@ -33,7 +33,7 @@ const TenantLandingContent = () => {
                 new cities.
               </p>
 
-              <a href="/tenant/register">
+              <a href="/register">
                 <button className="flex items-center justify-center cursor-pointer gap-2 bg-gradient-to-r from-[#F35E27] to-[#ff792b] w-full text-white p-4 rounded-[6px] text-[18px] font-semibold hover:bg-[#892728] transition shadow-lg">
                   <i className="fa-solid fa-flag-checkered"></i>
                   <span>Start Your Search</span>
@@ -234,7 +234,7 @@ const TenantLandingContent = () => {
                   </li>
                 </ul>
               </div>
-              <a href="/landlord/register">
+              <a href="/register">
                 <button className="flex items-center justify-center cursor-pointer gap-2 bg-gradient-to-r from-[#F35E27] to-[#ff792b] px-12 text-white p-4 rounded-[6px] text-[18px] font-semibold hover:bg-[#892728] transition shadow-lg">
                   <i className="fa-solid fa-square-list"></i>
                   <span>List Your Property</span>

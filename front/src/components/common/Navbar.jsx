@@ -85,21 +85,12 @@ const Navbar = ({ userType }) => {
         </ul>
 
         <div className="hidden md:block">
-          {userType === "tenant" ? (
-            <a
-              href="/tenant/login"
-              className="font-semibold bg-gradient-to-r text-white p-3 rounded-full px-6 from-[#F35E27]  to-[#ff8f4e] hover:opacity-90 transition-opacity"
-            >
-              Get Started
-            </a>
-          ) : (
-            <a
-              href="/landlord/login"
-              className="font-semibold bg-gradient-to-r text-white p-3 rounded-full px-6 from-[#F35E27] to-[#ff8f4e] hover:opacity-90 transition-opacity"
-            >
-              Get Started
-            </a>
-          )}
+          <a
+            href="/login"
+            className="font-semibold bg-gradient-to-r text-white p-3 rounded-full px-6 from-[#F35E27]  to-[#ff8f4e] hover:opacity-90 transition-opacity"
+          >
+            Get Started
+          </a>
         </div>
 
         {/* Mobile hamburger */}
@@ -173,7 +164,7 @@ const Navbar = ({ userType }) => {
             Download App
           </a>
           <a
-            href={userType === "tenant" ? "/tenant/login" : "/landlord/login"}
+            href="/login"
             className="inline-block font-semibold bg-gradient-to-r text-white p-3 rounded-full px-6 from-[#F35E27] to-[#ff8f4e] hover:opacity-90 transition-opacity"
           >
             Get Started

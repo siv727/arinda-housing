@@ -1,6 +1,6 @@
-const TabToggle = ({ activeTab, onTabChange }) => {
+const TabToggle = ({ activeTab, onTabChange, fixed = true }) => {
   return (
-    <div className="fixed top-20 left-1/2 -translate-x-1/2 z-40">
+    <div className={fixed ? "fixed top-20 left-1/2 -translate-x-1/2 z-40" : ""}>
       <div className="bg-white/90 backdrop-blur-md border-2 border-[#EAD1C7] rounded-full p-1.5 shadow-lg flex gap-1">
         <button
           onClick={() => onTabChange("tenant")}

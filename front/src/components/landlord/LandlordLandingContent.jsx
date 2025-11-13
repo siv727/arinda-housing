@@ -30,7 +30,7 @@ const LandlordLandingContent = () => {
                 rental income through our trusted network.
               </p>
 
-              <a href="/landlord/register">
+              <a href="/register">
                 <button className="flex items-center justify-center cursor-pointer gap-2 bg-gradient-to-r from-[#F35E27] to-[#ff792b] w-full text-white p-4 rounded-[6px] text-[18px] font-semibold hover:bg-[#892728] transition shadow-lg">
                   <i className="fa-solid fa-flag-checkered"></i>
                   <span>List Your Property Now</span>

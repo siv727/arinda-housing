@@ -1,15 +1,13 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 
+// Unified auth pages
+import Login from './pages/Login'
+import Register from './pages/Register'
+
 // Tenant pages
-import TenantLogin from './pages/tenant/Login'
-import TenantRegister from './pages/tenant/Register'
 import TenantListings from './pages/tenant/Listings'
 import ListingDetail from './pages/tenant/ListingDetail'
 import BookingForm from './pages/tenant/BookingForm'
-
-// Landlord pages
-import LandlordLogin from './pages/landlord/Login'
-import LandlordRegister from './pages/landlord/Register'
 
 // Landlord dashboard pages
 import LandlordDashboardLayout from './pages/landlord/dashboard/LandlordDashboardLayout'
@@ -37,11 +35,15 @@ function App() {
         <Route path="/tenant" element={<Navigate to="/landing" replace />} />
         <Route path="/landlord" element={<Navigate to="/landing" replace />} />
 
-        {/* Auth routes */}
-        <Route path="/tenant/login" element={<TenantLogin />} />
-        <Route path="/tenant/register" element={<TenantRegister />} />
-        <Route path="/landlord/login" element={<LandlordLogin />} />
-        <Route path="/landlord/register" element={<LandlordRegister />} />
+        {/* Unified auth routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        
+        {/* Redirect old auth routes to unified auth */}
+        <Route path="/tenant/login" element={<Navigate to="/login" replace />} />
+        <Route path="/tenant/register" element={<Navigate to="/register" replace />} />
+        <Route path="/landlord/login" element={<Navigate to="/login" replace />} />
+        <Route path="/landlord/register" element={<Navigate to="/register" replace />} />
 
         {/* Tenant routes */}
         <Route path="/tenant/listings" element={<TenantListings />} />
