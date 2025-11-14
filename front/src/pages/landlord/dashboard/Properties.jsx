@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import PropertyGrid from '@/components/properties/PropertyGrid'
 import PropertyTable from '@/components/properties/PropertyTable'
-import PropertyDialog from '@/components/properties/PropertyDialog'
+import PropertyDialog from '@/components/properties/PropertySheet'
 import { useNavigate } from 'react-router-dom'
 
 export default function Properties() {
