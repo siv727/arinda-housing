@@ -14,6 +14,7 @@ export const properties = [
         name: 'Aisha Cruz',
         avatar: 'https://randomuser.me/api/portraits/women/68.jpg',
         rating: 5,
+        date: "October 2024",
         comment: 'Very cozy place, close to transit and shops. Landlord was responsive.'
       },
       {
@@ -21,6 +22,7 @@ export const properties = [
         name: 'Marco Reyes',
         avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
         rating: 4,
+        date: "November 2024",
         comment: 'Good value for the price. Bathroom could be cleaner on move-in.'
       }
     ]
@@ -40,6 +42,7 @@ export const properties = [
         name: 'Bea Santos',
         avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
         rating: 5,
+        date: "October 2024",
         comment: 'Perfect for students. Walking distance to the university.'
       }
     ]
@@ -59,6 +62,7 @@ export const properties = [
         name: 'Jonah Lim',
         avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
         rating: 4,
+        date: "December 2024",
         comment: 'Great view and amenities. Parking is tight sometimes.'
       }
     ]
@@ -89,6 +93,7 @@ export const properties = [
         name: 'Clara Ong',
         avatar: 'https://randomuser.me/api/portraits/women/12.jpg',
         rating: 5,
+        date: "October 2024",
         comment: 'Spacious and well-lit. Quiet neighborhood.'
       },
     ]

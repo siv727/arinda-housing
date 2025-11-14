@@ -32,14 +32,14 @@ export default function PropertySheet({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:max-w-[480px] rounded-l-lg md:rounded-lg md:mr-3 md:mt-3 md:h-[97vh] flex flex-col shadow-2xl">
+      <SheetContent className="sm:max-w-[600px] rounded-l-lg md:rounded-lg md:mr-3 md:mt-3 md:h-[97vh] flex flex-col shadow-2xl">
         <SheetHeader>
           <SheetTitle>Property Details</SheetTitle>
         </SheetHeader>
 
         <SheetDescription>
-          <div className="flex-1 overflow-y-auto px-5 pt-4 space-y-4">
-            <div className="w-full h-56 bg-gray-100 rounded-md overflow-hidden mb-2">
+          <div className="flex-1 overflow-y-auto px-5  space-y-4">
+            <div className="w-full h-56 bg-gray-100 rounded-t-md overflow-hidden mb-4">
               <img
                 src={p.image}
                 alt={p.title}
@@ -47,10 +47,41 @@ export default function PropertySheet({
               />
             </div>
 
-            <div className="flex justify-between items-center">
-              <div>
+            <div>
+              <div class="flex justify-between items-center ">
                 <p className="font-semibold text-lg text-black">{p.title}</p>
+                <p className="bg-orange-100 text-orange-700 text-[12px] font-medium px-3 py-1 rounded-full">
+                  {p.type}
+                </p>
+              </div>
+
+              <div class="flex justify-between items-center ">
                 <p className="text-sm">{p.location}</p>
+                <div>
+                  <div
+                    className={`px-3 py-1 rounded-full flex items-center border  ${
+                      p.status === "Available"
+                        ? "bg-white text-green-600"
+                        : "bg-white text-orange-600"
+                    }`}
+                  >
+                    <span
+                      className={`mr-2 h-2 w-2 rounded-full ${
+                        p.status === "Available"
+                          ? "bg-green-500"
+                          : "bg-orange-500"
+                      }`}
+                    ></span>
+                    <span className="text-xs font-medium">
+                      {p.status}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-1">
+                <span className="text-2xl font-bold text-gray-900">
+                  {p.price}
+                </span>
               </div>
             </div>
           </div>
@@ -69,7 +100,7 @@ export default function PropertySheet({
               {(p.reviews || []).map((r, idx) => (
                 <div key={r.id}>
                   <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
+                    <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
                       <img
                         src={r.avatar}
                         alt={r.name}
@@ -79,7 +110,11 @@ export default function PropertySheet({
 
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
-                        <div className="font-semibold text-sm">{r.name}</div>
+                        <div class = "flex flex-col space-y-0.5 mb-2">
+                          <div className="font-semibold text-base">{r.name}</div>
+                          <p className="text-sm text-gray-500">{r.date}</p>
+                        </div>
+                        
 
                         <div className="flex items-center text-yellow-500">
                           {Array.from({ length: 5 }).map((_, i) => (
@@ -116,30 +151,30 @@ export default function PropertySheet({
             <div className="flex justify-end gap-3 w-full font-medium">
               <button
                 onClick={() => setConfirming(true)}
-                className="hover:bg-[#FFF8F2] transition  border rounded-lg py-3 px-6 text-gray-700"
+                className="hover:bg-[#FFF8F2] transition  border rounded-lg py-3 px-6 text-gray-700 cursor-pointer"
               >
-                <i className="fa-regular fa-trash pr-2"></i> Remove
+               Remove <i className="fa-regular fa-trash pl-2"></i> 
               </button>
               <button
                 onClick={() => onEdit(property)}
                 className="rounded-lg py-2 bg-[#F35E27] transition hover:bg-[#e7521c] px-6 text-white cursor-pointer"
               >
-                <i className="fa-regular fa-pen-to-square pr-2"></i>Edit
+                Edit<i className="fa-regular fa-pen-to-square pl-2"></i>
               </button>
             </div>
           ) : (
             <div className="flex justify-end gap-3 w-full font-semibold">
               <button
                 onClick={() => setConfirming(false)}
-                className="hover:bg-[#FFF8F2] transition  border rounded-lg py-3 px-6 text-gray-700"
+                className="hover:bg-[#FFF8F2] transition  border rounded-lg py-3 px-6 text-gray-700 cursor-pointer"
               >
-                Cancel
+                Cancel <i class="fa-solid fa-arrow-turn-down-left pl-1"></i>
               </button>
               <button
                 onClick={handleRemove}
                 className="rounded-lg py-2 bg-[#F35E27] transition hover:bg-[#e7521c] px-6 text-white cursor-pointer"
               >
-                Yes, remove
+                Yes, remove <i className="fa-regular fa-trash pl-2"></i>
               </button>
             </div>
           )}
