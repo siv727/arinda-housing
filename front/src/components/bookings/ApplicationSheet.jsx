@@ -8,6 +8,7 @@ import {
   SheetFooter,
 } from '@/components/ui/sheet'
 import ApprovalSheet from './ApprovalSheet'
+import RejectionSheet from './RejectionSheet'
 
 const StatusBadge = ({ status }) => {
   const map = {
@@ -36,24 +37,28 @@ export default function ApplicationSheet({ open, onOpenChange, booking, onApprov
   const tenant = booking?.tenant
   const property = booking?.property
   const [approvalOpen, setApprovalOpen] = useState(false)
+  const [rejectionOpen, setRejectionOpen] = useState(false)
+  const isActionSheetOpen = approvalOpen || rejectionOpen;
 
   const handleApprove = () => {
     if (!booking) return
-    // Open the approval sheet to confirm/send lease and message
     setApprovalOpen(true)
   }
 
   const handleReject = () => {
     if (!booking) return
-    onReject(booking)
-    onOpenChange(false)
+    setRejectionOpen(true)
   }
 
   const handleApprovalConfirm = (payload) => {
-    // payload contains { to, message, file }
     onApprove(booking, payload)
-    // close both sheets
     setApprovalOpen(false)
+    onOpenChange(false)
+  }
+
+  const handleRejectionConfirm = (payload) => {
+    onReject(booking, payload)
+    setRejectionOpen(false)
     onOpenChange(false)
   }
 
@@ -61,7 +66,7 @@ export default function ApplicationSheet({ open, onOpenChange, booking, onApprov
     <>
       <Sheet open={open} onOpenChange={onOpenChange}>
         <SheetContent
-          className={`${approvalOpen ? 'sm:max-w-[580px] md:h-[85vh] md:mt-16' : 'sm:max-w-[600px] md:h-[97vh] md:mt-3 transition-all'} transition-all rounded-l-lg md:rounded-lg md:mr-3   flex flex-col`}
+          className={`${isActionSheetOpen ? 'sm:max-w-[580px] md:h-[85vh] md:mt-16' : 'sm:max-w-[600px] md:h-[97vh] md:mt-3 transition-all'} transition-all rounded-l-lg md:rounded-lg md:mr-3   flex flex-col`}
         >
           <SheetHeader>
             <SheetTitle>Application Details</SheetTitle>
@@ -194,6 +199,14 @@ export default function ApplicationSheet({ open, onOpenChange, booking, onApprov
         to={tenant?.email}
         onConfirm={handleApprovalConfirm}
         onCancel={() => setApprovalOpen(false)}
+      />
+
+      <RejectionSheet
+        open={rejectionOpen}
+        onOpenChange={setRejectionOpen}
+        to={tenant?.email}
+        onConfirm={handleRejectionConfirm}
+        onCancel={() => setRejectionOpen(false)}
       />
     </>
   )
