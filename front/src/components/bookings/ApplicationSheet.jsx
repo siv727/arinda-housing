@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Sheet,
   SheetContent,
@@ -7,6 +7,8 @@ import {
   SheetDescription,
   SheetFooter,
 } from '@/components/ui/sheet'
+import ApprovalSheet from './ApprovalSheet'
+import RejectionSheet from './RejectionSheet'
 
 const StatusBadge = ({ status }) => {
   const map = {
@@ -34,22 +36,38 @@ const StatusBadge = ({ status }) => {
 export default function ApplicationSheet({ open, onOpenChange, booking, onApprove = () => {}, onReject = () => {} }) {
   const tenant = booking?.tenant
   const property = booking?.property
+  const [approvalOpen, setApprovalOpen] = useState(false)
+  const [rejectionOpen, setRejectionOpen] = useState(false)
+  const isActionSheetOpen = approvalOpen || rejectionOpen;
 
   const handleApprove = () => {
     if (!booking) return
-    onApprove(booking)
-    onOpenChange(false)
+    setApprovalOpen(true)
   }
 
   const handleReject = () => {
     if (!booking) return
-    onReject(booking)
+    setRejectionOpen(true)
+  }
+
+  const handleApprovalConfirm = (payload) => {
+    onApprove(booking, payload)
+    setApprovalOpen(false)
+    onOpenChange(false)
+  }
+
+  const handleRejectionConfirm = (payload) => {
+    onReject(booking, payload)
+    setRejectionOpen(false)
     onOpenChange(false)
   }
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-        <SheetContent className="sm:max-w-[600px] rounded-l-lg md:rounded-lg md:mr-3 md:mt-3 md:h-[97vh] flex flex-col">
+    <>
+      <Sheet open={open} onOpenChange={onOpenChange}>
+        <SheetContent
+          className={`${isActionSheetOpen ? 'sm:max-w-[580px] md:h-[85vh] md:mt-16' : 'sm:max-w-[600px] md:h-[97vh] md:mt-3 transition-all'} transition-all rounded-l-lg md:rounded-lg md:mr-3   flex flex-col`}
+        >
           <SheetHeader>
             <SheetTitle>Application Details</SheetTitle>
           </SheetHeader>
@@ -156,22 +174,40 @@ export default function ApplicationSheet({ open, onOpenChange, booking, onApprov
 
           {/* Fixed footer */}
           <SheetFooter className="border-t pt-4 ">
-            <div className="flex justify-end gap-3 w-full font-medium">
+            <div className="flex justify-end gap-3 w-full font-medium cursor-pointer">
               <button
                 onClick={handleReject}
                 className="hover:bg-[#FFF8F2] transition  border rounded-lg py-3 px-6 text-gray-700"
               >
-                Reject
+                Reject<i className="fa-regular fa-circle-x pl-2"></i>
               </button>
               <button
                 onClick={handleApprove}
                 className="rounded-lg py-2 bg-[#F35E27] transition hover:bg-[#e7521c] px-6 text-white cursor-pointer"
               >
-                Approve
+                Approve<i className="fa-regular fa-circle-check pl-2"></i>
               </button>
             </div>
           </SheetFooter>
         </SheetContent>
       </Sheet>
+
+      {/* Approval sheet opened after clicking Approve */}
+      <ApprovalSheet
+        open={approvalOpen}
+        onOpenChange={setApprovalOpen}
+        to={tenant?.email}
+        onConfirm={handleApprovalConfirm}
+        onCancel={() => setApprovalOpen(false)}
+      />
+
+      <RejectionSheet
+        open={rejectionOpen}
+        onOpenChange={setRejectionOpen}
+        to={tenant?.email}
+        onConfirm={handleRejectionConfirm}
+        onCancel={() => setRejectionOpen(false)}
+      />
+    </>
   )
 }
