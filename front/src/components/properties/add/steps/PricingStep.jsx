@@ -64,7 +64,7 @@ export default function PricingStep({ form = {}, update }) {
       <div className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <p className="text-lg mb-2 font-medium">Monthly Rent *</p>
+            <p className="text-lg mb-2 font-medium">Monthly Rent (₱) <span class = "text-red-500">*</span></p>
             <input
               type="number"
               className="mt-1 block w-full border-[#EAD1C7] border rounded-lg p-2 bg-white "
@@ -75,7 +75,7 @@ export default function PricingStep({ form = {}, update }) {
           </div>
 
           <div>
-            <p className="text-lg mb-2 font-medium">Security Deposit *</p>
+            <p className="text-lg mb-2 font-medium">Security Deposit (₱) <span class = "text-red-500">*</span></p>
             <input
               type="number"
               className="mt-1 block w-full border-[#EAD1C7] border rounded-lg p-2 bg-white"
@@ -86,7 +86,7 @@ export default function PricingStep({ form = {}, update }) {
           </div>
 
           <div>
-            <p className="text-lg mb-2 font-medium">Application Fee</p>
+            <p className="text-lg mb-2 font-medium">Application Fee (₱)</p>
             <input
               type="number"
               className="mt-1 block w-full border-[#EAD1C7] border rounded-lg p-2 bg-white"
@@ -97,7 +97,7 @@ export default function PricingStep({ form = {}, update }) {
           </div>
 
           <div>
-            <p className="text-lg  mb-2 font-medium">Pet Fee</p>
+            <p className="text-lg  mb-2 font-medium">Pet Fee (₱)</p>
             <input
               type="number"
               className="mt-1 block w-full border-[#EAD1C7] border rounded-lg p-2 bg-white"
@@ -108,7 +108,7 @@ export default function PricingStep({ form = {}, update }) {
           </div>
 
           <div>
-            <p className="text-lg font-medium mb-2">Advance Rent *</p>
+            <p className="text-lg font-medium mb-2">Advance Rent <span class = "text-red-500">*</span></p>
             <select
               value={advance}
               onChange={(e) =>
@@ -189,10 +189,14 @@ export default function PricingStep({ form = {}, update }) {
               <span>{formatCurrency(appFee)}</span>
             </div>
             <div className="flex justify-between text-gray-700">
+              <span>Pet Fee</span>
+              <span>{formatCurrency(petFee)}</span>
+            </div>
+            <div className="flex justify-between text-gray-700">
               <span>Advance Rent ({advance} months)</span>
               <span>{formatCurrency(monthly * advance)}</span>
             </div>
-            <div className="flex justify-between  border-t pt-2 font-medium">
+            <div className="flex justify-between  border-t border-[#EAD1C7] pt-2 font-medium">
               <span>Total Move-in Cost</span>
               <span>{formatCurrency(totalMoveIn)}</span>
             </div>

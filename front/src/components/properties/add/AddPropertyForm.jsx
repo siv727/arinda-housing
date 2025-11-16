@@ -31,16 +31,39 @@ export default function AddPropertyForm() {
 	const update = (patch) => setForm((f) => ({ ...f, ...patch }))
 
 	const submit = () => {
-		// placeholder submit
 		console.log('Submitting property:', form)
 		alert('Property submitted (placeholder)')
 	}
+
+	const isStepValid = (stepIndex, f) => {
+		switch (steps[stepIndex].id) {
+			case 'basic':
+				return Boolean((f.title || '').trim()) && Boolean((f.description || '').trim())
+			case 'type':
+				return Boolean((f.propertyType || '').trim()) && Boolean((f.roomType || '').trim())
+			case 'location':
+				return Boolean((f.street || '').trim() && (f.city || '').trim() && (f.province || '').trim() && f.mapIsConfirmed)
+			case 'pricing':
+				return Number(f.monthlyRent) > 0 && (f.securityDeposit !== undefined && f.securityDeposit !== '')
+			case 'photos':
+				return Array.isArray(f.photos) && f.photos.length >= 5
+			case 'amenities':
+			case 'neighborhood':
+				return true
+			case 'review':
+				return true
+			default:
+				return true
+		}
+	}
+
+	const canNext = isStepValid(current, form)
 
 	const CurrentComponent = steps[current].Component
 
 	return (
 		<div className="max-w-4xl mx-auto space-y-6 pb-28 h-full">
-			<ProgressBar current={current} total={steps.length} />
+			
 			<div className="2xl:p-6 space-y-6 ">
 				<div className="space-y-2 ">
 					<h2 className="text-3xl font-semibold">{steps[current].label}</h2>
@@ -48,7 +71,7 @@ export default function AddPropertyForm() {
 				</div>
 			</div>
 
-			<StepNavigation current={current} total={steps.length} onBack={goBack} onNext={goNext} onSubmit={submit} />
+			<StepNavigation current={current} total={steps.length} onBack={goBack} onNext={goNext} onSubmit={submit} canNext={canNext} />
 		</div>
 	)
 }

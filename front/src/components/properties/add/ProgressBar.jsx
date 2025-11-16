@@ -1,12 +1,18 @@
 import React from 'react'
 
 export default function ProgressBar({ current = 0, total = 1 }) {
-  const pct = Math.round(((current + 1) / total) * 100)
   return (
     <div>
-      <div className="text-xs text-gray-600 mb-2">{pct}% complete</div>
-      <div className="w-full bg-gray-100 h-2 rounded">
-        <div className="bg-[#F35E27] h-2 rounded" style={{ width: `${pct}%` }} />
+      <div className="flex gap-2">
+        {Array.from({ length: total }).map((_, i) => (
+          <div
+            key={i}
+            className="flex-1 h-2 rounded-t"
+            style={{
+              backgroundColor: i <= current ? '#F35E27' : '#e5e7eb',
+            }}
+          ></div>
+        ))}
       </div>
     </div>
   )
