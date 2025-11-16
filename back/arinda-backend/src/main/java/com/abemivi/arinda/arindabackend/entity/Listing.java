@@ -1,5 +1,6 @@
 package com.abemivi.arinda.arindabackend.entity;
 
+import com.abemivi.arinda.arindabackend.entity.enums.ListingStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,7 +30,13 @@ public class Listing {
     private String propertytype;
 
     @Column(nullable = false)
+    private String roomtype;
+
+    @Column(nullable = false)
     private int leaseterm;
+
+    @Column(nullable = false)
+    private ListingStatus listingStatus;
 
     @Embedded
     private Location location;
