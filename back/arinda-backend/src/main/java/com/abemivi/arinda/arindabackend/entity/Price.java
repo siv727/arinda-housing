@@ -6,23 +6,26 @@ import lombok.Data;
 @Data
 @Embeddable
 public class Price {
-    @Column(nullable = false)
-    private int monthrent;
+    @Column(name = "monthlyrent", nullable = false)
+    private int monthlyrent;
 
-    @Column(nullable = false)
+    @Column(name = "securitydeposit", nullable = false)
     private int securitydeposit;
 
+    @Column(name = "appfee")
     private int appfee;
+
+    @Column(name = "petfee")
     private int petfee;
 
-    @Column(nullable = false)
+    @Column(name = "advancerent")
     private int advancerent;
 
     public int getAdvancerentCost() {
-        return advancerent * monthrent;
+        return advancerent * monthlyrent;
     }
 
     public int getTotalMoveinCost() {
-        return monthrent + securitydeposit + appfee + petfee + getAdvancerentCost();
+        return monthlyrent + securitydeposit + appfee + petfee + getAdvancerentCost();
     }
 }
