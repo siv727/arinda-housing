@@ -3,7 +3,6 @@ import React from 'react'
 const TYPES = [
   { key: 'BoardingHouse', label: 'Boarding House', icon: 'fa-regular fa-house' },
   { key: 'Apartment', label: 'Apartment', icon: 'fa-regular fa-building' },
-  { key: 'StudioUnit', label: 'Studio', icon: 'fa-regular fa-bed' },
   { key: 'Dormitory', label: 'Dormitory', icon: 'fa-regular fa-city' },
   { key: 'Condominium', label: 'Condominium', icon: 'fa-regular fa-buildings' },
 ]
