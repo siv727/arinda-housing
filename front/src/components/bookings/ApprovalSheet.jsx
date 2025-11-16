@@ -163,7 +163,7 @@ export default function ApprovalSheet({
                 onCancel();
                 onOpenChange(false);
               }}
-              className="hover:bg-[#FFF8F2] transition  border rounded-lg py-3 px-6 text-gray-700"
+              className="hover:bg-[#FFF8F2] transition  border rounded-lg py-3 px-6 text-gray-700 cursor-pointer"
             >
               Cancel <i className="fa-solid fa-arrow-turn-down-left pl-1"></i>
             </button>
@@ -171,7 +171,7 @@ export default function ApprovalSheet({
               onClick={submit}
               className="rounded-lg py-2 bg-[#F35E27] transition hover:bg-[#e7521c] px-6 text-white cursor-pointer"
             >
-              Confirm Booking{" "}
+              Send Offer{" "}
               <i className="fa-regular fa-circle-check pl-2"></i>
             </button>
           </div>
