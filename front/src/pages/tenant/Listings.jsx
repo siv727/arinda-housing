@@ -64,7 +64,7 @@ const Listings = () => {
     // Room type filter
     if (currentFilters.roomTypes.length > 0) {
       results = results.filter(listing =>
-        currentFilters.roomTypes.includes(listing.type)
+        currentFilters.roomTypes.includes(listing.roomType)
       )
     }
 
