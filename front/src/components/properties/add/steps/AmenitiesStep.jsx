@@ -5,6 +5,7 @@ const AMENITIES = [
   { key: 'No Amenities', label: 'No Amenities', icon: 'fa-regular fa-circle-xmark' },
   { key: 'Air Conditioning', label: 'Air Conditioning', icon: 'fa-regular fa-snowflake' },
   { key: 'Laundry Area', label: 'Laundry Area', icon: 'fa-regular fa-shirt' },
+  { key: 'Kitchen', label: 'Kitchen', icon: 'fa-regular fa-kitchen-set' },
   { key: 'Furniture', label: 'Fully Furnished', icon: 'fa-regular fa-couch' },
   { key: 'Parking Space', label: 'Parking Space', icon: 'fa-regular fa-car' },
   { key: 'Security', label: 'Security', icon: 'fa-regular fa-shield-halved' },
