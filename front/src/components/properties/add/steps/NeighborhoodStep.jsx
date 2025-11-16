@@ -16,6 +16,7 @@ const NEIGHBORHOOD = [
   { key: 'ATM', label: 'ATM', icon: 'fa-regular fa-credit-card' },
   { key: 'Gas Station', label: 'Gas Station', icon: 'fa-regular fa-gas-pump' },
   { key: 'Park', label: 'Park', icon: 'fa-regular fa-tree' },
+  { key: 'Gym', label: 'Gym', icon: 'fa-regular fa-dumbbell' },
 ]
 
 export default function NeighborhoodStep({ form = {}, update }) {

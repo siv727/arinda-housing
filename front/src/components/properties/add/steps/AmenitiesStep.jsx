@@ -10,6 +10,8 @@ const AMENITIES = [
   { key: 'Security', label: 'Security', icon: 'fa-regular fa-shield-halved' },
   { key: 'Pet Friendly', label: 'Pet Friendly', icon: 'fa-regular fa-paw' },
   { key: 'Swimming Pool', label: 'Swimming Pool', icon: 'fa-regular fa-water-ladder' },
+  { key: 'Gym', label: 'Gym', icon: 'fa-regular fa-dumbbell' },
+  { key: 'Study Area', label: 'Study Area', icon: 'fa-regular fa-book' },
 ]
 
 export default function AmenitiesStep({ form = {}, update }) {

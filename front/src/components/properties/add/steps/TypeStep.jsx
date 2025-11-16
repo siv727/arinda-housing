@@ -14,7 +14,7 @@ function TypeCard({ label, icon, selected, onSelect }) {
       type="button"
       onClick={onSelect}
       aria-pressed={selected}
-      className={`group relative flex flex-col items-start  gap-3 p-4 rounded-lg border hover:shadow-sm transition-all text-left w-full sm:w-auto ${
+      className={`group relative flex flex-col cursor-pointer items-start  gap-3 p-4 rounded-lg border hover:shadow-sm transition-all text-left w-full sm:w-auto ${
         selected
           ? 'border-orange-500 ring-2 ring-orange-100 bg-[#FFF8F2]/30'
           : 'border-[#EAD1C7] bg-white'
