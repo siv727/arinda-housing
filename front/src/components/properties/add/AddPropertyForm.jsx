@@ -40,7 +40,7 @@ export default function AddPropertyForm() {
 			case 'basic':
 				return Boolean((f.title || '').trim()) && Boolean((f.description || '').trim())
 			case 'type':
-				return Boolean(f.type)
+				return Boolean((f.propertyType || '').trim()) && Boolean((f.roomType || '').trim())
 			case 'location':
 				return Boolean((f.street || '').trim() && (f.city || '').trim() && (f.province || '').trim() && f.mapIsConfirmed)
 			case 'pricing':
