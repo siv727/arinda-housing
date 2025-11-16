@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @Entity
@@ -27,5 +29,21 @@ public class Review {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id") // optional: explicit FK column name
     private Student student;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdat;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedat;
+
+    @PrePersist
+    protected void onCreate() {
+        createdat = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedat = LocalDateTime.now();
+    }
 
 }
