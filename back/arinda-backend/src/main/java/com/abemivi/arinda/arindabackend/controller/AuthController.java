@@ -6,7 +6,6 @@ import com.abemivi.arinda.arindabackend.dto.RegisterRequest;
 import com.abemivi.arinda.arindabackend.entity.Landlord;
 import com.abemivi.arinda.arindabackend.entity.Student;
 import com.abemivi.arinda.arindabackend.entity.User;
-import com.abemivi.arinda.arindabackend.entity.enums.Role;
 import com.abemivi.arinda.arindabackend.repository.UserRepository;
 import com.abemivi.arinda.arindabackend.service.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -39,8 +38,17 @@ public class AuthController {
         var user = userRepository.findByEmail(request.email()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
 
+        AuthenticationResponse response = AuthenticationResponse.builder()
+                .token(jwtToken)
+                .role(user.getRole())
+                .id(user.getId())
+                .email(user.getEmail())
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
+                .build();
+
         // 3. Return the token
-        return ResponseEntity.ok(new AuthenticationResponse(jwtToken, user.getRole()));
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/register")
@@ -84,8 +92,17 @@ public class AuthController {
             // 4. Generate a token for the new user
             var jwtToken = jwtService.generateToken(user);
 
+            AuthenticationResponse response = AuthenticationResponse.builder()
+                    .token(jwtToken)
+                    .role(user.getRole())
+                    .id(user.getId())
+                    .email(user.getEmail())
+                    .firstname(user.getFirstname())
+                    .lastname(user.getLastname())
+                    .build();
+
             // 5. Return the token
-            return ResponseEntity.ok(new AuthenticationResponse(jwtToken, user.getRole()));
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
