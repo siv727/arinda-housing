@@ -12,10 +12,7 @@ import java.util.Collection;
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(
-        name = "role",
-        discriminatorType = DiscriminatorType.STRING
-)
+@DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING)
 public abstract class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +33,14 @@ public abstract class User implements UserDetails {
 
     @Column(nullable = false)
     private String lastname;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private java.time.LocalDateTime createdat;
+
+    @PrePersist
+    protected void onCreate() {
+        createdat = java.time.LocalDateTime.now();
+    }
 
     // UserDetails Override
     @Override
