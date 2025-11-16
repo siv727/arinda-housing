@@ -1,8 +1,8 @@
 package com.abemivi.arinda.arindabackend.controller;
 
-import com.abemivi.arinda.arindabackend.dto.AuthenticationResponse;
-import com.abemivi.arinda.arindabackend.dto.LoginRequest;
-import com.abemivi.arinda.arindabackend.dto.RegisterRequest;
+import com.abemivi.arinda.arindabackend.dto.authentication.AuthenticationResponse;
+import com.abemivi.arinda.arindabackend.dto.authentication.LoginRequest;
+import com.abemivi.arinda.arindabackend.dto.authentication.RegisterRequest;
 import com.abemivi.arinda.arindabackend.entity.Landlord;
 import com.abemivi.arinda.arindabackend.entity.Student;
 import com.abemivi.arinda.arindabackend.entity.User;
