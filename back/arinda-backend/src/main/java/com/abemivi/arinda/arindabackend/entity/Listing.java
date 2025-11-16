@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,6 +28,7 @@ public class Listing {
     @Column(nullable = false)
     private String propertytype;
 
+    @Column(nullable = false)
     private int leaseterm;
 
     @Embedded
@@ -34,30 +37,30 @@ public class Listing {
     @Embedded
     private Price price;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "landlord_id", nullable = false)
     private Landlord landlord;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "listing_inclusion", joinColumns = @JoinColumn(name = "listing_id"), inverseJoinColumns = @JoinColumn(name = "inclusion_id"))
-    private Set<NeedsIncluded> inclusions;
+    private Set<NeedsIncluded> inclusions = new HashSet<>();
 
-    @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Photo> photos;
+    @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Photo> photos = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "listing_amenity", joinColumns = @JoinColumn(name = "listing_id"), inverseJoinColumns = @JoinColumn(name = "amenity_id"))
-    private Set<Amenity> amenities;
-
-    @ManyToMany
+    private Set<Amenity> amenities = new HashSet<>();
+    
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "listing_establishment", joinColumns = @JoinColumn(name = "listing_id"), inverseJoinColumns = @JoinColumn(name = "establishment_id"))
-    private Set<Establishment> establishments;
+    private Set<Establishment> establishments = new HashSet<>();
 
-    @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews;
+    @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Review> reviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "listing")
-    private List<Application> applications;
+    @OneToMany(mappedBy = "listing", fetch = FetchType.LAZY)
+    private List<Application> applications = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
