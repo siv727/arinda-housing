@@ -1,24 +1,48 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from "react";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetFooter,
-} from '@/components/ui/sheet'
+} from "@/components/ui/sheet";
 
-export default function ConfirmationSheet({ open, onOpenChange, booking, onConfirm = () => {}, onCancel = () => {} }) {
-  const tenant = booking?.tenant
-  const property = booking?.property
+export default function ConfirmationSheet({
+  open,
+  onOpenChange,
+  booking,
+  onConfirm = () => {},
+  onCancel = () => {},
+}) {
+  const tenant = booking?.tenant;
+  const property = booking?.property;
 
-  const [leaseTerm, setLeaseTerm] = useState('12 months')
-  const [monthlyRent, setMonthlyRent] = useState(property?.price || '')
-  const [moveInDate, setMoveInDate] = useState(tenant?.moveInDate || booking?.checkIn || '')
+  const [leaseTerm, setLeaseTerm] = useState("12 months");
+  const [monthlyRent, setMonthlyRent] = useState(booking?.price || "");
+  const [moveInDate, setMoveInDate] = useState(
+    booking?.moveInDate || booking?.checkIn || ""
+  );
 
+  const isEmptyString = (v) => {
+    return String(v ?? "").trim().length === 0;
+  };
+
+  const isInvalid =
+    isEmptyString(monthlyRent) ||
+    isEmptyString(moveInDate);
+    
+
+  useEffect(() => {
+    if (open && booking) {
+      setMonthlyRent(booking?.price || "");
+      setMoveInDate(booking?.moveInDate || booking?.checkIn || "");
+      setLeaseTerm(booking?.leaseDuration || "12 months"); 
+    }
+  }, [open, booking]);
   const submit = () => {
-    onConfirm({ leaseTerm, monthlyRent, moveInDate })
-    onOpenChange(false)
-  }
+    onConfirm({ leaseTerm, monthlyRent, moveInDate });
+    onOpenChange(false);
+  };
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -45,8 +69,14 @@ export default function ConfirmationSheet({ open, onOpenChange, booking, onConfi
           </div>
 
           <div>
-            <label className="text-sm text-gray-600 font-medium">Agreed-upon Lease Term</label>
-            <select className="mt-1 w-full px-3 py-2 border rounded-md" value={leaseTerm} onChange={(e) => setLeaseTerm(e.target.value)}>
+            <label className="text-sm text-gray-600 font-medium">
+              Agreed-upon Lease Term
+            </label>
+            <select
+              className="mt-1 w-full px-3 py-2 border rounded-md"
+              value={leaseTerm}
+              onChange={(e) => setLeaseTerm(e.target.value)}
+            >
               <option>1 months</option>
               <option>3 months</option>
               <option>6 months</option>
@@ -56,23 +86,58 @@ export default function ConfirmationSheet({ open, onOpenChange, booking, onConfi
           </div>
 
           <div>
-            <label className="text-sm text-gray-600 font-medium">Agreed-upon Monthly Rent</label>
-            <input className="mt-1 w-full px-3 py-2 border rounded-md" value={monthlyRent} onChange={(e) => setMonthlyRent(e.target.value)} />
+            <label className="text-sm text-gray-600 font-medium">
+              Agreed-upon Monthly Rent
+            </label>
+            <input
+              className="mt-1 w-full px-3 py-2 border rounded-md"
+              value={monthlyRent}
+              onChange={(e) => setMonthlyRent(e.target.value)}
+            />
           </div>
 
           <div>
-            <label className="text-sm text-gray-600 font-medium">Final Move-in Date</label>
-            <input type="text" className="mt-1 w-full px-3 py-2 border rounded-md" value={moveInDate} onChange={(e) => setMoveInDate(e.target.value)} />
+            <label className="text-sm text-gray-600 font-medium">
+              Final Move-in Date
+            </label>
+            <input
+              type="text"
+              className="mt-1 w-full px-3 py-2 border rounded-md"
+              value={moveInDate}
+              onChange={(e) => setMoveInDate(e.target.value)}
+            />
           </div>
         </div>
 
         <SheetFooter className="border-t pt-4">
           <div className="flex justify-end gap-3 w-full font-medium">
-            <button onClick={() => { onCancel(); onOpenChange(false) }} className="hover:bg-[#FFF8F2] transition  border rounded-lg py-3 px-6 text-gray-700">Cancel</button>
-            <button onClick={submit} className="rounded-lg py-2 bg-[#F35E27] transition hover:bg-[#e7521c] px-6 text-white">Confirm & Move to Tenants</button>
+            <button
+              onClick={() => {
+                onCancel();
+                onOpenChange(false);
+              }}
+              className="hover:bg-[#FFF8F2] transition  border rounded-lg py-3 px-6 text-gray-700 cursor-pointer"
+            >
+              Cancel <i className="fa-solid fa-arrow-turn-down-left pl-1"></i>
+            </button>
+            <button
+              disabled={isInvalid}
+              onClick={submit}
+              className={`
+              rounded-lg py-2 px-6 text-white transition bg-[#F35E27] hover:bg-[#e7521c] 
+              ${
+                isInvalid
+                  ? "opacity-40 cursor-not-allowed"
+                  : "cursor-pointer"
+              }
+            `}
+            >
+              Confirm & Move to Tenants{" "}
+              <i className="fa-regular fa-circle-check pl-2"></i>
+            </button>
           </div>
         </SheetFooter>
       </SheetContent>
     </Sheet>
-  )
+  );
 }
