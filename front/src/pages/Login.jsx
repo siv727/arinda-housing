@@ -15,7 +15,7 @@ const Login = () => {
           </h1>
           <p className="text-center mb-6">{description}</p>
           <hr />
-          <LoginForm userType="tenant" />
+          <LoginForm />
           <div className="text-[14px] text-center text-gray-600 mb-6">
             Don't have an account?
             <a
