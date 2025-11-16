@@ -146,8 +146,11 @@ export default function ApprovalSheet({
                       </div>
                     </div>
 
-                    <div class = "text text-gray-500 hover:text-gray-600 cursor-pointer transition p-2 rounded-full w-9 h-9 items-center flex justify-center hover:bg-gray-200" onClick={() => setFile(null)}>
-                        <i class="fa-regular fa-trash-can"></i>
+                    <div
+                      class="text text-gray-500 hover:text-gray-600 cursor-pointer transition p-2 rounded-full w-9 h-9 items-center flex justify-center hover:bg-gray-200"
+                      onClick={() => setFile(null)}
+                    >
+                      <i class="fa-regular fa-trash-can"></i>
                     </div>
                   </div>
                 </div>
@@ -163,16 +166,22 @@ export default function ApprovalSheet({
                 onCancel();
                 onOpenChange(false);
               }}
-              className="hover:bg-[#FFF8F2] transition  border rounded-lg py-3 px-6 text-gray-700"
+              className="hover:bg-[#FFF8F2] transition  border rounded-lg py-3 px-6 text-gray-700 cursor-pointer"
             >
               Cancel <i className="fa-solid fa-arrow-turn-down-left pl-1"></i>
             </button>
             <button
               onClick={submit}
-              className="rounded-lg py-2 bg-[#F35E27] transition hover:bg-[#e7521c] px-6 text-white cursor-pointer"
+              disabled={message.trim().length === 0 || !file}
+              className={`rounded-lg py-2 px-6 text-white transition bg-[#F35E27] hover:bg-[#e7521c] 
+                ${
+                  message.trim().length === 0 || !file
+                    ? "opacity-40 cursor-not-allowed"
+                    : "cursor-pointer"
+                }
+              `}
             >
-              Confirm Booking{" "}
-              <i className="fa-regular fa-circle-check pl-2"></i>
+              Send Offer <i class="fa-regular fa-paper-plane-top pl-2"></i>
             </button>
           </div>
         </SheetFooter>

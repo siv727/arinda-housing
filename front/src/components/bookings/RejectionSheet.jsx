@@ -45,7 +45,7 @@ export default function RejectionSheet({
               rows={6}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder="Write a short approval message or instructions here"
+              placeholder="Write a short rejection message here"
               className="mt-1 w-full px-3 py-2 border rounded-md"
             />
           </div>
@@ -64,7 +64,13 @@ export default function RejectionSheet({
             </button>
             <button
               onClick={submit}
-              className="rounded-lg py-2 bg-[#F35E27] transition hover:bg-[#e7521c] px-6 text-white cursor-pointer"
+              disabled={message.trim().length === 0}
+              className={`rounded-lg py-2 px-6 text-white transition bg-[#F35E27] hover:bg-[#e7521c] 
+    ${
+      message.trim().length === 0
+        ? "opacity-40 cursor-not-allowed"
+        : "cursor-pointer"
+    }`}
             >
               Confirm Rejection{" "}
               <i className="fa-regular fa-circle-check pl-2"></i>

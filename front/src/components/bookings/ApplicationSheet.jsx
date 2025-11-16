@@ -9,16 +9,19 @@ import {
 } from '@/components/ui/sheet'
 import ApprovalSheet from './ApprovalSheet'
 import RejectionSheet from './RejectionSheet'
+import ConfirmationSheet from './ConfirmationSheet'
 
 const StatusBadge = ({ status }) => {
   const map = {
     Confirmed: 'bg-green-100 text-green-700',
     Pending: 'bg-yellow-100 text-yellow-700',
+    Offered: 'bg-orange-100 text-orange-700',
     Rejected: 'bg-red-100 text-red-700',
   }
   const dot = {
     Confirmed: 'bg-green-500',
     Pending: 'bg-yellow-500',
+    Offered: 'bg-orange-500',
     Rejected: 'bg-red-500',
   }
   return (
@@ -33,12 +36,13 @@ const StatusBadge = ({ status }) => {
   )
 }
 
-export default function ApplicationSheet({ open, onOpenChange, booking, onApprove = () => {}, onReject = () => {} }) {
+export default function ApplicationSheet({ open, onOpenChange, booking, onApprove = () => {}, onReject = () => {}, onFinalize = () => {} }) {
   const tenant = booking?.tenant
   const property = booking?.property
   const [approvalOpen, setApprovalOpen] = useState(false)
   const [rejectionOpen, setRejectionOpen] = useState(false)
-  const isActionSheetOpen = approvalOpen || rejectionOpen;
+  const [confirmationOpen, setConfirmationOpen] = useState(false)
+  const isActionSheetOpen = approvalOpen || rejectionOpen || confirmationOpen;
 
   const handleApprove = () => {
     if (!booking) return
@@ -59,6 +63,14 @@ export default function ApplicationSheet({ open, onOpenChange, booking, onApprov
   const handleRejectionConfirm = (payload) => {
     onReject(booking, payload)
     setRejectionOpen(false)
+    onOpenChange(false)
+  }
+
+  const handleConfirmationConfirm = (payload) => {
+    // payload contains leaseTerm, monthlyRent, moveInDate
+    if (!booking) return
+    if (typeof onFinalize === 'function') onFinalize(booking, payload)
+    setConfirmationOpen(false)
     onOpenChange(false)
   }
 
@@ -175,18 +187,37 @@ export default function ApplicationSheet({ open, onOpenChange, booking, onApprov
           {/* Fixed footer */}
           <SheetFooter className="border-t pt-4 ">
             <div className="flex justify-end gap-3 w-full font-medium cursor-pointer">
-              <button
-                onClick={handleReject}
-                className="hover:bg-[#FFF8F2] transition  border rounded-lg py-3 px-6 text-gray-700"
-              >
-                Reject<i className="fa-regular fa-circle-x pl-2"></i>
-              </button>
-              <button
-                onClick={handleApprove}
-                className="rounded-lg py-2 bg-[#F35E27] transition hover:bg-[#e7521c] px-6 text-white cursor-pointer"
-              >
-                Approve<i className="fa-regular fa-circle-check pl-2"></i>
-              </button>
+              {booking?.status === 'Offered' ? (
+                <>
+                  <button
+                    onClick={handleReject}
+                    className="hover:bg-[#FFF8F2] transition  border rounded-lg py-3 px-6 text-gray-700 cursor-pointer"
+                  >
+                    Cancel Offer<i className="fa-regular fa-circle-x pl-2"></i>
+                  </button>
+                  <button
+                    onClick={() => setConfirmationOpen(true)}
+                    className="rounded-lg py-2 bg-[#F35E27] transition hover:bg-[#e7521c] px-6 text-white cursor-pointer"
+                  >
+                    Finalize Booking<i className="fa-regular fa-circle-check pl-2"></i>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={handleReject}
+                    className="hover:bg-[#FFF8F2] transition  border rounded-lg py-3 px-6 text-gray-700 cursor-pointer"
+                  >
+                    Reject<i className="fa-regular fa-circle-x pl-2"></i>
+                  </button>
+                  <button
+                    onClick={handleApprove}
+                    className="rounded-lg py-2 bg-[#F35E27] transition hover:bg-[#e7521c] px-6 text-white cursor-pointer"
+                  >
+                    Approve<i className="fa-regular fa-circle-check pl-2"></i>
+                  </button>
+                </>
+              )}
             </div>
           </SheetFooter>
         </SheetContent>
@@ -207,6 +238,14 @@ export default function ApplicationSheet({ open, onOpenChange, booking, onApprov
         to={tenant?.email}
         onConfirm={handleRejectionConfirm}
         onCancel={() => setRejectionOpen(false)}
+      />
+
+      <ConfirmationSheet
+        open={confirmationOpen}
+        onOpenChange={setConfirmationOpen}
+        booking={booking}
+        onConfirm={handleConfirmationConfirm}
+        onCancel={() => setConfirmationOpen(false)}
       />
     </>
   )
