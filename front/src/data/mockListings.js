@@ -14,7 +14,7 @@ export const mockListings = [
     availableDate: "August 15, 2024",
     bedrooms: 1,
     bathrooms: 1,
-    amenities: ["Wi-Fi / Internet", "Laundry / Laundry Area", "Kitchen", "Study Area", "Parking / Parking Space", "Gym"],
+    amenities: ["Laundry / Laundry Area", "Kitchen", "Study Area", "Parking / Parking Space", "Gym"],
     inclusions: ["Wi-Fi / Internet", "Electricity", "Water", "Gas"],
     neighborhood: ["School", "Gym", "Convenience Store", "ATM", "Bank"],
     images: [
@@ -80,7 +80,7 @@ export const mockListings = [
     availableDate: "September 1, 2024",
     bedrooms: 1,
     bathrooms: 1,
-    amenities: ["Wi-Fi / Internet", "Kitchen", "Study Area"],
+    amenities: ["Kitchen", "Study Area"],
     inclusions: ["Wi-Fi / Internet", "Electricity", "Water"],
     neighborhood: ["School", "Carenderia", "Convenience Store", "Terminal"],
     images: [
@@ -119,7 +119,7 @@ export const mockListings = [
     availableDate: "August 1, 2024",
     bedrooms: 1,
     bathrooms: 1,
-    amenities: ["Wi-Fi / Internet", "Kitchen", "Parking / Parking Space", "Laundry / Laundry Area", "Study Area"],
+    amenities: ["Kitchen", "Parking / Parking Space", "Laundry / Laundry Area", "Study Area"],
     inclusions: ["Wi-Fi / Internet", "Water"],
     neighborhood: ["Carenderia", "Convenience Store", "School", "Church", "Market"],
     images: [
@@ -177,7 +177,7 @@ export const mockListings = [
     availableDate: "August 15, 2024",
     bedrooms: 1,
     bathrooms: 1,
-    amenities: ["Wi-Fi / Internet", "Gym", "Swimming Pool", "Security", "Parking / Parking Space", "Fully Furnished"],
+    amenities: ["Gym", "Swimming Pool", "Security", "Parking / Parking Space", "Fully Furnished"],
     inclusions: ["Wi-Fi / Internet", "Electricity", "Water", "Gas", "Cable TV", "Trash Collection"],
     neighborhood: ["Mall", "Gym", "Bank", "ATM", "Gas Station", "Park"],
     images: [
@@ -243,7 +243,7 @@ export const mockListings = [
     availableDate: "July 15, 2024",
     bedrooms: 2,
     bathrooms: 1,
-    amenities: ["Wi-Fi / Internet", "Laundry / Laundry Area", "Kitchen", "Parking / Parking Space", "Fully Furnished"],
+    amenities: ["Laundry / Laundry Area", "Kitchen", "Parking / Parking Space", "Fully Furnished"],
     inclusions: ["Water", "Trash Collection", "Wi-Fi / Internet"],
     neighborhood: ["School", "Convenience Store", "Pharmacy", "ATM"],
     images: [
@@ -301,7 +301,7 @@ export const mockListings = [
     availableDate: "August 20, 2024",
     bedrooms: 1,
     bathrooms: 1,
-    amenities: ["Wi-Fi / Internet", "Kitchen", "Study Area", "Laundry / Laundry Area"],
+    amenities: ["Kitchen", "Study Area", "Laundry / Laundry Area"],
     inclusions: ["Wi-Fi / Internet", "Electricity", "Water"],
     neighborhood: ["School", "Carenderia", "Terminal", "Convenience Store"],
     images: [
@@ -359,7 +359,7 @@ export const mockListings = [
     availableDate: "September 1, 2024",
     bedrooms: 1,
     bathrooms: 1,
-    amenities: ["Wi-Fi / Internet", "Laundry / Laundry Area", "Kitchen", "Study Area", "Air Conditioning", "Fully Furnished"],
+    amenities: ["Laundry / Laundry Area", "Kitchen", "Study Area", "Air Conditioning", "Fully Furnished"],
     inclusions: ["Wi-Fi / Internet", "Electricity", "Water"],
     neighborhood: ["School", "Convenience Store", "ATM", "Bank", "Pharmacy"],
     images: [
@@ -425,7 +425,7 @@ export const mockListings = [
     availableDate: "August 10, 2024",
     bedrooms: 1,
     bathrooms: 1,
-    amenities: ["Wi-Fi / Internet", "Laundry / Laundry Area", "Kitchen", "Parking / Parking Space", "Pet Friendly"],
+    amenities: ["Laundry / Laundry Area", "Kitchen", "Parking / Parking Space", "Pet Friendly"],
     inclusions: ["Wi-Fi / Internet", "Water", "Gas"],
     neighborhood: ["Carenderia", "Convenience Store", "Market", "Church", "School"],
     images: [
