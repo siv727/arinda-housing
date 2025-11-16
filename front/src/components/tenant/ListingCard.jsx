@@ -44,54 +44,58 @@ const ListingCard = ({ listing, onFavoriteToggle }) => {
       </div>
 
       {/* Content Section */}
-      <div className="p-4">
-        {/* Title and Rating */}
-        <div className="flex justify-between items-start mb-2">
-          <h3 className="font-semibold text-lg text-gray-800 flex-1 pr-2 truncate">
-            {listing.title}
-          </h3>
-          <div className="flex items-center gap-1 text-sm whitespace-nowrap">
-            <i className="fa-solid fa-star text-[#FFA500]"></i>
-            <span className="font-semibold">{listing.rating}</span>
-            <span className="text-gray-500">({listing.reviewCount})</span>
+      <div className="p-4 flex flex-col justify-between min-h-60">
+        <div>
+          {/* Title and Rating */}
+          <div className="flex justify-between items-start mb-2">
+            <h3 className="font-semibold text-lg text-gray-800 flex-1 pr-2 truncate">
+              {listing.title}
+            </h3>
+            <div className="flex items-center gap-1 text-sm whitespace-nowrap">
+              <i className="fa-solid fa-star text-[#FFA500]"></i>
+              <span className="font-semibold">{listing.rating}</span>
+              <span className="text-gray-500">({listing.reviewCount})</span>
+            </div>
+          </div>
+
+          {/* Location */}
+          <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
+            <i className="fa-solid fa-location-dot"></i>
+            <span>{listing.location}</span>
+            <span className="text-[#DD4912]">• {listing.distance}</span>
+          </div>
+
+          {/* Amenities */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            {listing.amenities.slice(0, 3).map((amenity, index) => (
+              <span
+                key={index}
+                className="text-xs bg-orange-50 text-[#DD4912] px-2 py-1 rounded"
+              >
+                {amenity}
+              </span>
+            ))}
+            {listing.amenities.length > 3 && (
+              <span className="text-xs text-gray-500">+{listing.amenities.length - 3} more</span>
+            )}
           </div>
         </div>
 
-        {/* Location */}
-        <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
-          <i className="fa-solid fa-location-dot"></i>
-          <span>{listing.location}</span>
-          <span className="text-[#DD4912]">• {listing.distance}</span>
-        </div>
-
-        {/* Amenities */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          {listing.amenities.slice(0, 3).map((amenity, index) => (
-            <span
-              key={index}
-              className="text-xs bg-orange-50 text-[#DD4912] px-2 py-1 rounded"
+        <div>
+          {/* Price and Button */}
+          <div className="flex justify-between items-center pt-3 border-t border-gray-200">
+            <div>
+              <span className="text-2xl font-bold text-gray-800">${listing.price}</span>
+              <span className="text-sm text-gray-500">/month</span>
+              <div className="text-xs text-gray-500 mt-1">Available {listing.availableDate}</div>
+            </div>
+            <a
+              href={`/tenant/listings/${listing.id}`}
+              className="bg-gradient-to-r from-[#DD4912] to-[#FFA500] text-white px-4 py-2 rounded text-sm font-semibold hover:opacity-90 transition-opacity cursor-pointer"
             >
-              {amenity}
-            </span>
-          ))}
-          {listing.amenities.length > 3 && (
-            <span className="text-xs text-gray-500">+{listing.amenities.length - 3} more</span>
-          )}
-        </div>
-
-        {/* Price and Button */}
-        <div className="flex justify-between items-center pt-3 border-t border-gray-200">
-          <div>
-            <span className="text-2xl font-bold text-gray-800">${listing.price}</span>
-            <span className="text-sm text-gray-500">/month</span>
-            <div className="text-xs text-gray-500 mt-1">Available {listing.availableDate}</div>
+              View Details
+            </a>
           </div>
-          <a
-            href={`/tenant/listings/${listing.id}`}
-            className="bg-gradient-to-r from-[#DD4912] to-[#FFA500] text-white px-4 py-2 rounded text-sm font-semibold hover:opacity-90 transition-opacity cursor-pointer"
-          >
-            View Details
-          </a>
         </div>
       </div>
     </div>
