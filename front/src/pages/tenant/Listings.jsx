@@ -9,8 +9,11 @@ const Listings = () => {
   const [sortBy, setSortBy] = useState('recommended')
   const [filters, setFilters] = useState({
     priceRange: 'all',
+    propertyTypes: [],
     roomTypes: [],
-    amenities: []
+    amenities: [],
+    inclusions: [],
+    neighborhood: []
   })
   const [filteredListings, setFilteredListings] = useState(mockListings)
 
@@ -23,8 +26,11 @@ const Listings = () => {
   const handleClearFilters = () => {
     const clearedFilters = {
       priceRange: 'all',
+      propertyTypes: [],
       roomTypes: [],
-      amenities: []
+      amenities: [],
+      inclusions: [],
+      neighborhood: []
     }
     setFilters(clearedFilters)
     applyFilters(searchQuery, sortBy, clearedFilters)
@@ -61,10 +67,17 @@ const Listings = () => {
       })
     }
 
+    // Property type filter
+    if (currentFilters.propertyTypes.length > 0) {
+      results = results.filter(listing =>
+        currentFilters.propertyTypes.includes(listing.propertyType)
+      )
+    }
+
     // Room type filter
     if (currentFilters.roomTypes.length > 0) {
       results = results.filter(listing =>
-        currentFilters.roomTypes.includes(listing.type)
+        currentFilters.roomTypes.includes(listing.roomType)
       )
     }
 
@@ -73,6 +86,24 @@ const Listings = () => {
       results = results.filter(listing =>
         currentFilters.amenities.every(amenity =>
           listing.amenities.includes(amenity)
+        )
+      )
+    }
+
+    // Inclusions filter
+    if (currentFilters.inclusions.length > 0) {
+      results = results.filter(listing =>
+        currentFilters.inclusions.every(inclusion =>
+          listing.inclusions?.includes(inclusion)
+        )
+      )
+    }
+
+    // Neighborhood filter
+    if (currentFilters.neighborhood.length > 0) {
+      results = results.filter(listing =>
+        currentFilters.neighborhood.every(feature =>
+          listing.neighborhood?.includes(feature)
         )
       )
     }

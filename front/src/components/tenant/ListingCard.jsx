@@ -39,7 +39,7 @@ const ListingCard = ({ listing, onFavoriteToggle }) => {
 
         {/* Property Type Label */}
         <div className="absolute bottom-3 left-3 bg-black/60 text-white text-xs px-3 py-1 rounded">
-          {listing.type}
+          {listing.roomType}
         </div>
       </div>
 

@@ -3,7 +3,8 @@ export const mockListings = [
   {
     id: 1,
     title: "Modern Studio Near Campus",
-    type: "Studio Apartment",
+    propertyType: "Apartment",
+    roomType: "Studio / Studio Apartment",
     price: 850,
     location: "University District",
     distance: "0.2 miles from campus",
@@ -13,7 +14,9 @@ export const mockListings = [
     availableDate: "August 15, 2024",
     bedrooms: 1,
     bathrooms: 1,
-    amenities: ["WiFi", "Laundry", "Kitchen", "Study Area", "Parking", "Gym"],
+    amenities: ["Laundry / Laundry Area", "Kitchen", "Study Area", "Parking / Parking Space", "Gym"],
+    inclusions: ["Wi-Fi / Internet", "Electricity", "Water", "Gas"],
+    neighborhood: ["School", "Gym", "Convenience Store", "ATM", "Bank"],
     images: [
       "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80",
       "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80",
@@ -24,13 +27,6 @@ export const mockListings = [
     description: "This modern studio apartment is perfect for students looking for a comfortable and convenient living space near campus. Located in the heart of University District, you'll be just a 2-minute walk from classes, libraries, and campus amenities. The space features contemporary furnishings, a fully equipped kitchen, and a dedicated study area to help you succeed academically. The building offers excellent amenities including a fitness center, study lounges, and 24/7 security for peace of mind.",
     securityDeposit: 850,
     applicationFee: 50,
-    whatsIncluded: [
-      "All utilities (electricity, water, gas)",
-      "High-speed internet (100 Mbps)",
-      "Fully furnished",
-      "24/7 security",
-      "Maintenance support"
-    ],
     host: {
       name: "Sarah Dilucca",
       avatar: "https://i.pravatar.cc/150?img=5",
@@ -73,7 +69,8 @@ export const mockListings = [
   {
     id: 2,
     title: "Shared Dorm Room - Female Only",
-    type: "Shared Dorm",
+    propertyType: "Dormitory",
+    roomType: "Shared Dorm",
     price: 450,
     location: "Campus Housing",
     distance: "0.1 miles from campus",
@@ -83,7 +80,9 @@ export const mockListings = [
     availableDate: "September 1, 2024",
     bedrooms: 1,
     bathrooms: 1,
-    amenities: ["WiFi", "Shared Kitchen", "Study Lounge"],
+    amenities: ["Kitchen", "Study Area"],
+    inclusions: ["Wi-Fi / Internet", "Electricity", "Water"],
+    neighborhood: ["School", "Carenderia", "Convenience Store", "Terminal"],
     images: [
       "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&q=80",
       "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=800&q=80",
@@ -92,13 +91,6 @@ export const mockListings = [
     description: "Affordable shared dorm room in campus housing with access to all campus amenities. Female-only floor with secure access. Great community atmosphere and study support.",
     securityDeposit: 450,
     applicationFee: 30,
-    whatsIncluded: [
-      "All utilities included",
-      "High-speed WiFi",
-      "Access to campus facilities",
-      "Weekly housekeeping",
-      "24/7 campus security"
-    ],
     host: {
       name: "Campus Housing Services",
       avatar: "https://i.pravatar.cc/150?img=20",
@@ -116,7 +108,8 @@ export const mockListings = [
   {
     id: 3,
     title: "Private Room in Student House",
-    type: "Private Room",
+    propertyType: "Boarding House",
+    roomType: "Private Room",
     price: 650,
     location: "Student Village",
     distance: "0.5 miles from campus",
@@ -126,7 +119,9 @@ export const mockListings = [
     availableDate: "August 1, 2024",
     bedrooms: 1,
     bathrooms: 1,
-    amenities: ["WiFi", "Shared Kitchen", "Parking", "Laundry", "Study Area"],
+    amenities: ["Kitchen", "Parking / Parking Space", "Laundry / Laundry Area", "Study Area"],
+    inclusions: ["Wi-Fi / Internet", "Water"],
+    neighborhood: ["Carenderia", "Convenience Store", "School", "Church", "Market"],
     images: [
       "https://images.unsplash.com/photo-1554995207-c18c203602cb?w=800&q=80",
       "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&q=80",
@@ -137,13 +132,6 @@ export const mockListings = [
     description: "Enjoy your own private room in a shared student house with friendly housemates. This cozy space offers privacy when you need it and social opportunities when you want them. The house features a shared kitchen, living room, and backyard area perfect for BBQs and study breaks. Located in the popular Student Village neighborhood, you'll find plenty of cafes, restaurants, and grocery stores within walking distance. Parking space included!",
     securityDeposit: 650,
     applicationFee: 40,
-    whatsIncluded: [
-      "Utilities included (split with housemates)",
-      "High-speed internet",
-      "Parking space",
-      "Shared laundry facilities",
-      "Basic furniture provided"
-    ],
     host: {
       name: "Michael Torres",
       avatar: "https://i.pravatar.cc/150?img=15",
@@ -178,7 +166,8 @@ export const mockListings = [
   {
     id: 4,
     title: "Luxury Student Apartment",
-    type: "Studio Apartment",
+    propertyType: "Condominium",
+    roomType: "Studio / Studio Apartment",
     price: 1200,
     location: "Downtown",
     distance: "1.2 miles from campus",
@@ -188,7 +177,9 @@ export const mockListings = [
     availableDate: "August 15, 2024",
     bedrooms: 1,
     bathrooms: 1,
-    amenities: ["WiFi", "Gym", "Pool", "Concierge", "Parking", "Rooftop Deck"],
+    amenities: ["Gym", "Swimming Pool", "Security", "Parking / Parking Space", "Fully Furnished"],
+    inclusions: ["Wi-Fi / Internet", "Electricity", "Water", "Gas", "Cable TV", "Trash Collection"],
+    neighborhood: ["Mall", "Gym", "Bank", "ATM", "Gas Station", "Park"],
     images: [
       "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80",
       "https://images.unsplash.com/photo-1502672023488-70e25813eb80?w=800&q=80",
@@ -199,14 +190,6 @@ export const mockListings = [
     description: "Experience luxury student living in this stunning downtown studio apartment. Features floor-to-ceiling windows with city views, premium appliances, quartz countertops, and designer finishes throughout. The building offers resort-style amenities including a state-of-the-art fitness center, rooftop pool with lounge areas, 24/7 concierge service, and secure underground parking. Perfect for students who want the best of both worlds - close to city attractions while maintaining easy access to campus.",
     securityDeposit: 1200,
     applicationFee: 75,
-    whatsIncluded: [
-      "All utilities (electricity, water, gas, heating/cooling)",
-      "Ultra-fast fiber internet (500 Mbps)",
-      "Fully furnished with designer pieces",
-      "24/7 concierge service",
-      "Weekly housekeeping",
-      "Parking space"
-    ],
     host: {
       name: "Premium Properties LLC",
       avatar: "https://i.pravatar.cc/150?img=25",
@@ -249,7 +232,8 @@ export const mockListings = [
   {
     id: 5,
     title: "Cozy 2-Bedroom Apartment",
-    type: "2-Bedroom",
+    propertyType: "Apartment",
+    roomType: "2-Bedroom",
     price: 1100,
     location: "University District",
     distance: "0.3 miles from campus",
@@ -259,7 +243,9 @@ export const mockListings = [
     availableDate: "July 15, 2024",
     bedrooms: 2,
     bathrooms: 1,
-    amenities: ["WiFi", "Laundry", "Kitchen", "Parking", "Balcony", "Storage"],
+    amenities: ["Laundry / Laundry Area", "Kitchen", "Parking / Parking Space", "Fully Furnished"],
+    inclusions: ["Water", "Trash Collection", "Wi-Fi / Internet"],
+    neighborhood: ["School", "Convenience Store", "Pharmacy", "ATM"],
     images: [
       "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80",
       "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&q=80",
@@ -270,13 +256,6 @@ export const mockListings = [
     description: "Perfect for sharing with a roommate! This spacious 2-bedroom apartment offers comfortable living just a short walk from campus. Each bedroom is generously sized with ample closet space. The apartment features a full kitchen, in-unit laundry, and a private balcony perfect for relaxing after classes. Located on a quiet street in University District, you'll enjoy the peaceful atmosphere while still being close to campus life. One designated parking space included!",
     securityDeposit: 1100,
     applicationFee: 60,
-    whatsIncluded: [
-      "Water and trash included",
-      "High-speed WiFi",
-      "In-unit washer/dryer",
-      "One parking space",
-      "Basic maintenance"
-    ],
     host: {
       name: "Jennifer Lee",
       avatar: "https://i.pravatar.cc/150?img=31",
@@ -311,7 +290,8 @@ export const mockListings = [
   {
     id: 6,
     title: "Budget-Friendly Shared Room",
-    type: "Shared Room",
+    propertyType: "Boarding House",
+    roomType: "Shared Room",
     price: 380,
     location: "Campus Housing",
     distance: "0.2 miles from campus",
@@ -321,7 +301,9 @@ export const mockListings = [
     availableDate: "August 20, 2024",
     bedrooms: 1,
     bathrooms: 1,
-    amenities: ["WiFi", "Shared Kitchen", "Study Lounge", "Laundry"],
+    amenities: ["Kitchen", "Study Area", "Laundry / Laundry Area"],
+    inclusions: ["Wi-Fi / Internet", "Electricity", "Water"],
+    neighborhood: ["School", "Carenderia", "Terminal", "Convenience Store"],
     images: [
       "https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800&q=80",
       "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=800&q=80",
@@ -332,13 +314,6 @@ export const mockListings = [
     description: "The most affordable housing option for students on a budget! Share a room with one other student in this clean and comfortable campus housing. While you'll share your sleeping space, you'll have access to shared kitchen facilities, study lounges, and laundry room. This is a great way to save money while making friends and staying close to campus. Perfect for freshmen or students prioritizing affordability over privacy.",
     securityDeposit: 380,
     applicationFee: 25,
-    whatsIncluded: [
-      "All utilities included",
-      "WiFi access",
-      "Shared kitchen and study lounge",
-      "Laundry facilities",
-      "Campus shuttle access"
-    ],
     host: {
       name: "Student Housing Co-op",
       avatar: "https://i.pravatar.cc/150?img=40",
@@ -373,7 +348,8 @@ export const mockListings = [
   {
     id: 7,
     title: "Furnished 1-Bedroom Near Library",
-    type: "1-Bedroom",
+    propertyType: "Apartment",
+    roomType: "1-Bedroom",
     price: 950,
     location: "University District",
     distance: "0.4 miles from campus",
@@ -383,7 +359,9 @@ export const mockListings = [
     availableDate: "September 1, 2024",
     bedrooms: 1,
     bathrooms: 1,
-    amenities: ["WiFi", "Laundry", "Kitchen", "Study Area", "Air Conditioning", "Heating"],
+    amenities: ["Laundry / Laundry Area", "Kitchen", "Study Area", "Air Conditioning", "Fully Furnished"],
+    inclusions: ["Wi-Fi / Internet", "Electricity", "Water"],
+    neighborhood: ["School", "Convenience Store", "ATM", "Bank", "Pharmacy"],
     images: [
       "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=800&q=80",
       "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=800&q=80",
@@ -394,14 +372,6 @@ export const mockListings = [
     description: "Fully furnished 1-bedroom apartment perfect for serious students who value proximity to academic resources. Located just steps from the university library, you'll never have an excuse for late assignments! The apartment comes completely furnished with a comfortable bed, study desk, dining table, and living room furniture. Features a dedicated study area with excellent lighting, high-speed WiFi, and a quiet atmosphere conducive to academic success. The building is well-maintained with in-unit laundry for convenience.",
     securityDeposit: 950,
     applicationFee: 55,
-    whatsIncluded: [
-      "Electricity and water included",
-      "High-speed WiFi (200 Mbps)",
-      "Fully furnished (bed, desk, appliances)",
-      "In-unit laundry",
-      "Heating and air conditioning",
-      "Maintenance support"
-    ],
     host: {
       name: "Robert Chen",
       avatar: "https://i.pravatar.cc/150?img=11",
@@ -444,7 +414,8 @@ export const mockListings = [
   {
     id: 8,
     title: "Spacious Studio with Balcony",
-    type: "Studio Apartment",
+    propertyType: "Apartment",
+    roomType: "Studio / Studio Apartment",
     price: 780,
     location: "Student Village",
     distance: "0.6 miles from campus",
@@ -454,7 +425,9 @@ export const mockListings = [
     availableDate: "August 10, 2024",
     bedrooms: 1,
     bathrooms: 1,
-    amenities: ["WiFi", "Laundry", "Kitchen", "Balcony", "Parking", "Pet-Friendly"],
+    amenities: ["Laundry / Laundry Area", "Kitchen", "Parking / Parking Space", "Pet Friendly"],
+    inclusions: ["Wi-Fi / Internet", "Water", "Gas"],
+    neighborhood: ["Carenderia", "Convenience Store", "Market", "Church", "School"],
     images: [
       "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80",
       "https://images.unsplash.com/photo-1513584684374-8bab748fbf90?w=800&q=80",
@@ -465,14 +438,6 @@ export const mockListings = [
     description: "Enjoy studio living with extra breathing room! This spacious studio apartment features a private balcony perfect for morning coffee, study breaks, or evening relaxation. The open floor plan maximizes space efficiency while maintaining distinct living and sleeping areas. Large windows provide abundant natural light throughout the day. Located in the vibrant Student Village area, you'll have easy access to cafes, restaurants, and shops. Pet-friendly for small animals (additional deposit required). One parking space included!",
     securityDeposit: 780,
     applicationFee: 45,
-    whatsIncluded: [
-      "Water and gas included",
-      "High-speed internet",
-      "Pet-friendly (with deposit)",
-      "Parking space",
-      "On-site laundry",
-      "Basic maintenance"
-    ],
     host: {
       name: "Amanda Foster",
       avatar: "https://i.pravatar.cc/150?img=32",

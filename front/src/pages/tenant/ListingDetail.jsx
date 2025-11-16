@@ -28,7 +28,7 @@ const ListingDetail = () => {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-6 pt-24 pb-8">
         {/* Back Button */}
         <Link
           to="/tenant/listings"
@@ -60,7 +60,7 @@ const ListingDetail = () => {
               <div className="flex items-center gap-4 text-gray-600 mb-4">
                 <span className="flex items-center">
                   <i className="fa-solid fa-home mr-2 text-gray-400"></i>
-                  {listing.type}
+                  {listing.roomType}
                 </span>
                 <span className="flex items-center">
                   <i className="fa-solid fa-location-dot mr-2 text-gray-400"></i>
@@ -129,13 +129,13 @@ const ListingDetail = () => {
             <hr className="border-gray-200" />
 
             {/* What's Included */}
-            {listing.whatsIncluded && listing.whatsIncluded.length > 0 && (
+            {listing.inclusions && listing.inclusions.length > 0 && (
               <>
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900 mb-4">What's Included</h2>
                   <div className="bg-orange-50 border border-orange-200 rounded-lg p-6">
                     <ul className="space-y-3">
-                      {listing.whatsIncluded.map((item, index) => (
+                      {listing.inclusions.map((item, index) => (
                         <li key={index} className="flex items-start gap-3 text-gray-700">
                           <i className="fa-solid fa-circle-check text-orange-500 mt-1"></i>
                           <span>{item}</span>

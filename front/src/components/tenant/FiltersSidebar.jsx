@@ -1,6 +1,48 @@
+import { useState } from 'react'
+
 const FiltersSidebar = ({ filters, onFilterChange, onClearAll }) => {
+  // Collapsible sections state
+  const [expandedSections, setExpandedSections] = useState({
+    priceRange: true,
+    propertyType: true,
+    roomType: true,
+    amenities: false,
+    inclusions: false,
+    neighborhood: false
+  })
+
+  // Show more state for sections with many items
+  const [showMore, setShowMore] = useState({
+    roomType: false,
+    amenities: false,
+    inclusions: false,
+    neighborhood: false
+  })
+
+  const toggleSection = (section) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }))
+  }
+
+  const toggleShowMore = (section) => {
+    setShowMore(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }))
+  }
+
   const handlePriceChange = (priceRange) => {
     onFilterChange('priceRange', priceRange)
+  }
+
+  const handlePropertyTypeChange = (propertyType) => {
+    const currentPropertyTypes = filters.propertyTypes || []
+    const updatedPropertyTypes = currentPropertyTypes.includes(propertyType)
+      ? currentPropertyTypes.filter(type => type !== propertyType)
+      : [...currentPropertyTypes, propertyType]
+    onFilterChange('propertyTypes', updatedPropertyTypes)
   }
 
   const handleRoomTypeChange = (roomType) => {
@@ -19,6 +61,22 @@ const FiltersSidebar = ({ filters, onFilterChange, onClearAll }) => {
     onFilterChange('amenities', updatedAmenities)
   }
 
+  const handleInclusionChange = (inclusion) => {
+    const currentInclusions = filters.inclusions || []
+    const updatedInclusions = currentInclusions.includes(inclusion)
+      ? currentInclusions.filter(i => i !== inclusion)
+      : [...currentInclusions, inclusion]
+    onFilterChange('inclusions', updatedInclusions)
+  }
+
+  const handleNeighborhoodChange = (neighborhood) => {
+    const currentNeighborhood = filters.neighborhood || []
+    const updatedNeighborhood = currentNeighborhood.includes(neighborhood)
+      ? currentNeighborhood.filter(n => n !== neighborhood)
+      : [...currentNeighborhood, neighborhood]
+    onFilterChange('neighborhood', updatedNeighborhood)
+  }
+
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
       {/* Header */}
@@ -34,8 +92,15 @@ const FiltersSidebar = ({ filters, onFilterChange, onClearAll }) => {
 
       {/* Price Range */}
       <div className="mb-6">
-        <h3 className="font-semibold text-gray-700 mb-3">Price Range</h3>
-        <div className="space-y-2">
+        <button
+          onClick={() => toggleSection('priceRange')}
+          className="w-full flex justify-between items-center mb-3 cursor-pointer hover:text-[#DD4912] transition-colors"
+        >
+          <h3 className="font-semibold text-gray-700">Price Range</h3>
+          <i className={`fa-solid fa-chevron-${expandedSections.priceRange ? 'up' : 'down'} text-sm text-gray-500`}></i>
+        </button>
+        {expandedSections.priceRange && (
+          <div className="space-y-2">
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
@@ -73,128 +138,177 @@ const FiltersSidebar = ({ filters, onFilterChange, onClearAll }) => {
             <span className="text-sm text-gray-600">Over $800</span>
           </label>
         </div>
+        )}
+      </div>
+
+      {/* Property Type */}
+      <div className="mb-6">
+        <button
+          onClick={() => toggleSection('propertyType')}
+          className="w-full flex justify-between items-center mb-3 cursor-pointer hover:text-[#DD4912] transition-colors"
+        >
+          <h3 className="font-semibold text-gray-700">Property Type</h3>
+          <i className={`fa-solid fa-chevron-${expandedSections.propertyType ? 'up' : 'down'} text-sm text-gray-500`}></i>
+        </button>
+        {expandedSections.propertyType && (
+          <div className="space-y-2">
+            {['Apartment', 'Boarding House', 'Condominium', 'Dormitory'].map((propertyType) => (
+              <label key={propertyType} className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={filters.propertyTypes?.includes(propertyType)}
+                  onChange={() => handlePropertyTypeChange(propertyType)}
+                  className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
+                />
+                <span className="text-sm text-gray-600">{propertyType}</span>
+              </label>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Room Type */}
       <div className="mb-6">
-        <h3 className="font-semibold text-gray-700 mb-3">Room Type</h3>
-        <div className="space-y-2">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.roomTypes?.includes('Studio Apartment')}
-              onChange={() => handleRoomTypeChange('Studio Apartment')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">Studio Apartment</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.roomTypes?.includes('Private Room')}
-              onChange={() => handleRoomTypeChange('Private Room')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">Private Room</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.roomTypes?.includes('Shared Room')}
-              onChange={() => handleRoomTypeChange('Shared Room')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">Shared Room</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.roomTypes?.includes('Shared Dorm')}
-              onChange={() => handleRoomTypeChange('Shared Dorm')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">Shared Dorm</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.roomTypes?.includes('1-Bedroom')}
-              onChange={() => handleRoomTypeChange('1-Bedroom')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">1-Bedroom</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.roomTypes?.includes('2-Bedroom')}
-              onChange={() => handleRoomTypeChange('2-Bedroom')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">2-Bedroom</span>
-          </label>
-        </div>
+        <button
+          onClick={() => toggleSection('roomType')}
+          className="w-full flex justify-between items-center mb-3 cursor-pointer hover:text-[#DD4912] transition-colors"
+        >
+          <h3 className="font-semibold text-gray-700">Room Type</h3>
+          <i className={`fa-solid fa-chevron-${expandedSections.roomType ? 'up' : 'down'} text-sm text-gray-500`}></i>
+        </button>
+        {expandedSections.roomType && (
+          <>
+            <div className="space-y-2">
+              {['Studio / Studio Apartment', 'Private Room', 'Shared Room', 'Shared Dorm']
+                .concat(showMore.roomType ? ['1-Bedroom', '2-Bedroom'] : [])
+                .map((roomType) => (
+                  <label key={roomType} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={filters.roomTypes?.includes(roomType)}
+                      onChange={() => handleRoomTypeChange(roomType)}
+                      className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
+                    />
+                    <span className="text-sm text-gray-600">{roomType}</span>
+                  </label>
+                ))}
+            </div>
+            <button
+              onClick={() => toggleShowMore('roomType')}
+              className="text-sm text-[#DD4912] hover:underline mt-2 cursor-pointer"
+            >
+              {showMore.roomType ? 'Show Less' : 'Show More (2)'}
+            </button>
+          </>
+        )}
       </div>
 
       {/* Amenities */}
+      <div className="mb-6">
+        <button
+          onClick={() => toggleSection('amenities')}
+          className="w-full flex justify-between items-center mb-3 cursor-pointer hover:text-[#DD4912] transition-colors"
+        >
+          <h3 className="font-semibold text-gray-700">Amenities</h3>
+          <i className={`fa-solid fa-chevron-${expandedSections.amenities ? 'up' : 'down'} text-sm text-gray-500`}></i>
+        </button>
+        {expandedSections.amenities && (
+          <>
+            <div className="space-y-2">
+              {['Air Conditioning', 'Fully Furnished', 'Gym', 'Kitchen', 'Laundry / Laundry Area']
+                .concat(showMore.amenities ? ['Parking / Parking Space', 'Pet Friendly', 'Security', 'Study Area', 'Swimming Pool'] : [])
+                .map((amenity) => (
+                  <label key={amenity} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={filters.amenities?.includes(amenity)}
+                      onChange={() => handleAmenityChange(amenity)}
+                      className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
+                    />
+                    <span className="text-sm text-gray-600">{amenity}</span>
+                  </label>
+                ))}
+            </div>
+            <button
+              onClick={() => toggleShowMore('amenities')}
+              className="text-sm text-[#DD4912] hover:underline mt-2 cursor-pointer"
+            >
+              {showMore.amenities ? 'Show Less' : 'Show More (5)'}
+            </button>
+          </>
+        )}
+      </div>
+
+      {/* Inclusions */}
+      <div className="mb-6">
+        <button
+          onClick={() => toggleSection('inclusions')}
+          className="w-full flex justify-between items-center mb-3 cursor-pointer hover:text-[#DD4912] transition-colors"
+        >
+          <h3 className="font-semibold text-gray-700">What's Included</h3>
+          <i className={`fa-solid fa-chevron-${expandedSections.inclusions ? 'up' : 'down'} text-sm text-gray-500`}></i>
+        </button>
+        {expandedSections.inclusions && (
+          <>
+            <div className="space-y-2">
+              {['Wi-Fi / Internet', 'Electricity', 'Water', 'Gas']
+                .concat(showMore.inclusions ? ['Cable TV', 'Trash Collection'] : [])
+                .map((inclusion) => (
+                  <label key={inclusion} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={filters.inclusions?.includes(inclusion)}
+                      onChange={() => handleInclusionChange(inclusion)}
+                      className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
+                    />
+                    <span className="text-sm text-gray-600">{inclusion}</span>
+                  </label>
+                ))}
+            </div>
+            <button
+              onClick={() => toggleShowMore('inclusions')}
+              className="text-sm text-[#DD4912] hover:underline mt-2 cursor-pointer"
+            >
+              {showMore.inclusions ? 'Show Less' : 'Show More (2)'}
+            </button>
+          </>
+        )}
+      </div>
+
+      {/* Neighborhood */}
       <div>
-        <h3 className="font-semibold text-gray-700 mb-3">Amenities</h3>
-        <div className="space-y-2">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.amenities?.includes('WiFi')}
-              onChange={() => handleAmenityChange('WiFi')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">WiFi</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.amenities?.includes('Kitchen')}
-              onChange={() => handleAmenityChange('Kitchen')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">Kitchen</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.amenities?.includes('Laundry')}
-              onChange={() => handleAmenityChange('Laundry')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">Laundry</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.amenities?.includes('Study Area')}
-              onChange={() => handleAmenityChange('Study Area')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">Study Area</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.amenities?.includes('Parking')}
-              onChange={() => handleAmenityChange('Parking')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">Parking</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.amenities?.includes('Gym')}
-              onChange={() => handleAmenityChange('Gym')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">Gym</span>
-          </label>
-        </div>
+        <button
+          onClick={() => toggleSection('neighborhood')}
+          className="w-full flex justify-between items-center mb-3 cursor-pointer hover:text-[#DD4912] transition-colors"
+        >
+          <h3 className="font-semibold text-gray-700">Neighborhood</h3>
+          <i className={`fa-solid fa-chevron-${expandedSections.neighborhood ? 'up' : 'down'} text-sm text-gray-500`}></i>
+        </button>
+        {expandedSections.neighborhood && (
+          <>
+            <div className="space-y-2">
+              {['School', 'Convenience Store', 'Carenderia', 'Market', 'Mall', 'Church']
+                .concat(showMore.neighborhood ? ['Pharmacy', 'Hospital', 'Terminal', 'Bus Stop', 'Bank', 'ATM', 'Gas Station', 'Park', 'Gym'] : [])
+                .map((neighborhood) => (
+                  <label key={neighborhood} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={filters.neighborhood?.includes(neighborhood)}
+                      onChange={() => handleNeighborhoodChange(neighborhood)}
+                      className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
+                    />
+                    <span className="text-sm text-gray-600">{neighborhood}</span>
+                  </label>
+                ))}
+            </div>
+            <button
+              onClick={() => toggleShowMore('neighborhood')}
+              className="text-sm text-[#DD4912] hover:underline mt-2 cursor-pointer"
+            >
+              {showMore.neighborhood ? 'Show Less' : 'Show More (9)'}
+            </button>
+          </>
+        )}
       </div>
     </div>
   )
