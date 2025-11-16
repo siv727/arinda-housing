@@ -2,13 +2,12 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-const LoginForm = ({ userType = 'tenant' }) => {
+const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log(`Logging in as ${userType}`)
 
     const formData = new FormData(e.target)
     const email = formData.get('email')
@@ -25,7 +24,13 @@ const LoginForm = ({ userType = 'tenant' }) => {
       );
 
       console.log('User logged in successfully:', response.data)
-      response.data.role === 'LANDLORD' && userType === 'landlord' ? navigate('/landlord/dashboard') : navigate('/tenant/listings')
+      
+      // Redirect based on user role from backend
+      if (response.data.role === 'LANDLORD') {
+        navigate('/landlord/dashboard')
+      } else {
+        navigate('/tenant/listings')
+      }
     } catch (error) {
       console.error('Error logging in:', error.response?.data || error.message)
     }
