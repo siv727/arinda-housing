@@ -32,11 +32,11 @@ public class Listing {
     @Column(nullable = false)
     private String roomtype;
 
-    @Column(nullable = false)
-    private int leaseterm;
+    @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<LeaseTerm> leaseterms = new ArrayList<>();
 
     @Column(nullable = false)
-    private ListingStatus listingStatus;
+    private ListingStatus listingstatus;
 
     @Embedded
     private Location location;
@@ -58,7 +58,7 @@ public class Listing {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "listing_amenity", joinColumns = @JoinColumn(name = "listing_id"), inverseJoinColumns = @JoinColumn(name = "amenity_id"))
     private Set<Amenity> amenities = new HashSet<>();
-    
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "listing_establishment", joinColumns = @JoinColumn(name = "listing_id"), inverseJoinColumns = @JoinColumn(name = "establishment_id"))
     private Set<Establishment> establishments = new HashSet<>();
@@ -70,18 +70,18 @@ public class Listing {
     private List<Application> applications = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdat;
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedat;
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
+        createdat = LocalDateTime.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
+        updatedat = LocalDateTime.now();
     }
 }
