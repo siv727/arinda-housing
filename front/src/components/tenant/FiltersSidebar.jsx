@@ -3,6 +3,14 @@ const FiltersSidebar = ({ filters, onFilterChange, onClearAll }) => {
     onFilterChange('priceRange', priceRange)
   }
 
+  const handlePropertyTypeChange = (propertyType) => {
+    const currentPropertyTypes = filters.propertyTypes || []
+    const updatedPropertyTypes = currentPropertyTypes.includes(propertyType)
+      ? currentPropertyTypes.filter(type => type !== propertyType)
+      : [...currentPropertyTypes, propertyType]
+    onFilterChange('propertyTypes', updatedPropertyTypes)
+  }
+
   const handleRoomTypeChange = (roomType) => {
     const currentRoomTypes = filters.roomTypes || []
     const updatedRoomTypes = currentRoomTypes.includes(roomType)
@@ -17,6 +25,22 @@ const FiltersSidebar = ({ filters, onFilterChange, onClearAll }) => {
       ? currentAmenities.filter(a => a !== amenity)
       : [...currentAmenities, amenity]
     onFilterChange('amenities', updatedAmenities)
+  }
+
+  const handleInclusionChange = (inclusion) => {
+    const currentInclusions = filters.inclusions || []
+    const updatedInclusions = currentInclusions.includes(inclusion)
+      ? currentInclusions.filter(i => i !== inclusion)
+      : [...currentInclusions, inclusion]
+    onFilterChange('inclusions', updatedInclusions)
+  }
+
+  const handleNeighborhoodChange = (neighborhood) => {
+    const currentNeighborhood = filters.neighborhood || []
+    const updatedNeighborhood = currentNeighborhood.includes(neighborhood)
+      ? currentNeighborhood.filter(n => n !== neighborhood)
+      : [...currentNeighborhood, neighborhood]
+    onFilterChange('neighborhood', updatedNeighborhood)
   }
 
   return (
@@ -75,125 +99,127 @@ const FiltersSidebar = ({ filters, onFilterChange, onClearAll }) => {
         </div>
       </div>
 
+      {/* Property Type */}
+      <div className="mb-6">
+        <h3 className="font-semibold text-gray-700 mb-3">Property Type</h3>
+        <div className="space-y-2">
+          {['Apartment', 'Boarding House', 'Condominium', 'Dormitory'].map((propertyType) => (
+            <label key={propertyType} className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={filters.propertyTypes?.includes(propertyType)}
+                onChange={() => handlePropertyTypeChange(propertyType)}
+                className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
+              />
+              <span className="text-sm text-gray-600">{propertyType}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
       {/* Room Type */}
       <div className="mb-6">
         <h3 className="font-semibold text-gray-700 mb-3">Room Type</h3>
         <div className="space-y-2">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.roomTypes?.includes('Studio Apartment')}
-              onChange={() => handleRoomTypeChange('Studio Apartment')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">Studio Apartment</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.roomTypes?.includes('Private Room')}
-              onChange={() => handleRoomTypeChange('Private Room')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">Private Room</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.roomTypes?.includes('Shared Room')}
-              onChange={() => handleRoomTypeChange('Shared Room')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">Shared Room</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.roomTypes?.includes('Shared Dorm')}
-              onChange={() => handleRoomTypeChange('Shared Dorm')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">Shared Dorm</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.roomTypes?.includes('1-Bedroom')}
-              onChange={() => handleRoomTypeChange('1-Bedroom')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">1-Bedroom</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.roomTypes?.includes('2-Bedroom')}
-              onChange={() => handleRoomTypeChange('2-Bedroom')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">2-Bedroom</span>
-          </label>
+          {['Studio / Studio Apartment', 'Private Room', 'Shared Room', 'Shared Dorm', '1-Bedroom', '2-Bedroom'].map((roomType) => (
+            <label key={roomType} className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={filters.roomTypes?.includes(roomType)}
+                onChange={() => handleRoomTypeChange(roomType)}
+                className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
+              />
+              <span className="text-sm text-gray-600">{roomType}</span>
+            </label>
+          ))}
         </div>
       </div>
 
       {/* Amenities */}
-      <div>
+      <div className="mb-6">
         <h3 className="font-semibold text-gray-700 mb-3">Amenities</h3>
         <div className="space-y-2">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.amenities?.includes('WiFi')}
-              onChange={() => handleAmenityChange('WiFi')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">WiFi</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.amenities?.includes('Kitchen')}
-              onChange={() => handleAmenityChange('Kitchen')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">Kitchen</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.amenities?.includes('Laundry')}
-              onChange={() => handleAmenityChange('Laundry')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">Laundry</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.amenities?.includes('Study Area')}
-              onChange={() => handleAmenityChange('Study Area')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">Study Area</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.amenities?.includes('Parking')}
-              onChange={() => handleAmenityChange('Parking')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">Parking</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={filters.amenities?.includes('Gym')}
-              onChange={() => handleAmenityChange('Gym')}
-              className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
-            />
-            <span className="text-sm text-gray-600">Gym</span>
-          </label>
+          {[
+            'Air Conditioning',
+            'Fully Furnished',
+            'Gym',
+            'Kitchen',
+            'Laundry / Laundry Area',
+            'Parking / Parking Space',
+            'Pet Friendly',
+            'Security',
+            'Study Area',
+            'Swimming Pool'
+          ].map((amenity) => (
+            <label key={amenity} className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={filters.amenities?.includes(amenity)}
+                onChange={() => handleAmenityChange(amenity)}
+                className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
+              />
+              <span className="text-sm text-gray-600">{amenity}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Inclusions */}
+      <div className="mb-6">
+        <h3 className="font-semibold text-gray-700 mb-3">What's Included</h3>
+        <div className="space-y-2">
+          {[
+            'Cable TV',
+            'Electricity',
+            'Gas',
+            'Trash Collection',
+            'Water',
+            'Wi-Fi / Internet'
+          ].map((inclusion) => (
+            <label key={inclusion} className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={filters.inclusions?.includes(inclusion)}
+                onChange={() => handleInclusionChange(inclusion)}
+                className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
+              />
+              <span className="text-sm text-gray-600">{inclusion}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Neighborhood */}
+      <div>
+        <h3 className="font-semibold text-gray-700 mb-3">Neighborhood</h3>
+        <div className="space-y-2">
+          {[
+            'Carenderia',
+            'Convenience Store',
+            'Pharmacy',
+            'Hospital',
+            'Terminal',
+            'Bus Stop',
+            'Market',
+            'Mall',
+            'School',
+            'Church',
+            'Bank',
+            'ATM',
+            'Gas Station',
+            'Park',
+            'Gym'
+          ].map((neighborhood) => (
+            <label key={neighborhood} className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={filters.neighborhood?.includes(neighborhood)}
+                onChange={() => handleNeighborhoodChange(neighborhood)}
+                className="w-4 h-4 text-[#DD4912] border-gray-300 rounded focus:ring-[#DD4912]"
+              />
+              <span className="text-sm text-gray-600">{neighborhood}</span>
+            </label>
+          ))}
         </div>
       </div>
     </div>
