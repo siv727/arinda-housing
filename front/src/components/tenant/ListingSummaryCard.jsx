@@ -22,7 +22,7 @@ const ListingSummaryCard = ({ listing }) => {
       <div className="p-6">
         {/* Type Badge */}
         <span className="inline-block bg-orange-100 text-orange-800 text-xs font-semibold px-3 py-1 rounded-full mb-3">
-          {listing.type}
+          {listing.roomType}
         </span>
 
         {/* Title */}
@@ -71,11 +71,11 @@ const ListingSummaryCard = ({ listing }) => {
         )}
 
         {/* What's Included */}
-        {listing.whatsIncluded && listing.whatsIncluded.length > 0 && (
+        {listing.inclusions && listing.inclusions.length > 0 && (
           <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
             <h4 className="font-semibold text-gray-900 mb-3">What's Included:</h4>
             <ul className="space-y-2">
-              {listing.whatsIncluded.map((item, index) => (
+              {listing.inclusions.map((item, index) => (
                 <li key={index} className="text-sm text-gray-700 flex items-start gap-2">
                   <i className="fa-solid fa-circle-check text-orange-500 mt-0.5 text-xs"></i>
                   <span>{item}</span>
