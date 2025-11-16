@@ -13,7 +13,7 @@ public class LeaseTerm {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "months", nullable = false)
     private Integer months;
 
     @ManyToOne(fetch = FetchType.LAZY)
