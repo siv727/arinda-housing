@@ -1,4 +1,4 @@
-package com.abemivi.arinda.arindabackend.dto;
+package com.abemivi.arinda.arindabackend.dto.authentication;
 
 import com.abemivi.arinda.arindabackend.entity.enums.Role;
 import lombok.Builder;

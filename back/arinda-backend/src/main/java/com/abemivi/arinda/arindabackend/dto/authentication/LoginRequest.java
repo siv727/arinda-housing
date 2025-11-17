@@ -1,4 +1,4 @@
-package com.abemivi.arinda.arindabackend.dto;
+package com.abemivi.arinda.arindabackend.dto.authentication;
 
 public record LoginRequest(String email, String password) {
 }
