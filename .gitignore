@@ -1,0 +1,91 @@
+# Consolidated root .gitignore for arinda-housing
+
+### Frontend (from front/.gitignore)
+# Logs
+front/logs
+front/*.log
+front/npm-debug.log*
+front/yarn-debug.log*
+front/yarn-error.log*
+front/pnpm-debug.log*
+front/lerna-debug.log*
+
+front/node_modules/
+front/dist/
+front/dist-ssr/
+front/*.local
+front/.vite/
+.vite/
+front/.cache/
+
+# Editor directories and files (frontend)
+front/.vscode/*
+!front/.vscode/extensions.json
+
+### Backend (from back/arinda-backend/.gitignore)
+# Maven / Java
+back/arinda-backend/HELP.md
+back/arinda-backend/target/
+back/arinda-backend/.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS
+back/arinda-backend/.apt_generated
+back/arinda-backend/.classpath
+back/arinda-backend/.factorypath
+back/arinda-backend/.project
+back/arinda-backend/.settings
+back/arinda-backend/.springBeans
+back/arinda-backend/.sts4-cache
+
+### IntelliJ IDEA
+.idea/
+.idea
+*.iws
+*.iml
+*.ipr
+
+# Maven wrapper and build
+back/arinda-backend/.mvn/
+
+### NetBeans
+/back/arinda-backend/nbproject/private/
+/back/arinda-backend/nbbuild/
+/back/arinda-backend/dist/
+/back/arinda-backend/nbdist/
+/back/arinda-backend/.nb-gradle/
+back/arinda-backend/build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code
+.vscode/
+
+### Misc from front/.gitignore
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+### Files sometimes added by IDEA module
+back/arinda-backend/src/main/resources/application.properties
+/src/main/resources/application.properties
+
+### back/.idea/.gitignore entries (shelf and workspace)
+# These are covered by .idea/ above but left here for clarity
+/shelf/
+/workspace.xml
+
+### Common / Repo-wide
+coverage/
+*.lcov
+*.log
+.env
+
+# node/yarn
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
