@@ -5,7 +5,7 @@ export const bookings = [
     property: { title: 'Sunset Apartments', address: '123 College Ave, Quezon City' },
     checkIn: 'Jan 15, 2024',
     price: 10000,
-    status: 'Offered',
+    status: 'Confirmed',
     bookedDate: 'Jan 10, 2024'
   },
   {
