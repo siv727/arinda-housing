@@ -5,18 +5,8 @@ import { bookings as mockBookings } from '@/data/mockBookings'
 export default function Bookings() {
   const [bookings, setBookings] = useState(mockBookings)
 
-  const handleAccept = (b, payload) => {
-    if (payload) {
-      // payload from ApprovalSheet -> this is an Offer being sent
-      setBookings((prev) => prev.map(x => x.id === b.id ? { ...x, status: 'Offered' } : x))
-    } else {
-      setBookings((prev) => prev.map(x => x.id === b.id ? { ...x, status: 'Confirmed' } : x))
-    }
-  }
-
-  const handleFinalize = (b, details) => {
-    // details: { leaseTerm, monthlyRent, moveInDate }
-    setBookings((prev) => prev.map(x => x.id === b.id ? { ...x, status: 'Confirmed', lease: details } : x))
+  const handleAccept = (b) => {
+    setBookings((prev) => prev.map(x => x.id === b.id ? { ...x, status: 'Confirmed' } : x))
   }
 
   const handleReject = (b) => {
@@ -30,7 +20,7 @@ export default function Bookings() {
         <p className="text-gray-600">Manage all tenant bookings and reservations for your properties.</p>
       </div>
 
-        <BookingsTable bookings={bookings} onAccept={handleAccept} onReject={handleReject} onFinalize={handleFinalize} />
+        <BookingsTable bookings={bookings} onAccept={handleAccept} onReject={handleReject} />
  
     </div>
   )

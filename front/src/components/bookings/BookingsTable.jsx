@@ -4,13 +4,11 @@ import ApplicationSheet from "./ApplicationSheet";
 const StatusBadge = ({ status }) => {
   const map = {
     Confirmed: "bg-green-100 text-green-700",
-    Offered: "bg-orange-100 text-orange-700",
     Pending: "bg-yellow-100 text-yellow-700",
     Rejected: "bg-red-100 text-red-700",
   };
   const dot = {
     Confirmed: "bg-green-500",
-    Offered: "bg-orange-500", 
     Pending: "bg-yellow-500",
     Rejected: "bg-red-500",
   };
@@ -34,7 +32,6 @@ const BookingsTable = ({
   bookings = [],
   onAccept = () => {},
   onReject = () => {},
-  onFinalize = () => {},
 }) => {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [selected, setSelected] = useState(null);
@@ -44,9 +41,8 @@ const BookingsTable = ({
     setSheetOpen(true);
   };
 
-  const handleApprove = (b, payload) => {
-    // if payload provided, this is an Offer being sent
-    onAccept(b, payload)
+  const handleApprove = (b) => {
+    onAccept(b)
   }
 
   const handleReject = (b) => {
@@ -120,7 +116,7 @@ const BookingsTable = ({
           </tbody>
         </table>
       </div>
-      <ApplicationSheet open={sheetOpen} onOpenChange={setSheetOpen} booking={selected} onApprove={handleApprove} onReject={handleReject} onFinalize={(b, details) => onFinalize(b, details)} />
+      <ApplicationSheet open={sheetOpen} onOpenChange={setSheetOpen} booking={selected} onApprove={handleApprove} onReject={handleReject} />
     </>
   );
 };
