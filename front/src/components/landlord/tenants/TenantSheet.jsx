@@ -187,7 +187,7 @@ export default function TenantSheet({
                 Check in
               </label>
               <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50 ">
-                {property?.title}
+                {booking?.checkIn }
               </div>
             </div>
           </div>
