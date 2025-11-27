@@ -1,10 +1,14 @@
 import { useState } from 'react'
 import { bookings as mockBookings } from '@/data/mockBookings'
 import TenantsTable from '@/components/landlord/tenants/TenantsTable'
+import TenantFilters from '@/components/landlord/tenants/TenantFilters'
 
 export default function Tenants() {
   const [query, setQuery] = useState('')
   const [bookings, setBookings] = useState(mockBookings)
+  // Payment status filter: 'All' | 'Paid' | 'Due Soon' | 'Overdue'
+  const [paymentFilter, setPaymentFilter] = useState('All')
+  const [showFilters, setShowFilters] = useState(false)
 
   const confirmed = bookings.filter(b => b.status === 'Confirmed')
 
@@ -12,6 +16,16 @@ export default function Tenants() {
     const q = query.trim().toLowerCase()
     if (!q) return true
     return (`${b.tenant.name} ${b.tenant.email} ${b.property.title}`.toLowerCase()).includes(q)
+  })
+
+  // helper to read payment status from booking shape (fallbacks for different shapes)
+  const getPaymentStatus = (b) => {
+    return b.paymentStatus ?? b.payment?.status ?? 'Due Soon'
+  }
+
+  const paymentFiltered = filtered.filter(b => {
+    if (paymentFilter === 'All') return true
+    return getPaymentStatus(b) === paymentFilter
   })
 
   const handleEndLease = (b) => {
@@ -41,15 +55,21 @@ export default function Tenants() {
 
           <button
             type="button"
+            onClick={() => setShowFilters(s => !s)}
            className="bg-orange-500 cursor-pointer font-medium text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition flex items-center"
           >
             <i className="fa-regular fa-filter pr-2"></i>Filters
           </button>
         </div>
+
       </form>
 
+      {showFilters && (
+        <TenantFilters status={paymentFilter} setStatus={setPaymentFilter} onClose={() => setShowFilters(false)} />
+      )}
+
       <div>
-        <TenantsTable bookings={filtered} onEndLease={handleEndLease} />
+        <TenantsTable bookings={paymentFiltered} onEndLease={handleEndLease} />
       </div>
     </div>
   )

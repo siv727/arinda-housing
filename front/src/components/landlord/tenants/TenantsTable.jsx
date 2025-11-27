@@ -63,8 +63,8 @@ const TenantsTable = ({ bookings = [], onEndLease = () => {} }) => {
             <tr className="text-sm">
               <th className="px-6 py-4 text-left font-medium">Tenant</th>
               <th className="px-6 py-4 text-left font-medium">Property</th>
-              <th className="px-6 py-4 text-left font-medium">Monthly Rent</th>
               <th className="px-6 py-4 text-left font-medium">Payment Status</th>
+              <th className="px-6 py-4 text-left font-medium">Monthly Rent</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-300">
@@ -87,13 +87,11 @@ const TenantsTable = ({ bookings = [], onEndLease = () => {} }) => {
                   <div className="text-xs text-gray-500">{b.property.address}</div>
                 </td>
 
-
-
-                <td className="px-6 py-[22px] whitespace-nowrap align-top text-sm">{findPrice(b.property.title)}</td>
-
                 <td className="px-6 py-[22px] whitespace-nowrap align-top">
                   <PaymentBadge status={paymentMap[b.id] || 'Due Soon'} />
                 </td>
+
+                <td className="px-6 py-[22px] whitespace-nowrap align-top text-sm">{findPrice(b.property.title)}</td>
               </tr>
             ))}
           </tbody>
