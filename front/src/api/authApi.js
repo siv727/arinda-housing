@@ -43,5 +43,39 @@ export const registerTenant = async (data) => {
  * @returns {Promise} API response with auth token
  */
 export const login = async (credentials) => {
-  return axiosClient.post('/auth/login', credentials);
+  const response = await axiosClient.post('/auth/login', credentials);
+  
+  // Store JWT token and user role in localStorage
+  if (response.data.token) {
+    localStorage.setItem('authToken', response.data.token);
+  }
+  if (response.data.role) {
+    localStorage.setItem('userRole', response.data.role);
+  }
+  
+  return response;
+};
+
+/**
+ * Logout user - clear auth data from localStorage
+ */
+export const logout = () => {
+  localStorage.removeItem('authToken');
+  localStorage.removeItem('userRole');
+};
+
+/**
+ * Check if user is authenticated
+ * @returns {boolean} True if user has a valid token
+ */
+export const isAuthenticated = () => {
+  return !!localStorage.getItem('authToken');
+};
+
+/**
+ * Get current user role
+ * @returns {string|null} User role or null if not logged in
+ */
+export const getUserRole = () => {
+  return localStorage.getItem('userRole');
 };

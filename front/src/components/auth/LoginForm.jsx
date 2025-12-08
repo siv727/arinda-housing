@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import { login, getUserRole } from '@/api/authApi'
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -14,19 +14,15 @@ const LoginForm = () => {
     const password = formData.get('password')
 
     try {
-      const response = await axios.post(
-        'http://localhost:8080/api/auth/login',
-        {
-          email,
-          password
-        },
-        { headers: { 'Content-Type': 'application/json' } }
-      );
+      const response = await login({ email, password });
 
       console.log('User logged in successfully:', response.data)
       
-      // Redirect based on user role from backend
-      if (response.data.role === 'LANDLORD') {
+      // Get role from localStorage (already stored by login function)
+      const role = getUserRole();
+      
+      // Redirect based on user role
+      if (role === 'LANDLORD') {
         navigate('/landlord/dashboard')
       } else {
         navigate('/tenant/listings')
