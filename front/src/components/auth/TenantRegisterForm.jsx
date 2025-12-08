@@ -5,6 +5,7 @@ import { validatePassword } from "@/utils/passwordValidation";
 
 const TenantRegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -81,6 +82,10 @@ const TenantRegisterForm = () => {
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   return (
@@ -231,7 +236,7 @@ const TenantRegisterForm = () => {
         </label>
         <div className="relative">
           <input
-            type={showPassword ? "text" : "password"}
+            type={showConfirmPassword ? "text" : "password"}
             name="confirmPassword"
             placeholder="Confirm your password"
             className="peer w-full placeholder:text-[14px] bg-[#FFFEFD] pl-10 pr-10 py-2 border border-gray-300 rounded-lg
@@ -243,9 +248,9 @@ const TenantRegisterForm = () => {
                         peer-focus:text-[#F35E27] transition-colors"
           ></i>
           <i
-            onClick={togglePasswordVisibility}
+            onClick={toggleConfirmPasswordVisibility}
             className={`fa-solid ${
-              showPassword ? "fa-eye-slash" : "fa-eye"
+              showConfirmPassword ? "fa-eye-slash" : "fa-eye"
             } absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer transition-colors`}
           ></i>
         </div>
