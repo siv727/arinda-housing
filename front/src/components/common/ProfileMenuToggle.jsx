@@ -18,22 +18,11 @@ export default function ProfileMenuToggle() {
 
         <DropdownMenuItem asChild>
           <a
-            href="/"
+            href="/tenant/settings"
             className="block w-full px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer"
           >
             <i class="fa-regular fa-circle-user w-4"></i>
             Profile
-          </a>
-        </DropdownMenuItem>
-
-        <DropdownMenuSeparator className="my-1 bg-gray-300 mx-2" />
-
-        <DropdownMenuItem asChild>
-          <a
-            href="/"
-            className="block w-full px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer"
-          >
-            <i class="fa-regular fa-gear w-4"></i>Account Settings
           </a>
         </DropdownMenuItem>
 
