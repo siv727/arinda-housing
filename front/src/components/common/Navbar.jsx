@@ -1,8 +1,13 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 const Navbar = ({ userType }) => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+
+  // Check if we're on login or register pages
+  const isAuthPage = location.pathname === "/login" || location.pathname === "/register";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,132 +50,140 @@ const Navbar = ({ userType }) => {
         </div>
 
         {/* Desktop links */}
-        <ul className="hidden md:flex items-center space-x-12 text-sm">
-          <li>
-            <a
-              href="#home"
-              onClick={(e) => handleSmoothScroll(e, "#home")}
-              className="hover:text-[#F35E27] transition-colors"
-            >
-              <i className="fa-regular fa-house pr-2"></i>Home
-            </a>
-          </li>
-          <li>
-            <a
-              href="#about"
-              onClick={(e) => handleSmoothScroll(e, "#about")}
-              className="hover:text-[#F35E27] transition-colors"
-            >
-              <i className="fa-regular fa-lightbulb pr-2"></i>About
-            </a>
-          </li>
-          <li>
-            <a
-              href="#how-it-works"
-              onClick={(e) => handleSmoothScroll(e, "#how-it-works")}
-              className="hover:text-[#F35E27] transition-colors"
-            >
-              <i className="fa-regular fa-list-ol pr-2"></i>How It Works
-            </a>
-          </li>
-          <li>
-            <a
-              href="#download-app"
-              onClick={(e) => handleSmoothScroll(e, "#download-app")}
-              className="hover:text-[#F35E27] transition-colors"
-            >
-              <i className="fa-regular fa-mobile pr-2"></i>Download App
-            </a>
-          </li>
-        </ul>
+        {!isAuthPage && (
+          <>
+            <ul className="hidden md:flex items-center space-x-12 text-sm">
+              <li>
+                <a
+                  href="#home"
+                  onClick={(e) => handleSmoothScroll(e, "#home")}
+                  className="hover:text-[#F35E27] transition-colors"
+                >
+                  <i className="fa-regular fa-house pr-2"></i>Home
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#about"
+                  onClick={(e) => handleSmoothScroll(e, "#about")}
+                  className="hover:text-[#F35E27] transition-colors"
+                >
+                  <i className="fa-regular fa-lightbulb pr-2"></i>About
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#how-it-works"
+                  onClick={(e) => handleSmoothScroll(e, "#how-it-works")}
+                  className="hover:text-[#F35E27] transition-colors"
+                >
+                  <i className="fa-regular fa-list-ol pr-2"></i>How It Works
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#download-app"
+                  onClick={(e) => handleSmoothScroll(e, "#download-app")}
+                  className="hover:text-[#F35E27] transition-colors"
+                >
+                  <i className="fa-regular fa-mobile pr-2"></i>Download App
+                </a>
+              </li>
+            </ul>
 
-        <div className="hidden md:block">
-          <a
-            href="/login"
-            className="font-semibold bg-gradient-to-r text-white p-3 rounded-full px-6 from-[#F35E27]  to-[#ff8f4e] hover:opacity-90 transition-opacity"
-          >
-            Get Started
-          </a>
-        </div>
+            <div className="hidden md:block">
+              <a
+                href="/login"
+                className="font-semibold bg-gradient-to-r text-white p-3 rounded-full px-6 from-[#F35E27]  to-[#ff8f4e] hover:opacity-90 transition-opacity"
+              >
+                Get Started
+              </a>
+            </div>
+          </>
+        )}
 
         {/* Mobile hamburger */}
-        <div className="md:hidden">
-          <button
-            onClick={() => setOpen(!open)}
-            aria-expanded={open}
-            aria-label={open ? "Close menu" : "Open menu"}
-            className="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#F35E27]"
-          >
-            <svg
-              className="h-6 w-6 text-black"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
+        {!isAuthPage && (
+          <div className="md:hidden">
+            <button
+              onClick={() => setOpen(!open)}
+              aria-expanded={open}
+              aria-label={open ? "Close menu" : "Open menu"}
+              className="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#F35E27]"
             >
-              {open ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
-          </button>
-        </div>
+              <svg
+                className="h-6 w-6 text-black"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                {open ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                )}
+              </svg>
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Mobile menu panel */}
-      <div
-        className={`${
-          open ? "block" : "hidden"
-        } md:hidden bg-white/30 backdrop-blur-md border-b border-t border-black`}
-      >
-        <div className="px-4 pt-4 pb-6 space-y-4">
-          <a
-            href="#home"
-            onClick={(e) => handleSmoothScroll(e, "#home")}
-            className="block hover:text-[#F35E27] transition-colors"
-          >
-            Home
-          </a>
-          <a
-            href="#about"
-            onClick={(e) => handleSmoothScroll(e, "#about")}
-            className="block hover:text-[#F35E27] transition-colors"
-          >
-            About
-          </a>
-          <a
-            href="#how-it-works"
-            onClick={(e) => handleSmoothScroll(e, "#how-it-works")}
-            className="block hover:text-[#F35E27] transition-colors"
-          >
-            How It Works
-          </a>
-          <a
-            href="#download-app"
-            onClick={(e) => handleSmoothScroll(e, "#download-app")}
-            className="block hover:text-[#F35E27] transition-colors"
-          >
-            Download App
-          </a>
-          <a
-            href="/login"
-            className="inline-block font-semibold bg-gradient-to-r text-white p-3 rounded-full px-6 from-[#F35E27] to-[#ff8f4e] hover:opacity-90 transition-opacity"
-          >
-            Get Started
-          </a>
+      {!isAuthPage && (
+        <div
+          className={`${
+            open ? "block" : "hidden"
+          } md:hidden bg-white/30 backdrop-blur-md border-b border-t border-black`}
+        >
+          <div className="px-4 pt-4 pb-6 space-y-4">
+            <a
+              href="#home"
+              onClick={(e) => handleSmoothScroll(e, "#home")}
+              className="block hover:text-[#F35E27] transition-colors"
+            >
+              Home
+            </a>
+            <a
+              href="#about"
+              onClick={(e) => handleSmoothScroll(e, "#about")}
+              className="block hover:text-[#F35E27] transition-colors"
+            >
+              About
+            </a>
+            <a
+              href="#how-it-works"
+              onClick={(e) => handleSmoothScroll(e, "#how-it-works")}
+              className="block hover:text-[#F35E27] transition-colors"
+            >
+              How It Works
+            </a>
+            <a
+              href="#download-app"
+              onClick={(e) => handleSmoothScroll(e, "#download-app")}
+              className="block hover:text-[#F35E27] transition-colors"
+            >
+              Download App
+            </a>
+            <a
+              href="/login"
+              className="inline-block font-semibold bg-gradient-to-r text-white p-3 rounded-full px-6 from-[#F35E27] to-[#ff8f4e] hover:opacity-90 transition-opacity"
+            >
+              Get Started
+            </a>
+          </div>
         </div>
-      </div>
+      )}
     </nav>
   );
 };
