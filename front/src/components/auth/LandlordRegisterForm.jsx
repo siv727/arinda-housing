@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { registerLandlord } from '@/api/authApi'
+import { validatePassword } from '@/utils/passwordValidation'
 
 const LandlordRegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -20,6 +21,13 @@ const LandlordRegisterForm = () => {
     const phoneNumber = formData.get('phoneNumber')
     const password = formData.get('password')
     const confirmPassword = formData.get('confirmPassword')
+
+    // Password strength validation
+    const passwordValidation = validatePassword(password)
+    if (!passwordValidation.isValid) {
+      setError(passwordValidation.errors.join('. '))
+      return
+    }
 
     // Password match validation
     if (password !== confirmPassword) {
