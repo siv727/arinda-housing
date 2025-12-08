@@ -8,14 +8,6 @@ const ListingSummaryCard = ({ listing }) => {
           alt={listing.title}
           className="w-full h-full object-cover"
         />
-        
-        {/* Verified Badge */}
-        {listing.verified && (
-          <div className="absolute top-3 left-3 bg-gradient-to-r from-[#DD4912] to-[#FFA500] text-white text-xs px-3 py-1 rounded-full flex items-center gap-1">
-            <i className="fa-solid fa-check-circle"></i>
-            <span>Verified</span>
-          </div>
-        )}
       </div>
 
       {/* Card Content */}

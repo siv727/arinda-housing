@@ -27,7 +27,7 @@ const ListingDetail = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      
+
       <div className="max-w-7xl mx-auto px-6 pt-24 pb-8">
         {/* Back Button */}
         <Link
@@ -47,16 +47,10 @@ const ListingDetail = () => {
           <div className="lg:col-span-2 space-y-8">
             {/* Property Info */}
             <div>
-              <div className="flex items-start justify-between mb-2">
+              <div className="mb-2">
                 <h1 className="text-3xl font-bold text-gray-900">{listing.title}</h1>
-                {listing.verified && (
-                  <span className="inline-flex items-center px-3 py-1 bg-gradient-to-r from-[#DD4912] to-[#FFA500] text-white text-sm font-semibold rounded-full">
-                    <i className="fa-solid fa-check-circle mr-2"></i>
-                    Verified
-                  </span>
-                )}
               </div>
-              
+
               <div className="flex items-center gap-4 text-gray-600 mb-4">
                 <span className="flex items-center">
                   <i className="fa-solid fa-home mr-2 text-gray-400"></i>

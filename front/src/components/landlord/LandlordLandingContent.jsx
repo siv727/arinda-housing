@@ -25,7 +25,7 @@ const LandlordLandingContent = () => {
               </h1>
 
               <p className="text-lg md:text-[20px] text-[#666666] max-w-3xl mx-auto">
-                Connect with verified students seeking quality housing. Our
+                Connect with students seeking quality housing. Our
                 platform streamlines property management while maximizing your
                 rental income through our trusted network.
               </p>
@@ -43,7 +43,7 @@ const LandlordLandingContent = () => {
                     10,000+
                   </div>
                   <div className="text-[14px] text-[#666666]">
-                    Verified Properties
+                    Listed Properties
                   </div>
                 </div>
 
@@ -97,14 +97,14 @@ const LandlordLandingContent = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-32 text-center my-10">
           <div className="flex flex-col items-center w-64 gap-y-3">
             <div className="bg-gradient-to-b from-[#F35E27] to-[#ff792b] text-white w-12 h-12 flex items-center justify-center rounded">
-              <i className="fa-solid fa-badge-check text-[20px]"></i>
+              <i className="fa-solid fa-users text-[20px]"></i>
             </div>
 
             <div className="text-[20px] font-bold text-[#333333]">
-              Verified Tenants
+              Quality Tenants
             </div>
             <div className="text-[14px] text-[#666666]">
-              Every property is thoroughly verified with detailed information,
+              Connect with student tenants looking for quality housing with detailed information,
               high-quality photos, and accurate location data.
             </div>
           </div>

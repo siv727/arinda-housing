@@ -1,15 +1,6 @@
-import { useNavigate } from "react-router-dom";
-import { logout } from "@/api/authApi";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel } from "@/components/ui/dropdown-menu";
 
 export default function ProfileMenuToggle() {
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout(); // Clear auth data from localStorage
-    navigate('/login'); // Redirect to login page
-  };
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -35,16 +26,6 @@ export default function ProfileMenuToggle() {
           </a>
         </DropdownMenuItem>
 
-        <DropdownMenuItem asChild>
-          <a
-            href="/"
-            className="block w-full px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer"
-          >
-            <i class="fa-regular fa-bookmark w-4"></i>
-            Wishlists
-          </a>
-        </DropdownMenuItem>
-
         <DropdownMenuSeparator className="my-1 bg-gray-300 mx-2" />
 
         <DropdownMenuItem asChild>
@@ -59,12 +40,12 @@ export default function ProfileMenuToggle() {
         <DropdownMenuSeparator className="my-1 bg-gray-300 mx-2" />
 
         <DropdownMenuItem asChild>
-          <button
-            onClick={handleLogout}
-            className="block w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100 font-semibold cursor-pointer"
+          <a
+            href="/"
+            className="block w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 font-semibold cursor-pointer"
           >
             Logout
-          </button>
+          </a>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

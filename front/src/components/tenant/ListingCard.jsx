@@ -1,41 +1,24 @@
 import { useState } from 'react'
 
 const ListingCard = ({ listing, onFavoriteToggle }) => {
-  const [isFavorite, setIsFavorite] = useState(false)
+  // const [isFavorite, setIsFavorite] = useState(false)
 
-  const handleFavoriteClick = () => {
-    setIsFavorite(!isFavorite)
-    if (onFavoriteToggle) {
-      onFavoriteToggle(listing.id, !isFavorite)
-    }
-  }
+  // const handleFavoriteClick = () => {
+  //   setIsFavorite(!isFavorite)
+  //   if (onFavoriteToggle) {
+  //     onFavoriteToggle(listing.id, !isFavorite)
+  //   }
+  // }
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
       {/* Image Section */}
       <div className="relative h-48 overflow-hidden">
-        <img 
-          src={listing.images[0]} 
+        <img
+          src={listing.images[0]}
           alt={listing.title}
           className="w-full h-full object-cover hover:scale-115 transition-scale duration-500"
         />
-        
-        {/* Verified Badge */}
-        {listing.verified && (
-          <div className="absolute top-3 left-3 bg-gradient-to-r from-[#DD4912] to-[#FFA500] text-white text-xs px-3 py-1 rounded-full flex items-center gap-1">
-            <i className="fa-solid fa-check-circle"></i>
-            <span>Verified</span>
-          </div>
-        )}
-        
-        {/* Heart Icon */}
-        <button
-          onClick={handleFavoriteClick}
-          className="absolute top-3 right-3 bg-white w-8 h-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform cursor-pointer"
-          aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
-        >
-          <i className={`fa-${isFavorite ? 'solid' : 'regular'} fa-heart text-${isFavorite ? '[#DD4912]' : 'gray-600'}`}></i>
-        </button>
 
         {/* Property Type Label */}
         <div className="absolute bottom-3 left-3 bg-black/60 text-white text-xs px-3 py-1 rounded">

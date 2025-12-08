@@ -120,15 +120,10 @@ const Listings = () => {
     setFilteredListings(results)
   }
 
-  const handleFavoriteToggle = (listingId, isFavorite) => {
-    console.log(`Listing ${listingId} favorite status: ${isFavorite}`)
-    // TODO: Implement favorite persistence when backend is ready
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-bl from-[#FFF1EB] to-[#FFFDFA]">
       <Navbar />
-      
+
       {/* Main Container */}
       <div className="pt-24 px-4 sm:px-6 lg:px-8 max-w-[1900px] mx-auto">
         {/* Search Bar */}
@@ -198,7 +193,6 @@ const Listings = () => {
                   <ListingCard
                     key={listing.id}
                     listing={listing}
-                    onFavoriteToggle={handleFavoriteToggle}
                   />
                 ))}
               </div>

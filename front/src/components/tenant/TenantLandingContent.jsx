@@ -12,14 +12,14 @@ const TenantLandingContent = () => {
   return (
     <div className="flex flex-col">
       {/* TENANT HERO SECTION */}
-      <section  
+      <section
         id="home"
         className="relative min-h-[100vh] flex items-center justify-center pt-25 px-4 overflow-hidden bg-gradient-to-bl from-[#FFF1EB] to-[#FFFDFA]"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-10 relative z-20 ">
           <div className="text-center m-5 mx-auto absolute -top-24 inset-x-0 border-[1.5px] border-[#EAD1C7] rounded-full w-fit px-4 py-1 text-[#45352E] font-medium text-[12px] bg-white/10">
-            <i className="fa-regular fa-badge-check mr-2"></i>
-            Verified Listings, Student Approved
+            <i className="fa-regular fa-home mr-2"></i>
+            Student Housing, Simplified
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-32 items-start">
             <div className="flex flex-col gap-y-10">
@@ -28,7 +28,7 @@ const TenantLandingContent = () => {
               </h1>
 
               <p className="text-lg md:text-[20px] text-[#666666] max-w-3xl mx-auto">
-                Skip the door-to-door search. Discover verified, safe, and
+                Skip the door-to-door search. Discover safe and
                 affordable rentals designed specifically for students moving to
                 new cities.
               </p>
@@ -46,7 +46,7 @@ const TenantLandingContent = () => {
                     10,000+
                   </div>
                   <div className="text-[14px] text-[#666666]">
-                    Verified Properties
+                    Properties Listed
                   </div>
                 </div>
 
@@ -61,16 +61,16 @@ const TenantLandingContent = () => {
                   <div className="text-[30px] font-bold text-[#333333]">200+</div>
                   <div className="text-[14px] text-[#666666]">Cities Covered</div>
                 </div>
+              </div>
             </div>
-          </div>
 
             <div className="hidden md:block">
               <div className="bg-white border border-black rounded w-full h-110"></div>
             </div>
           </div>
         </div>
-      </section>      
-      
+      </section>
+
       {/* UNIVERSITIES SECTION */}
       <section className="relative ">
         <div className="bg-gradient-to-b from-[#F35E27] to-[#ff792b] transform skew-y-2 absolute -top-4 -bottom-10 inset-0 "></div>
@@ -128,14 +128,14 @@ const TenantLandingContent = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-32 text-center">
           <div className="flex flex-col items-center w-64 gap-y-3">
             <div className="bg-gradient-to-b from-[#F35E27] to-[#ff792b] text-white w-12 h-12 flex items-center justify-center rounded">
-              <i className="fa-solid fa-badge-check text-[20px]"></i>
+              <i className="fa-solid fa-home text-[20px]"></i>
             </div>
 
             <div className="text-[20px] font-bold text-[#333333]">
-              Verified Listings
+              Quality Listings
             </div>
             <div className="text-[14px] text-[#666666]">
-              Every property is thoroughly verified with detailed information,
+              Browse properties with detailed information,
               high-quality photos, and accurate location data.
             </div>
           </div>
@@ -214,22 +214,22 @@ const TenantLandingContent = () => {
               <div>
                 <ul className=" text-[#666666] space-y-4 text-[18px]">
                   <li>
-                    <i className="fa-solid fa-badge-check pr-3 text-[#F35E27]"></i>{" "}
-                    Reach a large audience of verified student renters
+                    <i className="fa-solid fa-circle-check pr-3 text-[#F35E27]"></i>{" "}
+                    Reach a large audience of student renters
                   </li>
                   <hr className="border-t border-gray-400 opacity-50" />
                   <li>
-                    <i className="fa-solid fa-badge-check pr-3 text-[#F35E27]"></i>
+                    <i className="fa-solid fa-circle-check pr-3 text-[#F35E27]"></i>
                     Easy property management tools
                   </li>
                   <hr className="border-t border-gray-400 opacity-50" />
                   <li>
-                    <i className="fa-solid fa-badge-check pr-3 text-[#F35E27]"></i>
+                    <i className="fa-solid fa-circle-check pr-3 text-[#F35E27]"></i>
                     Secure payment processing
                   </li>
                   <hr className="border-t border-gray-400 opacity-50" />
                   <li>
-                    <i className="fa-solid fa-badge-check pr-3 text-[#F35E27]"></i>
+                    <i className="fa-solid fa-circle-check pr-3 text-[#F35E27]"></i>
                     Dedicated support team
                   </li>
                 </ul>
