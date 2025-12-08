@@ -85,6 +85,7 @@ public class AuthController {
             user.setLastname(request.lastname());
             user.setEmail(request.email());
             user.setPasswordhash(passwordEncoder.encode(request.passwordhash()));
+            user.setRole(request.role());
 
             // 3. Save the new user to the database
             userRepository.save(user);
