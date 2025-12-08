@@ -4,6 +4,8 @@ import { registerTenant } from "@/api/authApi";
 
 const TenantRegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -22,9 +24,13 @@ const TenantRegisterForm = () => {
 
     // Password match validation
     if (password !== confirmPassword) {
-      console.error("Passwords do not match"); // replace this with a proper error display
+      setError("Passwords do not match");
       return;
     }
+
+    // Clear any previous errors
+    setError("");
+    setLoading(true);
 
     // API call to register tenant
     try {
@@ -37,13 +43,31 @@ const TenantRegisterForm = () => {
         passwordhash: password,
       });
 
-      console.log("Tenant registered successfully:", response.data); // remove after finalization
+      console.log("Tenant registered successfully:", response.data);
       navigate("/tenant/listings");
     } catch (error) {
-      console.error(
-        "Error registering tenant:",
-        error.response?.data || error.message
-      ); // replace this with a proper error display
+      // Log full error for debugging
+      console.error("Full error object:", error);
+      console.error("Error response:", error.response);
+      console.error("Error response data:", error.response?.data);
+      
+      // Extract error message from various backend response formats
+      let errorMessage = "Registration failed. Please try again.";
+      
+      if (error.response?.data) {
+        const data = error.response.data;
+        // Check for different error message formats
+        errorMessage = data.message || 
+                      data.error || 
+                      data.msg ||
+                      data.detail ||
+                      (typeof data === 'string' ? data : null) ||
+                      errorMessage;
+      }
+      
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -53,6 +77,14 @@ const TenantRegisterForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="p-6">
+      {/* Error Message */}
+      {error && (
+        <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm flex items-start gap-2">
+          <i className="fa-solid fa-circle-exclamation mt-0.5"></i>
+          <span>{error}</span>
+        </div>
+      )}
+
       {/* First and Last Name */}
       <div className="flex gap-4 mb-4">
         {/* First Name */}
@@ -213,10 +245,11 @@ const TenantRegisterForm = () => {
 
       <button
         type="submit"
-        className="w-full py-3 text-[14px] bg-gradient-to-r from-[#DD4912] to-[#FFA500] text-white rounded flex items-center justify-center gap-2 group cursor-pointer"
+        disabled={loading}
+        className="w-full py-3 text-[14px] bg-gradient-to-r from-[#DD4912] to-[#FFA500] text-white rounded flex items-center justify-center gap-2 group cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        Sign Up
-        <i className="fa-solid fa-arrow-right transition-transform duration-200 group-hover:translate-x-2"></i>
+        {loading ? "Signing Up..." : "Sign Up"}
+        {!loading && <i className="fa-solid fa-arrow-right transition-transform duration-200 group-hover:translate-x-2"></i>}
       </button>
     </form>
   );

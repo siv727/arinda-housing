@@ -1,14 +1,5 @@
 package com.abemivi.arinda.arindabackend.controller;
 
-import com.abemivi.arinda.arindabackend.dto.authentication.AuthenticationResponse;
-import com.abemivi.arinda.arindabackend.dto.authentication.LoginRequest;
-import com.abemivi.arinda.arindabackend.dto.authentication.RegisterRequest;
-import com.abemivi.arinda.arindabackend.entity.Landlord;
-import com.abemivi.arinda.arindabackend.entity.Student;
-import com.abemivi.arinda.arindabackend.entity.User;
-import com.abemivi.arinda.arindabackend.repository.UserRepository;
-import com.abemivi.arinda.arindabackend.service.JwtService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +9,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.abemivi.arinda.arindabackend.dto.authentication.AuthenticationResponse;
+import com.abemivi.arinda.arindabackend.dto.authentication.LoginRequest;
+import com.abemivi.arinda.arindabackend.dto.authentication.RegisterRequest;
+import com.abemivi.arinda.arindabackend.entity.Landlord;
+import com.abemivi.arinda.arindabackend.entity.Student;
+import com.abemivi.arinda.arindabackend.entity.User;
+import com.abemivi.arinda.arindabackend.repository.UserRepository;
+import com.abemivi.arinda.arindabackend.service.JwtService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -59,7 +61,16 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.CONFLICT)
                         .body("Email already registered");
             }
-
+            
+            // Check if student ID is already used (only for STUDENT role)
+            if (request.role() == com.abemivi.arinda.arindabackend.entity.enums.Role.STUDENT) {
+                if (request.studentid() != null && userRepository.findByStudentid(request.studentid()).isPresent()) {
+                    return ResponseEntity.status(HttpStatus.CONFLICT)
+                            .body("Student ID already registered");
+                }
+            }
+            
+            
             // 1. Create a new user object based on the role
             User user;
 
