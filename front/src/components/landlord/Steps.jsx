@@ -8,7 +8,7 @@ export default function Steps() {
     {
       number: 2,
       title: "Connect with Students",
-      description: "Receive applications from verified students, review their profiles, and communicate directly through our platform."
+      description: "Receive applications from students, review their profiles, and communicate directly through our platform."
     },
     {
       number: 3,
@@ -28,19 +28,19 @@ export default function Steps() {
                 <div className="absolute left-5 top-10 w-0.5" style={{ height: 'calc(100% + 3rem)' }}>
                   {/* Dashed line */}
                   <div className="h-full border-l-2 border-dashed border-[#F35E27]" />
-                  
+
                   {/* Arrow at bottom of line */}
                   <div className="absolute bottom-0 left-1/2 -translate-x-1/2">
                     <div className="w-0 h-0 border-l-10 border-r-10 border-t-18 border-l-transparent border-r-transparent border-t-[#F35E27]" />
                   </div>
                 </div>
               )}
-              
+
               {/* Step number circle */}
               <span className="absolute translate-y-10 left-0 top-0 flex items-center justify-center w-10 h-10 bg-[#F35E27] text-white text-lg font-bold rounded-full shadow-lg z-10">
                 {step.number}
               </span>
-              
+
               {/* Content */}
               <div className="bg-white p-8 rounded-lg border border-black transition-shadow">
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">

@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 const BookingInfoCard = ({ listing }) => {
   const [moveInDate, setMoveInDate] = useState('')
   const [leaseTerm, setLeaseTerm] = useState('6') // Default 6 months
-  const [isFavorite, setIsFavorite] = useState(false)
 
   // Calculate total move-in cost
   const monthlyRent = listing.price
@@ -12,25 +11,14 @@ const BookingInfoCard = ({ listing }) => {
   const applicationFee = listing.applicationFee || 0
   const totalMoveInCost = monthlyRent + securityDeposit + applicationFee
 
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite)
-  }
-
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6 sticky top-24">
-      {/* Price and Favorite */}
-      <div className="flex items-center justify-between mb-4">
+      {/* Price */}
+      <div className="mb-4">
         <div>
           <span className="text-3xl font-bold text-gray-900">₱{listing.price.toLocaleString()}</span>
           <span className="text-gray-600"> / month</span>
         </div>
-        <button
-          onClick={toggleFavorite}
-          className="text-2xl cursor-pointer transition-colors"
-          aria-label="Add to favorites"
-        >
-          <i className={`fa-${isFavorite ? 'solid' : 'regular'} fa-heart ${isFavorite ? 'text-red-500' : 'text-gray-400 hover:text-red-500'}`}></i>
-        </button>
       </div>
 
       {/* Availability */}
@@ -90,7 +78,7 @@ const BookingInfoCard = ({ listing }) => {
       {/* Cost Breakdown */}
       <div className="space-y-3">
         <h3 className="font-semibold text-gray-900 mb-3">Move-in Cost Breakdown</h3>
-        
+
         <div className="flex justify-between text-sm">
           <span className="text-gray-600">Monthly Rent</span>
           <span className="font-semibold text-gray-900">₱{monthlyRent.toLocaleString()}</span>

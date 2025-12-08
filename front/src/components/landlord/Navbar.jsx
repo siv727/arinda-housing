@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import ProfileMenuToggle from '../common/ProfileMenuToggle'
-import NotificationBell from '../common/NotificationBell'
 
 // eslint-disable-next-line no-unused-vars
 const Navbar = ({ userType }) => {
@@ -19,11 +18,10 @@ const Navbar = ({ userType }) => {
 
   return (
     <nav
-      className={`fixed w-full z-50 border-b transition-all ${
-        scrolled
-          ? 'border-[#EAD1C7] bg-white/90 backdrop-blur-md'
-          : 'border-[#EAD1C7] bg-white'
-      }`}
+      className={`fixed w-full z-50 border-b transition-all ${scrolled
+        ? 'border-[#EAD1C7] bg-white/90 backdrop-blur-md'
+        : 'border-[#EAD1C7] bg-white'
+        }`}
     >
       <div className="max-w-[1900px] mx-auto px-6 2xl:px-12 w-full flex items-center justify-between p-5">
         {/* Left: Logo */}
@@ -67,17 +65,15 @@ const Navbar = ({ userType }) => {
 
         {/* Right: Notification & Profile */}
         <div className="flex items-center gap-6">
-          <NotificationBell />
           <ProfileMenuToggle />
-          
+
         </div>
       </div>
 
       {/* Mobile menu panel */}
       <div
-        className={`${
-          open ? 'block' : 'hidden'
-        } md:hidden bg-white/30 backdrop-blur-md border-b border-t border-black`}
+        className={`${open ? 'block' : 'hidden'
+          } md:hidden bg-white/30 backdrop-blur-md border-b border-t border-black`}
       >
         <div className="px-4 pt-4 pb-6 space-y-4">
           <a
