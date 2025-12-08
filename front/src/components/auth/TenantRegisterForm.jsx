@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { registerTenant } from "@/api/authApi";
 
 const TenantRegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -26,21 +26,16 @@ const TenantRegisterForm = () => {
       return;
     }
 
-    // API call to register landlord
+    // API call to register tenant
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/auth/register",
-        {
-          firstname: firstName,
-          lastname: lastName,
-          email,
-          school,
-          studentid: studentId,
-          passwordhash: password,
-          role: "STUDENT",
-        },
-        { headers: { "Content-Type": "application/json" } }
-      );
+      const response = await registerTenant({
+        firstname: firstName,
+        lastname: lastName,
+        email,
+        school,
+        studentid: studentId,
+        passwordhash: password,
+      });
 
       console.log("Tenant registered successfully:", response.data); // remove after finalization
       navigate("/tenant/listings");

@@ -1,5 +1,9 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 
+// Route protection
+import ProtectedRoute from './components/auth/ProtectedRoute'
+import PublicRoute from './components/auth/PublicRoute'
+
 // Unified auth pages
 import Login from './pages/Login'
 import Register from './pages/Register'
@@ -36,8 +40,8 @@ function App() {
         <Route path="/landlord" element={<Navigate to="/landing" replace />} />
 
         {/* Unified auth routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+        <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
         
         {/* Redirect old auth routes to unified auth */}
         <Route path="/tenant/login" element={<Navigate to="/login" replace />} />
@@ -46,12 +50,12 @@ function App() {
         <Route path="/landlord/register" element={<Navigate to="/register" replace />} />
 
         {/* Tenant routes */}
-        <Route path="/tenant/listings" element={<TenantListings />} />
-        <Route path="/tenant/listings/:id" element={<ListingDetail />} />
-        <Route path="/tenant/listings/:id/book" element={<BookingForm />} />
+        <Route path="/tenant/listings" element={<ProtectedRoute allowedRole="STUDENT"><TenantListings /></ProtectedRoute>} />
+        <Route path="/tenant/listings/:id" element={<ProtectedRoute allowedRole="STUDENT"><ListingDetail /></ProtectedRoute>} />
+        <Route path="/tenant/listings/:id/book" element={<ProtectedRoute allowedRole="STUDENT"><BookingForm /></ProtectedRoute>} />
 
         {/* Landlord dashboard routes */}
-        <Route path="/landlord/dashboard" element={<LandlordDashboardLayout />}>
+        <Route path="/landlord/dashboard" element={<ProtectedRoute allowedRole="LANDLORD"><LandlordDashboardLayout /></ProtectedRoute>}>
           <Route path="" element={<LandlordOverview />} />
           <Route path="overview" element={<LandlordOverview />} />
           <Route path="bookings" element={<LandlordBookings />} />

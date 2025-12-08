@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import { registerLandlord } from '@/api/authApi'
 
 const LandlordRegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -27,18 +27,13 @@ const LandlordRegisterForm = () => {
 
     // API call to register landlord
     try {
-      const response = await axios.post(
-        'http://localhost:8080/api/auth/register',
-        {
-          firstname: firstName,
-          lastname: lastName,
-          email,
-          phonenumber: phoneNumber,
-          passwordhash: password,
-          role: 'LANDLORD'
-        },
-        { headers: { 'Content-Type': 'application/json' } }
-      );
+      const response = await registerLandlord({
+        firstname: firstName,
+        lastname: lastName,
+        email,
+        phonenumber: phoneNumber,
+        passwordhash: password,
+      });
 
       console.log('Landlord registered successfully:', response.data) // remove after finalization
       navigate('/landlord/dashboard')
