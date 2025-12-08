@@ -1,6 +1,15 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel } from "@/components/ui/dropdown-menu";
+import { useNavigate } from "react-router-dom";
+import { logout } from "@/api/authApi";
 
 export default function ProfileMenuToggle() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -39,13 +48,12 @@ export default function ProfileMenuToggle() {
 
         <DropdownMenuSeparator className="my-1 bg-gray-300 mx-2" />
 
-        <DropdownMenuItem asChild>
-          <a
-            href="/"
-            className="block w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 font-semibold cursor-pointer"
+        <DropdownMenuItem onClick={handleLogout}>
+          <button
+            className="block w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 font-semibold cursor-pointer text-left"
           >
             Logout
-          </a>
+          </button>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
