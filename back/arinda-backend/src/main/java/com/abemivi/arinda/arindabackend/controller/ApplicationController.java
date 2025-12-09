@@ -20,13 +20,20 @@ public class ApplicationController {
     private final ApplicationService applicationService;
 
     @PostMapping
-    public ResponseEntity<ApplicationResponse> submitApplication(
+    public ResponseEntity<?> submitApplication(
             Authentication authentication,
             @Valid @RequestBody CreateApplicationRequest request) {
-        String email = authentication.getName();
-        ApplicationResponse response = applicationService.createApplication(email, request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        try {
+            String email = authentication.getName();
+            ApplicationResponse response = applicationService.createApplication(email, request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse(e.getMessage()));
+        }
     }
+    
+    record ErrorResponse(String message) {}
 
     @GetMapping
     public ResponseEntity<List<ApplicationResponse>> getMyApplications(Authentication authentication) {
