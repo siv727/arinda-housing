@@ -25,7 +25,7 @@ const Navbar = ({ userType }) => {
     >
       <div className="max-w-[1900px] mx-auto px-6 2xl:px-12 w-full flex items-center justify-between p-5">
         {/* Left: Logo */}
-        <div className="logo font-bold text-xl text-[#F35E27]">Arinda</div>
+        <div className="logo font-bold text-xl text-[#F35E27]"><a href='/landlord/dashboard/overview'>Arinda</a></div>
 
         {/* Center: Links */}
         <ul className="hidden md:flex font-medium items-center space-x-12 absolute left-1/2 -translate-x-1/2 text-sm">
