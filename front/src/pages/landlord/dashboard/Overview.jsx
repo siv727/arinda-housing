@@ -1,5 +1,7 @@
 import RecentBookingRequests from '@/components/landlord/dashboard/RecentBookingRequests';
+import PropertyStatusOverview from '@/components/landlord/dashboard/PropertyStatusOverview';
 import { bookings } from '@/data/mockBookings';
+import { properties } from '@/data/mockProperties';
 
 export default function Overview() {
     return (
@@ -78,8 +80,11 @@ export default function Overview() {
                 </div>
             </div>
 
+            <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
+                <RecentBookingRequests bookings={bookings} />
+                <PropertyStatusOverview properties={properties} />
+            </div>
             
-            <RecentBookingRequests bookings={bookings} />
         </div>
     );
 }
