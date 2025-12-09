@@ -30,6 +30,51 @@ export default function Overview() {
                 </div>
             </div>
 
+            {/* Quick Actions */}
+            <div className="bg-white rounded-2xl border border-[#EAD1C7] p-6">
+                <h2 className="text-xl font-semibold mb-4 text-gray-800">Quick Actions</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <a
+                        href="/landlord/dashboard/properties/add"
+                        className="flex items-center justify-between p-4 rounded-xl border border-[#EAD1C7] hover:border-[#F35E27] hover:bg-[#FFF8F5] transition-all group"
+                    >
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-[#FFF8F5] flex items-center justify-center group-hover:bg-[#F35E27] transition-colors">
+                                <i className="fa-solid fa-plus text-[#F35E27] group-hover:text-white transition-colors"></i>
+                            </div>
+                            <span className="font-semibold text-gray-800">Add New Listing</span>
+                        </div>
+                        <i className="fa-solid fa-chevron-right text-gray-400 group-hover:text-[#F35E27] transition-colors"></i>
+                    </a>
+
+                    <a
+                        href="/landlord/dashboard/properties"
+                        className="flex items-center justify-between p-4 rounded-xl border border-[#EAD1C7] hover:border-[#F35E27] hover:bg-[#FFF8F5] transition-all group"
+                    >
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-[#FFF8F5] flex items-center justify-center group-hover:bg-[#F35E27] transition-colors">
+                                <i className="fa-solid fa-file-lines text-[#F35E27] group-hover:text-white transition-colors"></i>
+                            </div>
+                            <span className="font-semibold text-gray-800">View Applications</span>
+                        </div>
+                        <i className="fa-solid fa-chevron-right text-gray-400 group-hover:text-[#F35E27] transition-colors"></i>
+                    </a>
+
+                    <a
+                        href="/landlord/dashboard/tenants"
+                        className="flex items-center justify-between p-4 rounded-xl border border-[#EAD1C7] hover:border-[#F35E27] hover:bg-[#FFF8F5] transition-all group"
+                    >
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-[#FFF8F5] flex items-center justify-center group-hover:bg-[#F35E27] transition-colors">
+                                <i className="fa-solid fa-users text-[#F35E27] group-hover:text-white transition-colors"></i>
+                            </div>
+                            <span className="font-semibold text-gray-800">View Tenants</span>
+                        </div>
+                        <i className="fa-solid fa-chevron-right text-gray-400 group-hover:text-[#F35E27] transition-colors"></i>
+                    </a>
+                </div>
+            </div>
+
             
             <div className="bg-white rounded-2xl border border-[#EAD1C7] p-6">
                 <h2 className="text-xl font-semibold mb-4 text-gray-800">Recent Bookings</h2>
