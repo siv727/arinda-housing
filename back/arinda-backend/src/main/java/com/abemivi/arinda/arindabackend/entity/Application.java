@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 
 @Data
 @Entity
@@ -16,9 +19,23 @@ public class Application {
 
     @Column(columnDefinition = "TEXT")
     private String applicantMessage;
+    
     @Enumerated(EnumType.STRING)
     private ApplicationStatus status;
 
+    @Column(name = "move_in_date")
+    private LocalDate moveInDate;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        if (status == null) {
+            status = ApplicationStatus.PENDING;
+        }
+    }
 
     // RELATIONSHIP
     @ManyToOne(fetch = FetchType.LAZY)
