@@ -1,3 +1,6 @@
+import RecentBookingRequests from '@/components/landlord/dashboard/RecentBookingRequests';
+import { bookings } from '@/data/mockBookings';
+
 export default function Overview() {
     return (
         <div className="p-6 space-y-6">
@@ -76,23 +79,7 @@ export default function Overview() {
             </div>
 
             
-            <div className="bg-white rounded-2xl border border-[#EAD1C7] p-6">
-                <h2 className="text-xl font-semibold mb-4 text-gray-800">Recent Bookings</h2>
-                <ul className="divide-y divide-gray-200">
-                    <li className="py-3 flex justify-between">
-                        <span className="text-gray-700">John Cruz - Unit 301</span>
-                        <span className="text-gray-500 text-sm">2 days ago</span>
-                    </li>
-                    <li className="py-3 flex justify-between">
-                        <span className="text-gray-700">Anna Santos - Studio B</span>
-                        <span className="text-gray-500 text-sm">5 days ago</span>
-                    </li>
-                    <li className="py-3 flex justify-between">
-                        <span className="text-gray-700">Mark Tan - Room 204</span>
-                        <span className="text-gray-500 text-sm">1 week ago</span>
-                    </li>
-                </ul>
-            </div>
+            <RecentBookingRequests bookings={bookings} />
         </div>
     );
 }
