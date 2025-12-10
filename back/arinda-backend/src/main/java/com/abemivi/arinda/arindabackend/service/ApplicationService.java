@@ -12,11 +12,13 @@ import com.abemivi.arinda.arindabackend.dto.application.CreateApplicationRequest
 import com.abemivi.arinda.arindabackend.dto.application.RejectApplicationRequest;
 import com.abemivi.arinda.arindabackend.entity.Application;
 import com.abemivi.arinda.arindabackend.entity.Landlord;
+import com.abemivi.arinda.arindabackend.entity.Lease;
 import com.abemivi.arinda.arindabackend.entity.Listing;
 import com.abemivi.arinda.arindabackend.entity.Student;
 import com.abemivi.arinda.arindabackend.entity.User;
 import com.abemivi.arinda.arindabackend.entity.enums.ApplicationStatus;
 import com.abemivi.arinda.arindabackend.repository.ApplicationRepository;
+import com.abemivi.arinda.arindabackend.repository.LeaseRepository;
 import com.abemivi.arinda.arindabackend.repository.ListingRepository;
 import com.abemivi.arinda.arindabackend.repository.UserRepository;
 
@@ -29,6 +31,7 @@ public class ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final UserRepository userRepository;
     private final ListingRepository listingRepository;
+    private final LeaseRepository leaseRepository;
 
     @Transactional
     public ApplicationResponse createApplication(String email, CreateApplicationRequest request) {
@@ -142,6 +145,10 @@ public class ApplicationService {
         application.setAttachmentUrl(request.attachmentUrl());
 
         Application updated = applicationRepository.save(application);
+        
+        // Create a Lease record for the approved application
+        createLeaseForApprovedApplication(updated);
+        
         return buildBookingResponse(updated);
     }
 
@@ -203,5 +210,23 @@ public class ApplicationService {
                 .responseMessage(application.getResponseMessage())
                 .attachmentUrl(application.getAttachmentUrl())
                 .build();
+    }
+    
+    private void createLeaseForApprovedApplication(Application application) {
+        // Check if lease already exists for this application
+        if (leaseRepository.findById(application.getId()).isPresent()) {
+            return; // Lease already exists
+        }
+        
+        Lease lease = new Lease();
+        lease.setStudent(application.getStudent());
+        lease.setApplication(application);
+        lease.setStartDate(application.getMoveInDate());
+        // Set end date to 1 year from start date by default
+        lease.setEndDate(application.getMoveInDate().plusYears(1));
+        lease.setDocumentUrl(application.getAttachmentUrl());
+        // paymentStatus will be set to DUE_SOON by default via @PrePersist
+        
+        leaseRepository.save(lease);
     }
 }
