@@ -12,6 +12,7 @@ import com.abemivi.arinda.arindabackend.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,9 +59,9 @@ public class ListingMapper {
         Double avgRating = reviewRepository.findAverageRatingByListingId(listing.getId());
         long reviewCount = reviewRepository.countByListingId(listing.getId());
 
+        // FIX: listing.getAmenities() is now a Set<String>, so we don't need .map(a -> a.getName())
         List<String> amenityNames = listing.getAmenities().stream()
                 .limit(3)
-                .map(a -> a.getName())
                 .collect(Collectors.toList());
 
         if (listing.getAmenities().size() > 3) {
@@ -114,8 +115,12 @@ public class ListingMapper {
                 .hostphonenumber(listing.getLandlord().getPhonenumber())
                 .hostemail(listing.getLandlord().getEmail())
                 .description(listing.getDescription())
-                .inclusions(listing.getInclusions().stream().map(i -> i.getName()).collect(Collectors.toList()))
-                .amenitydetails(listing.getAmenities().stream().map(this::toAmenityDTO).collect(Collectors.toList()))
+
+                // FIX: Directly pass the list of strings
+                .inclusions(new ArrayList<>(listing.getInclusions()))
+                // FIX: Map to new 'amenities' field, passing strings directly
+                .amenities(new ArrayList<>(listing.getAmenities()))
+
                 .reviewsummary(toReviewSummaryDTO(listing))
                 .reviewdetails(reviews)
                 .locationdetails(toLocationDTO(listing))
@@ -134,12 +139,7 @@ public class ListingMapper {
                 .build();
     }
 
-    private AmenityDetails toAmenityDTO(com.abemivi.arinda.arindabackend.entity.Amenity amenity) {
-        return AmenityDetails.builder()
-                .id(amenity.getId())
-                .name(amenity.getName())
-                .build();
-    }
+    // REMOVED: private AmenityDetails toAmenityDTO(...) as it is no longer needed
 
     private ReviewDetails toReviewDTO(Review review) {
         return ReviewDetails.builder()
@@ -193,8 +193,3 @@ public class ListingMapper {
                 .build();
     }
 }
-
-        
-                
-                
-                
