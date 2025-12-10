@@ -12,6 +12,7 @@ import Register from './pages/Register'
 import TenantListings from './pages/tenant/Listings'
 import ListingDetail from './pages/tenant/ListingDetail'
 import BookingForm from './pages/tenant/BookingForm'
+import MyApplication from './pages/tenant/MyApplication'
 
 // Landlord dashboard pages
 import LandlordDashboardLayout from './pages/landlord/dashboard/LandlordDashboardLayout'
@@ -53,6 +54,7 @@ function App() {
         <Route path="/tenant/listings" element={<ProtectedRoute allowedRole="STUDENT"><TenantListings /></ProtectedRoute>} />
         <Route path="/tenant/listings/:id" element={<ProtectedRoute allowedRole="STUDENT"><ListingDetail /></ProtectedRoute>} />
         <Route path="/tenant/listings/:id/book" element={<ProtectedRoute allowedRole="STUDENT"><BookingForm /></ProtectedRoute>} />
+        <Route path="/tenant/applications" element={<ProtectedRoute allowedRole="STUDENT"><MyApplication /></ProtectedRoute>} />
 
         {/* Landlord dashboard routes */}
         <Route path="/landlord/dashboard" element={<ProtectedRoute allowedRole="LANDLORD"><LandlordDashboardLayout /></ProtectedRoute>}>
