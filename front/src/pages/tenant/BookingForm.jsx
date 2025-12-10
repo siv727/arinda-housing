@@ -28,15 +28,21 @@ const BookingForm = () => {
   }
 
   const handleFormSubmit = (formData) => {
-    // In a real app, this would send data to the backend
-    console.log('Booking application submitted:', {
-      listingId: listing.id,
-      listingTitle: listing.title,
-      ...formData
-    })
-    
-    // Show success modal
-    setShowSuccessModal(true)
+    // Send only required fields to backend
+    import('./../../api/applicationApi').then(({ submitApplication }) => {
+      submitApplication({
+        listingId: listing.id,
+        moveInDate: formData.moveInDate,
+        phoneNumber: formData.phoneNumber,
+        applicantMessage: formData.additionalNotes
+      })
+      .then(() => {
+        setShowSuccessModal(true);
+      })
+      .catch((err) => {
+        alert('Failed to submit application: ' + (err?.response?.data?.message || err.message));
+      });
+    });
   }
 
   const handleModalClose = () => {

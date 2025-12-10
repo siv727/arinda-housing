@@ -48,6 +48,7 @@ public class ApplicationService {
         application.setListing(listing);
         application.setMoveInDate(request.moveInDate());
         application.setApplicantMessage(request.applicantMessage());
+        application.setPhoneNumber(request.phoneNumber());
 
         Application savedApplication = applicationRepository.save(application);
 
