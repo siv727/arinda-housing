@@ -4,7 +4,7 @@ import com.abemivi.arinda.arindabackend.entity.enums.Role;
 import lombok.Builder;
 
 @Builder
-public record ProfileResponse(
+public record TenantProfileResponse(
         Long id,
         String email,
         String firstname,

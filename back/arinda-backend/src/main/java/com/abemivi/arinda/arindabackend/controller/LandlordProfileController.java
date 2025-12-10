@@ -2,7 +2,7 @@ package com.abemivi.arinda.arindabackend.controller;
 
 import com.abemivi.arinda.arindabackend.dto.profile.LandlordProfileResponse;
 import com.abemivi.arinda.arindabackend.dto.profile.UpdateLandlordProfileRequest;
-import com.abemivi.arinda.arindabackend.service.ProfileService;
+import com.abemivi.arinda.arindabackend.service.LandlordProfileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/landlord/profile")
 @RequiredArgsConstructor
 public class LandlordProfileController {
-    private final ProfileService profileService;
+    private final LandlordProfileService landlordProfileService;
 
     @GetMapping
     public ResponseEntity<LandlordProfileResponse> getLandlordProfile(Authentication authentication) {
         String email = authentication.getName();
-        LandlordProfileResponse profile = profileService.getLandlordProfile(email);
+        LandlordProfileResponse profile = landlordProfileService.getLandlordProfile(email);
         return ResponseEntity.ok(profile);
     }
 
@@ -27,7 +27,7 @@ public class LandlordProfileController {
             Authentication authentication,
             @Valid @RequestBody UpdateLandlordProfileRequest request) {
         String email = authentication.getName();
-        LandlordProfileResponse updatedProfile = profileService.updateLandlordProfile(email, request);
+        LandlordProfileResponse updatedProfile = landlordProfileService.updateLandlordProfile(email, request);
         return ResponseEntity.ok(updatedProfile);
     }
 }
