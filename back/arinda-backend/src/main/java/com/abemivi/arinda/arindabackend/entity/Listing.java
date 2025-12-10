@@ -48,20 +48,26 @@ public class Listing {
     @JoinColumn(name = "landlord_id", nullable = false)
     private Landlord landlord;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "listing_inclusion", joinColumns = @JoinColumn(name = "listing_id"), inverseJoinColumns = @JoinColumn(name = "inclusion_id"))
-    private Set<NeedsIncluded> inclusions = new HashSet<>();
+    // REFACTORED: Use ElementCollection for simple string lists
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "listing_inclusions", joinColumns = @JoinColumn(name = "listing_id"))
+    @Column(name = "name")
+    private Set<String> inclusions = new HashSet<>();
 
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Photo> photos = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "listing_amenity", joinColumns = @JoinColumn(name = "listing_id"), inverseJoinColumns = @JoinColumn(name = "amenity_id"))
-    private Set<Amenity> amenities = new HashSet<>();
+    // REFACTORED
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "listing_amenities", joinColumns = @JoinColumn(name = "listing_id"))
+    @Column(name = "name")
+    private Set<String> amenities = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "listing_establishment", joinColumns = @JoinColumn(name = "listing_id"), inverseJoinColumns = @JoinColumn(name = "establishment_id"))
-    private Set<Establishment> establishments = new HashSet<>();
+    // REFACTORED
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "listing_establishments", joinColumns = @JoinColumn(name = "listing_id"))
+    @Column(name = "name")
+    private Set<String> establishments = new HashSet<>();
 
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Review> reviews = new ArrayList<>();
