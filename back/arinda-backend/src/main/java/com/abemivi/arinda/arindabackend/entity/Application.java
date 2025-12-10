@@ -26,6 +26,9 @@ public class Application {
     @Column(name = "move_in_date")
     private LocalDate moveInDate;
 
+    @Column(name = "phone_number", nullable = false)
+    private String phoneNumber;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 

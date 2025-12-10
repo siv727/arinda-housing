@@ -13,5 +13,8 @@ public record CreateApplicationRequest(
         @Future(message = "Move-in date must be in the future")
         LocalDate moveInDate,
 
-        String applicantMessage
+        String applicantMessage,
+
+        @NotNull(message = "Phone number is required")
+        String phoneNumber
 ) {}
