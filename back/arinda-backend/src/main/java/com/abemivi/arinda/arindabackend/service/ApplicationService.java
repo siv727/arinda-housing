@@ -1,19 +1,26 @@
 package com.abemivi.arinda.arindabackend.service;
 
-import com.abemivi.arinda.arindabackend.dto.application.ApplicationResponse;
-import com.abemivi.arinda.arindabackend.dto.application.CreateApplicationRequest;
-import com.abemivi.arinda.arindabackend.entity.Application;
-import com.abemivi.arinda.arindabackend.entity.Listing;
-import com.abemivi.arinda.arindabackend.entity.Student;
-import com.abemivi.arinda.arindabackend.entity.User;
-import com.abemivi.arinda.arindabackend.repository.ApplicationRepository;
-import com.abemivi.arinda.arindabackend.repository.ListingRepository;
-import com.abemivi.arinda.arindabackend.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import com.abemivi.arinda.arindabackend.dto.application.ApplicationResponse;
+import com.abemivi.arinda.arindabackend.dto.application.ApproveApplicationRequest;
+import com.abemivi.arinda.arindabackend.dto.application.BookingResponse;
+import com.abemivi.arinda.arindabackend.dto.application.CreateApplicationRequest;
+import com.abemivi.arinda.arindabackend.dto.application.RejectApplicationRequest;
+import com.abemivi.arinda.arindabackend.entity.Application;
+import com.abemivi.arinda.arindabackend.entity.Landlord;
+import com.abemivi.arinda.arindabackend.entity.Listing;
+import com.abemivi.arinda.arindabackend.entity.Student;
+import com.abemivi.arinda.arindabackend.entity.User;
+import com.abemivi.arinda.arindabackend.entity.enums.ApplicationStatus;
+import com.abemivi.arinda.arindabackend.repository.ApplicationRepository;
+import com.abemivi.arinda.arindabackend.repository.ListingRepository;
+import com.abemivi.arinda.arindabackend.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -86,9 +93,116 @@ public class ApplicationService {
                 .applicantMessage(application.getApplicantMessage())
                 .status(application.getStatus())
                 .createdAt(application.getCreatedAt())
+                .responseMessage(application.getResponseMessage())
+                .attachmentUrl(application.getAttachmentUrl())
                 .tenantId(student.getId())
                 .tenantName(tenantName)
                 .tenantEmail(student.getEmail())
+                .build();
+    }
+
+    // ===== LANDLORD BOOKINGS MANAGEMENT =====
+
+    @Transactional(readOnly = true)
+    public List<BookingResponse> getLandlordBookings(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!(user instanceof Landlord landlord)) {
+            throw new RuntimeException("Only landlords can view bookings");
+        }
+
+        // Get all applications for landlord's listings
+        List<Application> applications = applicationRepository.findByListingLandlord(landlord);
+
+        return applications.stream()
+                .map(this::buildBookingResponse)
+                .toList();
+    }
+
+    @Transactional
+    public BookingResponse approveApplication(String email, Long applicationId, ApproveApplicationRequest request) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!(user instanceof Landlord landlord)) {
+            throw new RuntimeException("Only landlords can approve applications");
+        }
+
+        Application application = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> new RuntimeException("Application not found"));
+
+        // Verify landlord owns this listing
+        if (!application.getListing().getLandlord().getId().equals(landlord.getId())) {
+            throw new RuntimeException("You don't have permission to approve this application");
+        }
+
+        // Update application status
+        application.setStatus(ApplicationStatus.APPROVED);
+        application.setResponseMessage(request.message());
+        application.setAttachmentUrl(request.attachmentUrl());
+
+        Application updated = applicationRepository.save(application);
+        return buildBookingResponse(updated);
+    }
+
+    @Transactional
+    public BookingResponse rejectApplication(String email, Long applicationId, RejectApplicationRequest request) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!(user instanceof Landlord landlord)) {
+            throw new RuntimeException("Only landlords can reject applications");
+        }
+
+        Application application = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> new RuntimeException("Application not found"));
+
+        // Verify landlord owns this listing
+        if (!application.getListing().getLandlord().getId().equals(landlord.getId())) {
+            throw new RuntimeException("You don't have permission to reject this application");
+        }
+
+        // Update application status
+        application.setStatus(ApplicationStatus.REJECTED);
+        application.setResponseMessage(request.message());
+
+        Application updated = applicationRepository.save(application);
+        return buildBookingResponse(updated);
+    }
+
+    private BookingResponse buildBookingResponse(Application application) {
+        Student student = application.getStudent();
+        Listing listing = application.getListing();
+        
+        String tenantName = student.getFirstname() + " " + student.getLastname();
+        String listingAddress = listing.getLocation().getAddress() + ", " + listing.getLocation().getCity();
+        
+        BookingResponse.TenantInfo tenantInfo = BookingResponse.TenantInfo.builder()
+                .id(student.getId())
+                .name(tenantName)
+                .email(student.getEmail())
+                .phone(null)  // Phone not available in current User entity
+                .studentId(student.getStudentid())
+                .university(student.getSchool())
+                .build();
+        
+        BookingResponse.PropertyInfo propertyInfo = BookingResponse.PropertyInfo.builder()
+                .id(listing.getId())
+                .title(listing.getTitle())
+                .address(listingAddress)
+                .build();
+        
+        return BookingResponse.builder()
+                .id(application.getId())
+                .tenant(tenantInfo)
+                .property(propertyInfo)
+                .checkIn(application.getMoveInDate())
+                .status(application.getStatus())
+                .bookedDate(application.getCreatedAt())
+                .applicantMessage(application.getApplicantMessage())
+                .responseMessage(application.getResponseMessage())
+                .attachmentUrl(application.getAttachmentUrl())
                 .build();
     }
 }
