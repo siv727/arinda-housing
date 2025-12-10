@@ -92,6 +92,8 @@ public class ApplicationService {
                 .applicantMessage(application.getApplicantMessage())
                 .status(application.getStatus())
                 .createdAt(application.getCreatedAt())
+                .responseMessage(application.getResponseMessage())
+                .attachmentUrl(application.getAttachmentUrl())
                 .tenantId(student.getId())
                 .tenantName(tenantName)
                 .tenantEmail(student.getEmail())

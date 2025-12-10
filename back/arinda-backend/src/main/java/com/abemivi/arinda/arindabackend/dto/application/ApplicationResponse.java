@@ -17,6 +17,10 @@ public record ApplicationResponse(
         ApplicationStatus status,
         LocalDateTime createdAt,
         
+        // Landlord response
+        String responseMessage,
+        String attachmentUrl,
+        
         // Tenant info
         Long tenantId,
         String tenantName,
