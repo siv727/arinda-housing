@@ -63,7 +63,7 @@ public class ListingService {
         price.setSecuritydeposit(request.getSecuritydeposit());
         price.setAppfee(request.getAppfee() != null ? request.getAppfee() : 0);
         price.setPetfee(request.getPetfee() != null ? request.getPetfee() : 0);
-        price.setAdvancerent(request.getAdvancerent());
+        price.setAdvancerent(request.getAdvancerent() != null ? request.getAdvancerent() : 1);
         listing.setPrice(price);
 
         // Save listing first to get ID (needed for lease terms foreign key)
