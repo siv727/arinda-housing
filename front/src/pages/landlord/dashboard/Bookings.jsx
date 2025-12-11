@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import BookingsTable from '@/components/bookings/BookingsTable'
+import BookingFilters from '@/components/bookings/BookingFilters'
 import { getLandlordBookings } from '@/api/bookingsApi'
 
 export default function Bookings() {
   const [bookings, setBookings] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [statusFilter, setStatusFilter] = useState('All')
+  const [showFilters, setShowFilters] = useState(false)
 
   useEffect(() => {
     fetchBookings()
@@ -34,6 +38,14 @@ export default function Bookings() {
     // Refresh bookings after rejection
     fetchBookings()
   }
+
+  // Filter bookings based on search and status
+  const filteredBookings = bookings.filter((b) => {
+    const q = searchTerm.trim().toLowerCase()
+    const matchesSearch = q === '' || `${b.tenantName} ${b.tenantEmail} ${b.propertyTitle} ${b.propertyAddress}`.toLowerCase().includes(q)
+    const matchesStatus = statusFilter === 'All' || b.status === statusFilter.toUpperCase()
+    return matchesSearch && matchesStatus
+  })
 
   if (loading) {
     return (
@@ -70,7 +82,36 @@ export default function Bookings() {
         <p className="text-gray-600">Manage all tenant bookings and reservations for your properties.</p>
       </div>
 
-      <BookingsTable bookings={bookings} onAccept={handleAccept} onReject={handleReject} />
+      {/* Search and Filters */}
+      <form onSubmit={(e) => e.preventDefault()}>
+        <div className="flex space-x-2">
+          <div className="relative flex-grow">
+            <i className="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            <input
+              type="text"
+              name="search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search bookings"
+              className="w-full border rounded-lg border-[#EAD1C7] bg-white pl-11 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-400"
+            />
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setShowFilters((s) => !s)}
+            className="bg-orange-500 cursor-pointer font-medium text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition flex items-center"
+          >
+            <i className="fa-regular fa-filter pr-2"></i>Filters
+          </button>
+        </div>
+      </form>
+
+      {showFilters && (
+        <BookingFilters status={statusFilter} setStatus={setStatusFilter} onClose={() => setShowFilters(false)} />
+      )}
+
+      <BookingsTable bookings={filteredBookings} onAccept={handleAccept} onReject={handleReject} />
     </div>
   )
 }
