@@ -5,7 +5,7 @@ export const bookings = [
     property: { title: 'Sunset Apartments', address: '123 College Ave, Quezon City' },
     checkIn: 'Jan 15, 2024',
     price: 10000,
-    status: 'Confirmed',
+    status: 'Approved',
     bookedDate: 'Jan 10, 2024'
   },
   {
@@ -22,7 +22,7 @@ export const bookings = [
     tenant: { name: 'Ana Rodriguez', email: 'ana.rodriguez@email.com', avatar: 'https://i.pravatar.cc/150?img=44', phone: '+63 918 111 2222', moveInDate: 'Jan 25, 2024', studentId: 'S9988776', university: 'De La Salle University', notes: 'Requires wheelchair access.' },
     property: { title: 'Downtown Loft', address: '789 Main St, Makati City' },
     checkIn: 'Jan 25, 2024',
-    status: 'Confirmed',
+    status: 'Approved',
     bookedDate: 'Jan 14, 2024'
   },
   {
@@ -49,7 +49,7 @@ export const bookings = [
     property: { title: 'City Center Condo', address: '987 Business St, BGC' },
     checkIn: 'Feb 10, 2024',
     price: 10000,
-    status: 'Confirmed',
+    status: 'Approved',
     bookedDate: 'Jan 20, 2024'
   }
 ]
