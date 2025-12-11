@@ -156,9 +156,11 @@ public class ListingMapper {
     private ReviewDetails toReviewDTO(Review review) {
         return ReviewDetails.builder()
                 .id(review.getId())
+                .listingId(review.getListing().getId())
                 .rating(review.getRating())
                 .comment(review.getComment())
                 .reviewername(review.getStudent().getFirstname() + " " + review.getStudent().getLastname())
+                .reviewerprofile(null)
                 .createdat(review.getCreatedat())
                 .build();
     }

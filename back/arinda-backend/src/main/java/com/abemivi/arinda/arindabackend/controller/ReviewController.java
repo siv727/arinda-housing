@@ -1,7 +1,10 @@
 package com.abemivi.arinda.arindabackend.controller;
 
+import com.abemivi.arinda.arindabackend.dto.support.ReviewDetails;
+import com.abemivi.arinda.arindabackend.dto.support.ReviewSummary;
 import com.abemivi.arinda.arindabackend.entity.Review;
-import com.abemivi.arinda.arindabackend.repository.ReviewRepository;
+import com.abemivi.arinda.arindabackend.entity.Student;
+import com.abemivi.arinda.arindabackend.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,103 +13,161 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/listings/{listingId}/reviews")
 @RequiredArgsConstructor
 public class ReviewController {
-    private final ReviewRepository reviewRepository;
-    private final com.abemivi.arinda.arindabackend.repository.ApplicationRepository applicationRepository;
-    private final com.abemivi.arinda.arindabackend.repository.ListingRepository listingRepository;
-    private final com.abemivi.arinda.arindabackend.repository.UserRepository userRepository;
 
+    private final ReviewService reviewService;
+
+    /**
+     * Get all reviews for a listing (returns DTOs, not entities)
+     */
     @GetMapping
-    public ResponseEntity<List<Review>> getReviews(@PathVariable Long listingId) {
-        List<Review> reviews = reviewRepository.findByListingIdOrderByCreatedatDesc(listingId);
+    public ResponseEntity<List<ReviewDetails>> getReviews(@PathVariable Long listingId) {
+        List<ReviewDetails> reviews = reviewService.getReviewsForListing(listingId);
         return ResponseEntity.ok(reviews);
     }
 
+    /**
+     * Get rating summary for a listing (NEW ENDPOINT)
+     */
+    @GetMapping("/rating")
+    public ResponseEntity<ReviewSummary> getListingRating(@PathVariable Long listingId) {
+        if (!reviewService.listingExists(listingId)) {
+            return ResponseEntity.notFound().build();
+        }
+        ReviewSummary summary = reviewService.getRatingSummary(listingId);
+        return ResponseEntity.ok(summary);
+    }
+
+    /**
+     * Create a new review
+     */
     @PostMapping
     public ResponseEntity<?> createReview(
             @PathVariable Long listingId,
-            @Valid @RequestBody Review review,
+            @Valid @RequestBody Map<String, Object> requestBody,
             Authentication authentication) {
+
+        // Validate user
         String email = authentication.getName();
-        var userOpt = userRepository.findByEmail(email);
-        if (userOpt.isEmpty() || !(userOpt.get() instanceof com.abemivi.arinda.arindabackend.entity.Student student)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only tenants can review listings.");
+        Optional<Student> studentOpt = reviewService.findStudentByEmail(email);
+        if (studentOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "Only tenants can review listings."));
         }
-        var listingOpt = listingRepository.findById(listingId);
-        if (listingOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Listing not found.");
+        Student student = studentOpt.get();
+
+        // Validate listing exists
+        if (!reviewService.listingExists(listingId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "Listing not found."));
         }
-        var listing = listingOpt.get();
-        // Check if student has booked this listing
-        boolean hasBooked = applicationRepository.existsByStudentAndListing(student, listing);
-        if (!hasBooked) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You must book this listing before reviewing.");
-        }
+
         // Prevent duplicate reviews
-        boolean alreadyReviewed = reviewRepository.existsByListingIdAndStudentId(listingId, student.getId());
-        if (alreadyReviewed) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("You have already reviewed this listing.");
+        if (reviewService.hasStudentReviewed(listingId, student.getId())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("error", "You have already reviewed this listing."));
         }
-        review.setListing(listing);
-        review.setStudent(student);
-        Review savedReview = reviewRepository.save(review);
-        return savedReview != null ? ResponseEntity.status(HttpStatus.CREATED).body(savedReview)
-            : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+
+        // Extract rating and comment from request body
+        int rating = (int) requestBody.get("rating");
+        String comment = (String) requestBody.getOrDefault("comment", "");
+
+        ReviewDetails savedReview = reviewService.createReview(listingId, rating, comment, student);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedReview);
     }
 
+    /**
+     * Update an existing review
+     */
     @PutMapping("/{reviewId}")
     public ResponseEntity<?> updateReview(
             @PathVariable Long listingId,
             @PathVariable Long reviewId,
-            @Valid @RequestBody Review reviewDetails,
+            @Valid @RequestBody Map<String, Object> requestBody,
             Authentication authentication) {
+
+        // Validate user
         String email = authentication.getName();
-        var userOpt = userRepository.findByEmail(email);
-        if (userOpt.isEmpty() || !(userOpt.get() instanceof com.abemivi.arinda.arindabackend.entity.Student student)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only tenants can update reviews.");
+        Optional<Student> studentOpt = reviewService.findStudentByEmail(email);
+        if (studentOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "Only tenants can update reviews."));
         }
-        var reviewOpt = reviewRepository.findById(reviewId);
+        Student student = studentOpt.get();
+
+        // Find the review
+        Optional<Review> reviewOpt = reviewService.findById(reviewId);
         if (reviewOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Review not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "Review not found."));
         }
-        var review = reviewOpt.get();
+        Review review = reviewOpt.get();
+
+        // Check ownership
         if (!review.getStudent().getId().equals(student.getId())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You can only update your own review.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "You can only update your own review."));
         }
-        review.setRating(reviewDetails.getRating());
-        review.setComment(reviewDetails.getComment());
-        Review updatedReview = reviewRepository.save(review);
-        return updatedReview != null ? ResponseEntity.ok(updatedReview)
-            : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+
+        // Validate that the review belongs to the specified listing
+        if (!review.getListing().getId().equals(listingId)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "Review does not belong to this listing."));
+        }
+
+        // Extract rating and comment from request body
+        int rating = (int) requestBody.get("rating");
+        String comment = (String) requestBody.getOrDefault("comment", "");
+
+        ReviewDetails updatedReview = reviewService.updateReview(reviewId, rating, comment);
+        return ResponseEntity.ok(updatedReview);
     }
 
+    /**
+     * Delete a review
+     */
     @DeleteMapping("/{reviewId}")
     public ResponseEntity<?> deleteReview(
             @PathVariable Long listingId,
             @PathVariable Long reviewId,
             Authentication authentication) {
+
+        // Validate user
         String email = authentication.getName();
-        var userOpt = userRepository.findByEmail(email);
-        if (userOpt.isEmpty() || !(userOpt.get() instanceof com.abemivi.arinda.arindabackend.entity.Student student)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only tenants can delete reviews.");
+        Optional<Student> studentOpt = reviewService.findStudentByEmail(email);
+        if (studentOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "Only tenants can delete reviews."));
         }
-        var reviewOpt = reviewRepository.findById(reviewId);
+        Student student = studentOpt.get();
+
+        // Find the review
+        Optional<Review> reviewOpt = reviewService.findById(reviewId);
         if (reviewOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Review not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "Review not found."));
         }
-        var review = reviewOpt.get();
+        Review review = reviewOpt.get();
+
+        // Check ownership
         if (!review.getStudent().getId().equals(student.getId())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You can only delete your own review.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "You can only delete your own review."));
         }
-        try {
-            reviewRepository.deleteById(reviewId);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+
+        // Validate that the review belongs to the specified listing
+        if (!review.getListing().getId().equals(listingId)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "Review does not belong to this listing."));
         }
+
+        reviewService.deleteReview(reviewId);
+        return ResponseEntity.noContent().build();
     }
 }
