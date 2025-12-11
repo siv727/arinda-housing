@@ -9,15 +9,12 @@ import java.time.LocalDateTime;
 @Builder
 public record BookingResponse(
         Long id,
-        
         // Tenant/Student info
         TenantInfo tenant,
-        
         // Property/Listing info
         PropertyInfo property,
-        
         // Application details
-        LocalDate checkIn,  // moveInDate
+        LocalDate moveInDate,
         ApplicationStatus status,
         LocalDateTime bookedDate,  // createdAt
         String applicantMessage,

@@ -57,7 +57,7 @@ const BookingsTable = ({
             <tr className="text-sm">
               <th className="px-6 py-4 text-left font-medium">Tenant</th>
               <th className="px-6 py-4 text-left font-medium">Property</th>
-              <th className="px-6 py-4 text-left font-medium">Check In</th>
+              <th className="px-6 py-4 text-left font-medium">Move In</th>
               <th className="px-6 py-4 text-left font-medium">Status</th>
               <th className="px-6 py-4 text-left font-medium">Booked Date</th>
             </tr>

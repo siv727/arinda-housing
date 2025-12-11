@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.abemivi.arinda.arindabackend.dto.application.ApproveApplicationRequest;
 import com.abemivi.arinda.arindabackend.dto.application.BookingResponse;
+import com.abemivi.arinda.arindabackend.dto.application.BookingSummary;
 import com.abemivi.arinda.arindabackend.dto.application.RejectApplicationRequest;
 import com.abemivi.arinda.arindabackend.service.ApplicationService;
 
@@ -27,10 +28,24 @@ public class BookingsController {
     private final ApplicationService applicationService;
 
     @GetMapping
-    public ResponseEntity<List<BookingResponse>> getAllBookings(Authentication authentication) {
+    public ResponseEntity<List<BookingSummary>> getAllBookings(Authentication authentication) {
         String email = authentication.getName();
-        List<BookingResponse> bookings = applicationService.getLandlordBookings(email);
+        List<BookingSummary> bookings = applicationService.getLandlordBookings(email);
         return ResponseEntity.ok(bookings);
+    }
+
+    @GetMapping("/{applicationId}")
+    public ResponseEntity<?> getBookingDetails(
+            Authentication authentication,
+            @PathVariable Long applicationId) {
+        try {
+            String email = authentication.getName();
+            BookingResponse booking = applicationService.getBookingDetails(email, applicationId);
+            return ResponseEntity.ok(booking);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
+        }
     }
 
     @PatchMapping("/{applicationId}/approve")

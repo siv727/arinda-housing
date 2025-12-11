@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.abemivi.arinda.arindabackend.dto.application.ApplicationResponse;
 import com.abemivi.arinda.arindabackend.dto.application.ApproveApplicationRequest;
 import com.abemivi.arinda.arindabackend.dto.application.BookingResponse;
+import com.abemivi.arinda.arindabackend.dto.application.BookingSummary;
 import com.abemivi.arinda.arindabackend.dto.application.CreateApplicationRequest;
 import com.abemivi.arinda.arindabackend.dto.application.RejectApplicationRequest;
 import com.abemivi.arinda.arindabackend.entity.Application;
@@ -104,7 +105,7 @@ public class ApplicationService {
     // ===== LANDLORD BOOKINGS MANAGEMENT =====
 
     @Transactional(readOnly = true)
-    public List<BookingResponse> getLandlordBookings(String email) {
+    public List<BookingSummary> getLandlordBookings(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -116,8 +117,28 @@ public class ApplicationService {
         List<Application> applications = applicationRepository.findByListingLandlord(landlord);
 
         return applications.stream()
-                .map(this::buildBookingResponse)
+                .map(this::buildBookingSummary)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public BookingResponse getBookingDetails(String email, Long applicationId) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!(user instanceof Landlord landlord)) {
+            throw new RuntimeException("Only landlords can view booking details");
+        }
+
+        Application application = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> new RuntimeException("Application not found"));
+
+        // Verify landlord owns this listing
+        if (!application.getListing().getLandlord().getId().equals(landlord.getId())) {
+            throw new RuntimeException("You don't have permission to view this booking");
+        }
+
+        return buildBookingResponse(application);
     }
 
     @Transactional
@@ -197,12 +218,31 @@ public class ApplicationService {
                 .id(application.getId())
                 .tenant(tenantInfo)
                 .property(propertyInfo)
-                .checkIn(application.getMoveInDate())
+                .moveInDate(application.getMoveInDate())
                 .status(application.getStatus())
                 .bookedDate(application.getCreatedAt())
                 .applicantMessage(application.getApplicantMessage())
                 .responseMessage(application.getResponseMessage())
                 .attachmentUrl(application.getAttachmentUrl())
+                .build();
+    }
+
+    private BookingSummary buildBookingSummary(Application application) {
+        Student student = application.getStudent();
+        Listing listing = application.getListing();
+        
+        String tenantName = student.getFirstname() + " " + student.getLastname();
+        String listingAddress = listing.getLocation().getAddress() + ", " + listing.getLocation().getCity();
+        
+        return BookingSummary.builder()
+                .id(application.getId())
+                .tenantName(tenantName)
+                .tenantEmail(student.getEmail())
+                .propertyTitle(listing.getTitle())
+                .propertyAddress(listingAddress)
+                .moveInDate(application.getMoveInDate())
+                .status(application.getStatus())
+                .bookedDate(application.getCreatedAt())
                 .build();
     }
 }
