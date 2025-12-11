@@ -63,7 +63,7 @@ const TenantsTable = ({ bookings = [], onEndLease = () => {} }) => {
             <tr className="text-sm">
               <th className="px-6 py-4 text-left font-medium">Tenant</th>
               <th className="px-6 py-4 text-left font-medium">Property</th>
-              <th className="px-6 py-4 text-left font-medium">Payment Status</th>
+              <th className="px-6 py-4 text-left font-medium">Status</th>
               <th className="px-6 py-4 text-left font-medium">Monthly Rent</th>
             </tr>
           </thead>

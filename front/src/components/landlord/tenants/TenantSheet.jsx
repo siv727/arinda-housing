@@ -83,6 +83,15 @@ export default function TenantSheet({
     onOpenChange(false);
   };
 
+  const formatCurrency = (amount) => {
+    if (!amount) return '-'
+    return new Intl.NumberFormat('en-PH', {
+      style: 'currency',
+      currency: 'PHP',
+      minimumFractionDigits: 0,
+    }).format(amount)
+  }
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="sm:max-w-[550px] rounded-l-lg md:rounded-lg md:mr-3 md:mt-3 md:h-[97vh] flex flex-col">
@@ -123,43 +132,29 @@ export default function TenantSheet({
           </div>
 
           <div className="p-5 border rounded-lg bg-gray-50 m-5">
-            <div className="justify-between flex flex-row mb-4">
-              <p className="text-sm font-medium text-gray-700">Monthly Rent</p>
+            <div className="mb-4">
+              <p className="text-sm font-medium text-gray-700">Lease Information</p>
             </div>
 
-            <p className="text-sm font-medium text-gray-700">
-              Set Payment Status
-            </p>
+            <div className="space-y-3">
+              <div>
+                <label className="text-xs text-gray-500">Monthly Rent</label>
+                <div className="text-sm font-semibold">{formatCurrency(booking?.price)}</div>
+              </div>
 
-            <div className="mt-2 gap-2 justify-between flex ">
-                {["Paid", "Due Soon", "Overdue"].map((s) => (
-                <button
-                  key={s}
-                  onClick={() => handleStatusChange(s)}
-                  className={`px-3 py-2 rounded-lg text-sm font-medium border w-full transition-colors cursor-pointer ${
-                    draftStatus === s
-                      ? selectionColors[s]
-                      : "border-gray-300 bg-white hover:bg-gray-100 text-gray-700"
-                  }`}
-                >
-                  {s}
-                </button>
-              ))}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs text-gray-500">Move-in Date</label>
+                  <div className="text-sm font-semibold">{booking?.checkIn }</div>
+                </div>
+                <div>
+                  <label className="text-xs text-gray-500">Lease Contract</label>
+                  <div className="text-sm font-semibold">-</div>
+                </div>
+              </div>
             </div>
           </div>
-          <div className=" flex justify-end m-5">
-            <button
-              onClick={savePayment}
-              disabled={draftStatus === status}
-              className={`rounded-lg py-2.5 font-medium px-6 text-white transition ${
-                draftStatus === status
-                  ? "opacity-50 cursor-not-allowed bg-[#F35E27]"
-                  : "bg-[#F35E27] hover:bg-[#e7521c] cursor-pointer"
-              }`}
-            >
-              Save Changes <i className="fa-solid fa-check pl-1"></i>
-            </button>
-          </div>
+
           <hr className="my-4"></hr>
           <div className="mx-5 mb-10 space-y-4">
             <div className="grid grid-cols-2 gap-4">
@@ -173,22 +168,24 @@ export default function TenantSheet({
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-700">
-                  Phone Number
-                </label>
-                <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
-                  {tenant?.phone}
-                </div>
+                 <label className="text-sm font-medium text-gray-700">
+                Phone Number
+              </label>
+              <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50 ">
+                {tenant?.phone }
+              </div>
+
+               
               </div>
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-700">
-                Check in
-              </label>
-              <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50 ">
-                {booking?.checkIn }
-              </div>
+               <label className="text-sm font-medium text-gray-700">
+                  Address
+                </label>
+                <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
+                  {property?.address}
+                </div>
             </div>
           </div>
         </div>
@@ -207,6 +204,12 @@ export default function TenantSheet({
                 className="rounded-lg py-2 px-6 text-white transition bg-[#F35E27] hover:bg-[#e7521c] cursor-pointer "
               >
                 End Lease <i className="fa-regular fa-note pl-2"></i>
+              </button>
+              <button
+                onClick={() => setConfirming(true)}
+                className="rounded-lg py-2 px-6 text-white transition border-[#a11313] border-2 bg-[#c92121] hover:bg-[#a71616] cursor-pointer "
+              >
+                Evict Tenant <i class="fa-solid fa-link-slash pl-2"></i>
               </button>
             </div>
           ) : (
