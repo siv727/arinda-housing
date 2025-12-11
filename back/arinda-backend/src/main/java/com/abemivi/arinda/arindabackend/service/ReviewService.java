@@ -5,6 +5,8 @@ import com.abemivi.arinda.arindabackend.dto.support.ReviewSummary;
 import com.abemivi.arinda.arindabackend.entity.Listing;
 import com.abemivi.arinda.arindabackend.entity.Review;
 import com.abemivi.arinda.arindabackend.entity.Student;
+import com.abemivi.arinda.arindabackend.entity.enums.ApplicationStatus;
+import com.abemivi.arinda.arindabackend.repository.ApplicationRepository;
 import com.abemivi.arinda.arindabackend.repository.ListingRepository;
 import com.abemivi.arinda.arindabackend.repository.ReviewRepository;
 import com.abemivi.arinda.arindabackend.repository.UserRepository;
@@ -22,6 +24,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ListingRepository listingRepository;
     private final UserRepository userRepository;
+    private final ApplicationRepository applicationRepository;
 
     /**
      * Get all reviews for a listing as DTOs (no circular reference)
@@ -108,6 +111,17 @@ public class ReviewService {
      */
     public boolean listingExists(Long listingId) {
         return listingRepository.existsById(listingId);
+    }
+
+    /**
+     * Check if student has an approved application for a listing (for review validation)
+     */
+    public boolean hasApprovedApplication(Long listingId, Student student) {
+        Listing listing = listingRepository.findById(listingId).orElse(null);
+        if (listing == null) {
+            return false;
+        }
+        return applicationRepository.existsByStudentAndListingAndStatus(student, listing, ApplicationStatus.APPROVED);
     }
 
     /**
