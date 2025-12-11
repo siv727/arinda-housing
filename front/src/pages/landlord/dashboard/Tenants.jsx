@@ -10,7 +10,7 @@ export default function Tenants() {
   const [paymentFilter, setPaymentFilter] = useState('All')
   const [showFilters, setShowFilters] = useState(false)
 
-  const confirmed = bookings.filter(b => b.status === 'Confirmed')
+  const confirmed = bookings.filter(b => b.status === 'Approved')
 
   const filtered = confirmed.filter(b => {
     const q = query.trim().toLowerCase()

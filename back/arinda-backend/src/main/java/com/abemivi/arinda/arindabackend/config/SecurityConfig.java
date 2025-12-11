@@ -44,9 +44,15 @@ public class SecurityConfig {
 
                 // 3. Define public (permitAll) and protected (authenticated) endpoints.
                 .authorizeHttpRequests(auth -> auth
+                        // Allow preflight requests
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/listings").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/listings/**").permitAll()
+
+                        // Allow PATCH (your frontend is sending PATCH in the preflight)
+                        .requestMatchers(HttpMethod.PATCH, "/**").authenticated()
 
                         // 3. All other requests must be authenticated
                         .anyRequest().authenticated())
@@ -69,7 +75,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration
                 .setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8080", "http://localhost:5173"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
 
