@@ -5,6 +5,26 @@ import { logout } from "@/api/authApi";
 export default function ProfileMenuToggle() {
   const navigate = useNavigate();
 
+  // Get user role from localStorage
+  let userRole = localStorage.getItem('userRole');
+
+  // If role not in localStorage, try to decode from JWT token
+  if (!userRole) {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        // JWT might have role in different formats, check both
+        userRole = payload.role || payload.authorities?.[0]?.replace('ROLE_', '');
+      } catch (error) {
+        console.error('Failed to decode token:', error);
+      }
+    }
+  }
+
+  // Determine settings route based on role
+  const settingsRoute = userRole === 'LANDLORD' ? '/landlord/settings' : '/tenant/settings';
+
   const handleLogout = () => {
     logout();
     navigate("/login");
@@ -27,10 +47,10 @@ export default function ProfileMenuToggle() {
 
         <DropdownMenuItem asChild>
           <a
-            href="/tenant/settings"
+            href={settingsRoute}
             className="block w-full px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer"
           >
-            <i class="fa-regular fa-circle-user w-4"></i>
+            <i className="fa-regular fa-circle-user w-4"></i>
             Profile
           </a>
         </DropdownMenuItem>
