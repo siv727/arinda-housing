@@ -3,6 +3,7 @@ package com.abemivi.arinda.arindabackend.service;
 import com.abemivi.arinda.arindabackend.dto.lease.LeaseResponse;
 import com.abemivi.arinda.arindabackend.entity.Lease;
 import com.abemivi.arinda.arindabackend.entity.Listing;
+import com.abemivi.arinda.arindabackend.entity.Photo;
 import com.abemivi.arinda.arindabackend.entity.User;
 import com.abemivi.arinda.arindabackend.repository.LeaseRepository;
 import com.abemivi.arinda.arindabackend.repository.UserRepository;
@@ -36,9 +37,10 @@ public class LeaseService {
         String status = determineLeaseStatus(lease.getStartDate(), lease.getEndDate());
         
         // Get first photo URL if available
-        String photoUrl = listing.getPhotos().isEmpty() 
-                ? null 
-                : listing.getPhotos().get(0).getUrl();
+        String photoUrl = listing.getPhotos().stream()
+                .findFirst()          // Safely gets an Optional<Photo> from the Set
+                .map(Photo::getUrl)   // If a photo exists, get its URL
+                .orElse(null);        // Otherwise, return null
 
         // Build full address
         String address = String.format("%s, %s, %s",
