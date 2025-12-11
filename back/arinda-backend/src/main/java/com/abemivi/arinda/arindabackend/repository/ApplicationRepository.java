@@ -19,6 +19,9 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     boolean existsByStudentAndListing(Student student, Listing listing);
     Optional<Application> findByStudentAndListing(Student student, Listing listing);
     
+    @Query("SELECT a FROM Application a WHERE a.student = :student AND a.listing = :listing AND a.status = 'REJECTED' ORDER BY a.updatedAt DESC")
+    Optional<Application> findMostRecentRejectedApplication(@Param("student") Student student, @Param("listing") Listing listing);
+    
     @Query("SELECT a FROM Application a WHERE a.listing.landlord = :landlord ORDER BY a.createdAt DESC")
     List<Application> findByListingLandlord(@Param("landlord") Landlord landlord);
 }

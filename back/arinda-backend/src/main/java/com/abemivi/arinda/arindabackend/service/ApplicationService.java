@@ -1,6 +1,8 @@
 package com.abemivi.arinda.arindabackend.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,9 +47,26 @@ public class ApplicationService {
         Listing listing = listingRepository.findById(request.listingId())
                 .orElseThrow(() -> new RuntimeException("Listing not found"));
 
-        // Check if student already applied to this listing
-        if (applicationRepository.existsByStudentAndListing(student, listing)) {
-            throw new RuntimeException("You have already submitted an application for this listing");
+        // Check if student has a pending or approved application for this listing
+        Optional<Application> existingApplication = applicationRepository.findByStudentAndListing(student, listing);
+        if (existingApplication.isPresent()) {
+            Application app = existingApplication.get();
+            if (app.getStatus() == ApplicationStatus.PENDING || app.getStatus() == ApplicationStatus.APPROVED) {
+                throw new RuntimeException("You have already submitted an application for this listing");
+            }
+        }
+
+        // Check for 1-day cooldown after rejection
+        Optional<Application> recentRejection = applicationRepository.findMostRecentRejectedApplication(student, listing);
+        if (recentRejection.isPresent()) {
+            Application rejectedApp = recentRejection.get();
+            LocalDateTime rejectionTime = rejectedApp.getUpdatedAt();
+            LocalDateTime cooldownEnd = rejectionTime.plusDays(1);
+            
+            if (LocalDateTime.now().isBefore(cooldownEnd)) {
+                long hoursRemaining = java.time.Duration.between(LocalDateTime.now(), cooldownEnd).toHours();
+                throw new RuntimeException("You must wait " + hoursRemaining + " more hour(s) before reapplying to this listing");
+            }
         }
 
         // Create application
