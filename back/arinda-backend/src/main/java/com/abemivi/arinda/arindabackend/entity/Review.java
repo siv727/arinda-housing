@@ -28,6 +28,7 @@ public class Review {
     // RELATIONSHIP
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "listing_id", nullable = false) // Creates the 'listing_id' column
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private Listing listing;
 
     @ManyToOne(fetch = FetchType.LAZY)

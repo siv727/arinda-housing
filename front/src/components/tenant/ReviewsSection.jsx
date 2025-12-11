@@ -18,8 +18,8 @@ const ReviewsSection = ({ listing }) => {
         const reviewsRes = await axiosClient.get(`/listings/${listing.id}/reviews`);
         setReviews(reviewsRes.data);
         // Optionally fetch average rating from backend
-        const ratingRes = await axiosClient.get(`/listings/${listing.id}/rating`);
-        setAverageRating(ratingRes.data.average || 0);
+        const ratingRes = await axiosClient.get(`/listings/${listing.id}/reviews/rating`);
+        setAverageRating(ratingRes.data.averagerating || 0);
       } catch {
         // Error handling can be added if needed
       }
@@ -52,8 +52,8 @@ const ReviewsSection = ({ listing }) => {
               const { default: axiosClient } = await import('../../api/axiosClient');
               const reviewsRes = await axiosClient.get(`/listings/${listing.id}/reviews`);
               setReviews(reviewsRes.data);
-              const ratingRes = await axiosClient.get(`/listings/${listing.id}/rating`);
-              setAverageRating(ratingRes.data.average || 0);
+              const ratingRes = await axiosClient.get(`/listings/${listing.id}/reviews/rating`);
+              setAverageRating(ratingRes.data.averagerating || 0);
               setModalOpen(false);
             } catch {
               // Error handling can be added if needed
@@ -119,8 +119,8 @@ const ReviewsSection = ({ listing }) => {
           const { default: axiosClient } = await import('../../api/axiosClient');
           const reviewsRes = await axiosClient.get(`/listings/${listing.id}/reviews`);
           setReviews(reviewsRes.data);
-          const ratingRes = await axiosClient.get(`/listings/${listing.id}/rating`);
-          setAverageRating(ratingRes.data.average || 0);
+          const ratingRes = await axiosClient.get(`/listings/${listing.id}/reviews/rating`);
+          setAverageRating(ratingRes.data.averagerating || 0);
           setModalOpen(false);
         }}
       />
@@ -157,11 +157,11 @@ const ReviewsSection = ({ listing }) => {
       {/* Individual Reviews */}
       <div className="space-y-6">
         {reviews.map((review, index) => (
-          <div key={index} className="flex gap-4">
+          <div key={review.id || index} className="flex gap-4">
             {/* Reviewer Avatar */}
             <img
-              src={review.reviewerAvatar}
-              alt={review.reviewerName}
+              src={review.reviewerprofile || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(review.reviewername || 'User')}
+              alt={review.reviewername}
               className="w-12 h-12 rounded-full object-cover flex-shrink-0"
             />
 
@@ -169,12 +169,12 @@ const ReviewsSection = ({ listing }) => {
             <div className="flex-1">
               <div className="flex items-center justify-between mb-2">
                 <div>
-                  <h4 className="font-semibold text-gray-900">{review.reviewerName}</h4>
-                  <p className="text-sm text-gray-500">{formatDate(review.date)}</p>
+                  <h4 className="font-semibold text-gray-900">{review.reviewername}</h4>
+                  <p className="text-sm text-gray-500">{formatDate(review.createdat)}</p>
                 </div>
                 <div className="flex gap-1">{renderStars(review.rating)}</div>
               </div>
-              <p className="text-gray-700 leading-relaxed">{review.text}</p>
+              <p className="text-gray-700 leading-relaxed">{review.comment}</p>
             </div>
           </div>
         ))}
