@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { User } from 'lucide-react'
-import Navbar from '../../components/landlord/Navbar'
-import { getLandlordProfile, updateLandlordProfile } from '../../api/landlordProfileApi'
+import Navbar from '../../../components/landlord/Navbar'
+import { getLandlordProfile, updateLandlordProfile } from '../../../api/landlordProfileApi'
 
 const AccountSettings = () => {
     const [loading, setLoading] = useState(true)
@@ -145,8 +145,8 @@ const AccountSettings = () => {
                                         form="profile-form"
                                         disabled={!isFormDirty || saving || loading}
                                         className={`px-6 py-2 rounded-md transition-all ${isFormDirty && !saving && !loading
-                                                ? 'bg-[#F35E27] text-white hover:bg-[#D94E1F] cursor-pointer'
-                                                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                            ? 'bg-[#F35E27] text-white hover:bg-[#D94E1F] cursor-pointer'
+                                            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                             }`}
                                     >
                                         {saving ? 'Saving...' : 'Save Changes'}
@@ -156,8 +156,8 @@ const AccountSettings = () => {
                                 {message.text && (
                                     <div
                                         className={`mb-6 p-4 rounded-md ${message.type === 'success'
-                                                ? 'bg-green-50 text-green-800 border border-green-200'
-                                                : 'bg-red-50 text-red-800 border border-red-200'
+                                            ? 'bg-green-50 text-green-800 border border-green-200'
+                                            : 'bg-red-50 text-red-800 border border-red-200'
                                             }`}
                                     >
                                         {message.text}
