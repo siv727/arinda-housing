@@ -9,17 +9,15 @@ import java.time.LocalDateTime;
 @Builder
 public record BookingResponse(
         Long id,
-        
         // Tenant/Student info
         TenantInfo tenant,
-        
         // Property/Listing info
         PropertyInfo property,
-        
         // Application details
-        LocalDate checkIn,  // moveInDate
+        LocalDate moveInDate,
         ApplicationStatus status,
         LocalDateTime bookedDate,  // createdAt
+        String phoneNumber,  // from application, not tenant
         String applicantMessage,
         String responseMessage,  // landlord's approval/rejection message
         String attachmentUrl  // lease document or approval attachment
@@ -29,7 +27,6 @@ public record BookingResponse(
             Long id,
             String name,
             String email,
-            String phone,
             String studentId,
             String university
     ) {}
