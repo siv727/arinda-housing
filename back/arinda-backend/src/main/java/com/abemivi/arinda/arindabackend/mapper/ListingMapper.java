@@ -5,13 +5,13 @@ import com.abemivi.arinda.arindabackend.dto.listingcards.TenantListingCard;
 import com.abemivi.arinda.arindabackend.dto.listingdetails.LandlordListingDetails;
 import com.abemivi.arinda.arindabackend.dto.listingdetails.TenantListingDetails;
 import com.abemivi.arinda.arindabackend.dto.support.*;
-import com.abemivi.arinda.arindabackend.entity.Listing;
-import com.abemivi.arinda.arindabackend.entity.Photo;
-import com.abemivi.arinda.arindabackend.entity.Review;
+import com.abemivi.arinda.arindabackend.entity.*;
 import com.abemivi.arinda.arindabackend.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collection; // Important Import
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,12 +21,17 @@ public class ListingMapper {
 
     private final ReviewRepository reviewRepository;
 
-    // LANDLORD MAPPINGS
+    // --- LANDLORD MAPPINGS ---
 
     public LandlordListingCard toLandlordCardDTO(Listing listing) {
+        String photoUrl = listing.getPhotos().stream()
+                .findFirst()
+                .map(Photo::getUrl)
+                .orElse(null);
+
         return LandlordListingCard.builder()
                 .id(listing.getId())
-                .mainphotourl(listing.getPhotos().isEmpty() ? null : listing.getPhotos().get(0).getUrl())
+                .mainphotourl(photoUrl)
                 .title(listing.getTitle())
                 .location(listing.getLocation().getCity() + ", " + listing.getLocation().getProvince())
                 .propertytype(listing.getPropertytype())
@@ -40,9 +45,14 @@ public class ListingMapper {
                 .map(this::toReviewDTO)
                 .collect(Collectors.toList());
 
+        String photoUrl = listing.getPhotos().stream()
+                .findFirst()
+                .map(Photo::getUrl)
+                .orElse(null);
+
         return LandlordListingDetails.builder()
                 .id(listing.getId())
-                .mainphotourl(listing.getPhotos().isEmpty() ? null : listing.getPhotos().get(0).getUrl())
+                .mainphotourl(photoUrl)
                 .title(listing.getTitle())
                 .location(listing.getLocation().getCity() + ", " + listing.getLocation().getProvince())
                 .propertytype(listing.getPropertytype())
@@ -52,7 +62,7 @@ public class ListingMapper {
                 .build();
     }
 
-    // TENANT MAPPINGS
+    // --- TENANT MAPPINGS ---
 
     public TenantListingCard toTenantCardDTO(Listing listing) {
         Double avgRating = reviewRepository.findAverageRatingByListingId(listing.getId());
@@ -60,22 +70,27 @@ public class ListingMapper {
 
         List<String> amenityNames = listing.getAmenities().stream()
                 .limit(3)
-                .map(a -> a.getName())
                 .collect(Collectors.toList());
 
         if (listing.getAmenities().size() > 3) {
             amenityNames.add("+" + (listing.getAmenities().size() - 3) + " more");
         }
 
+        // FIX: Handle Set<LeaseTerm> sorting
         List<String> leaseTerms = listing.getLeaseterms().stream()
-                .map(lt -> lt.getMonths())
+                .map(LeaseTerm::getMonths)
                 .sorted()
                 .map(t -> t + " month" + (t > 1 ? "s" : ""))
                 .collect(Collectors.toList());
 
+        String photoUrl = listing.getPhotos().stream()
+                .findFirst()
+                .map(Photo::getUrl)
+                .orElse(null);
+
         return TenantListingCard.builder()
                 .id(listing.getId())
-                .mainphotourl(listing.getPhotos().isEmpty() ? null : listing.getPhotos().get(0).getUrl())
+                .mainphotourl(photoUrl)
                 .title(listing.getTitle())
                 .location(listing.getLocation().getCity() + ", " + listing.getLocation().getProvince())
                 .averagerating(avgRating)
@@ -90,13 +105,14 @@ public class ListingMapper {
         Double avgRating = reviewRepository.findAverageRatingByListingId(listing.getId());
         long reviewCount = reviewRepository.countByListingId(listing.getId());
 
+        // FIX: Stream works on Set, returns List
         List<ReviewDetails> reviews = listing.getReviews().stream()
                 .sorted((r1, r2) -> r2.getCreatedat().compareTo(r1.getCreatedat()))
                 .map(this::toReviewDTO)
                 .collect(Collectors.toList());
 
         List<String> leaseTerms = listing.getLeaseterms().stream()
-                .map(lt -> lt.getMonths())
+                .map(LeaseTerm::getMonths)
                 .sorted()
                 .map(t -> t + " month" + (t > 1 ? "s" : ""))
                 .collect(Collectors.toList());
@@ -110,12 +126,13 @@ public class ListingMapper {
                 .location(listing.getLocation().getCity() + ", " + listing.getLocation().getProvince())
                 .averagerating(avgRating)
                 .reviewcount((int) reviewCount)
+                // HOST INFO (Works now because of JOIN FETCH l.landlord)
                 .hostname(listing.getLandlord().getFirstname() + " " + listing.getLandlord().getLastname())
                 .hostphonenumber(listing.getLandlord().getPhonenumber())
                 .hostemail(listing.getLandlord().getEmail())
                 .description(listing.getDescription())
-                .inclusions(listing.getInclusions().stream().map(i -> i.getName()).collect(Collectors.toList()))
-                .amenitydetails(listing.getAmenities().stream().map(this::toAmenityDTO).collect(Collectors.toList()))
+                .inclusions(new ArrayList<>(listing.getInclusions()))
+                .amenities(new ArrayList<>(listing.getAmenities()))
                 .reviewsummary(toReviewSummaryDTO(listing))
                 .reviewdetails(reviews)
                 .locationdetails(toLocationDTO(listing))
@@ -125,19 +142,12 @@ public class ListingMapper {
                 .build();
     }
 
-    // SUPPORTING MAPPERS
+    // --- SUPPORT METHODS ---
 
     private PhotoDetails toPhotoDTO(Photo photo) {
         return PhotoDetails.builder()
                 .id(photo.getId())
                 .url(photo.getUrl())
-                .build();
-    }
-
-    private AmenityDetails toAmenityDTO(com.abemivi.arinda.arindabackend.entity.Amenity amenity) {
-        return AmenityDetails.builder()
-                .id(amenity.getId())
-                .name(amenity.getName())
                 .build();
     }
 
@@ -152,21 +162,16 @@ public class ListingMapper {
     }
 
     private PricingDetails toPricingDTO(Listing listing) {
-        int advanceRentCost = listing.getPrice().getAdvancerent() * listing.getPrice().getMonthlyrent();
-        int totalMoveinCost = listing.getPrice().getMonthlyrent() +
-                listing.getPrice().getSecuritydeposit() +
-                listing.getPrice().getAppfee() +
-                listing.getPrice().getPetfee() +
-                advanceRentCost;
+        Price price = listing.getPrice();
 
         return PricingDetails.builder()
-                .monthlyrent(listing.getPrice().getMonthlyrent())
-                .securitydeposit(listing.getPrice().getSecuritydeposit())
-                .appfee(listing.getPrice().getAppfee() > 0 ? listing.getPrice().getAppfee() : null)
-                .petfee(listing.getPrice().getPetfee() > 0 ? listing.getPrice().getPetfee() : null)
-                .advancerent(listing.getPrice().getAdvancerent() > 0 ? listing.getPrice().getAdvancerent() : null)
-                .advancerentcost(listing.getPrice().getAdvancerent() > 0 ? advanceRentCost : null)
-                .totalmoveincost(totalMoveinCost)
+                .monthlyrent(price.getMonthlyrent())
+                .securitydeposit(price.getSecuritydeposit())
+                .appfee(price.getAppfee() > 0 ? price.getAppfee() : null)
+                .petfee(price.getPetfee() > 0 ? price.getPetfee() : null)
+                .advancerent(price.getAdvancerent() > 0 ? price.getAdvancerent() : null)
+                .advancerentcost(price.getAdvancerent() > 0 ? price.getAdvancerentCost() : null) // Use Entity Method
+                .totalmoveincost(price.getTotalMoveinCost()) // Use Entity Method
                 .build();
     }
 
@@ -180,7 +185,8 @@ public class ListingMapper {
     }
 
     private ReviewSummary toReviewSummaryDTO(Listing listing) {
-        List<Review> reviews = listing.getReviews();
+        // FIX: Accept generic Collection to handle both List and Set
+        Collection<Review> reviews = listing.getReviews();
 
         return ReviewSummary.builder()
                 .averagerating(reviewRepository.findAverageRatingByListingId(listing.getId()))
@@ -193,8 +199,3 @@ public class ListingMapper {
                 .build();
     }
 }
-
-        
-                
-                
-                

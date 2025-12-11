@@ -27,15 +27,14 @@ import java.util.List;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-//    private final JwtAuthFilter jwtAuthFilter;
-//    private final UserDetailsService userDetailsService;
+    // private final JwtAuthFilter jwtAuthFilter;
+    // private final UserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
             AuthenticationProvider authenticationProvider,
-            JwtAuthFilter jwtAuthFilter
-    ) throws Exception {
+            JwtAuthFilter jwtAuthFilter) throws Exception {
         http
                 // 1. Disable CSRF. Not needed for stateless JWT APIs that don't use cookies.
                 .csrf(AbstractHttpConfigurer::disable)
@@ -47,18 +46,19 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/listings").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/listings/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/listings/**").permitAll()
 
                         // 3. All other requests must be authenticated
-                        .anyRequest().authenticated()
-                )
-                // 4. Configure session management to be STATELESS. Spring won't create sessions.
+                        .anyRequest().authenticated())
+                // 4. Configure session management to be STATELESS. Spring won't create
+                // sessions.
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 // 5. Tell HttpSecurity to use the AuthenticationProvider bean we define below
                 .authenticationProvider(authenticationProvider)
 
-                // 6. Add our custom JWT filter *before* the standard username/passwordhash filter.
+                // 6. Add our custom JWT filter *before* the standard username/passwordhash
+                // filter.
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -67,7 +67,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8080", "http://localhost:5173"));
+        configuration
+                .setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8080", "http://localhost:5173"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
@@ -78,7 +79,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+    public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService,
+            PasswordEncoder passwordEncoder) {
         // This bean method "lazily" asks for the dependencies it needs
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);

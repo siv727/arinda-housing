@@ -3,7 +3,9 @@ package com.abemivi.arinda.arindabackend.entity;
 import com.abemivi.arinda.arindabackend.entity.enums.ListingStatus;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,6 +17,8 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @Table(name = "listing")
+@EqualsAndHashCode(exclude = {"leaseterms", "photos", "reviews", "landlord", "applications"})
+@ToString(exclude = {"leaseterms", "photos", "reviews", "landlord", "applications"})
 public class Listing {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +37,7 @@ public class Listing {
     private String roomtype;
 
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<LeaseTerm> leaseterms = new ArrayList<>();
+    private Set<LeaseTerm> leaseterms = new HashSet<>();
 
     @Column(nullable = false)
     private ListingStatus listingstatus;
@@ -48,23 +52,29 @@ public class Listing {
     @JoinColumn(name = "landlord_id", nullable = false)
     private Landlord landlord;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "listing_inclusion", joinColumns = @JoinColumn(name = "listing_id"), inverseJoinColumns = @JoinColumn(name = "inclusion_id"))
-    private Set<NeedsIncluded> inclusions = new HashSet<>();
+    // REFACTORED: Use ElementCollection for simple string lists
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "listing_inclusions", joinColumns = @JoinColumn(name = "listing_id"))
+    @Column(name = "name")
+    private Set<String> inclusions = new HashSet<>();
 
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Photo> photos = new ArrayList<>();
+    private Set<Photo> photos = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "listing_amenity", joinColumns = @JoinColumn(name = "listing_id"), inverseJoinColumns = @JoinColumn(name = "amenity_id"))
-    private Set<Amenity> amenities = new HashSet<>();
+    // REFACTORED
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "listing_amenities", joinColumns = @JoinColumn(name = "listing_id"))
+    @Column(name = "name")
+    private Set<String> amenities = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "listing_establishment", joinColumns = @JoinColumn(name = "listing_id"), inverseJoinColumns = @JoinColumn(name = "establishment_id"))
-    private Set<Establishment> establishments = new HashSet<>();
+    // REFACTORED
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "listing_establishments", joinColumns = @JoinColumn(name = "listing_id"))
+    @Column(name = "name")
+    private Set<String> establishments = new HashSet<>();
 
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Review> reviews = new ArrayList<>();
+    private Set<Review> reviews = new HashSet<>();
 
     @OneToMany(mappedBy = "listing", fetch = FetchType.LAZY)
     private List<Application> applications = new ArrayList<>();

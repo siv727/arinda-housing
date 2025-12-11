@@ -2,7 +2,9 @@ package com.abemivi.arinda.arindabackend.service;
 
 import com.abemivi.arinda.arindabackend.dto.listing.CreateListingRequest;
 import com.abemivi.arinda.arindabackend.dto.listingcards.LandlordListingCard;
+import com.abemivi.arinda.arindabackend.dto.listingcards.TenantListingCard;
 import com.abemivi.arinda.arindabackend.dto.listingdetails.LandlordListingDetails;
+import com.abemivi.arinda.arindabackend.dto.listingdetails.TenantListingDetails;
 import com.abemivi.arinda.arindabackend.entity.*;
 import com.abemivi.arinda.arindabackend.entity.enums.ListingStatus;
 import com.abemivi.arinda.arindabackend.mapper.ListingMapper;
@@ -21,19 +23,15 @@ import java.util.stream.Collectors;
 public class ListingService {
 
     private final ListingRepository listingRepository;
-    private final AmenityRepository amenityRepository;
-    private final NeedsIncludedRepository needsIncludedRepository;
-    private final EstablishmentRepository establishmentRepository;
+    // Removed AmenityRepository, NeedsIncludedRepository, EstablishmentRepository
     private final UserRepository userRepository;
     private final ListingMapper listingMapper;
 
     @Transactional
     public Listing createListing(CreateListingRequest request, Long landlordId) {
-        // Get landlord
         Landlord landlord = (Landlord) userRepository.findById(landlordId)
                 .orElseThrow(() -> new RuntimeException("Landlord not found"));
 
-        // Create listing
         Listing listing = new Listing();
         listing.setTitle(request.getTitle());
         listing.setDescription(request.getDescription());
@@ -42,7 +40,7 @@ public class ListingService {
         listing.setListingstatus(ListingStatus.AVAILABLE);
         listing.setLandlord(landlord);
 
-        // Set location
+        // Set Location
         Location location = new Location();
         location.setUnit(request.getUnit());
         location.setBuilding(request.getBuilding());
@@ -57,7 +55,7 @@ public class ListingService {
         location.setPlaceName(request.getPlacename());
         listing.setLocation(location);
 
-        // Set price
+        // Set Price
         Price price = new Price();
         price.setMonthlyrent(request.getMonthlyrent());
         price.setSecuritydeposit(request.getSecuritydeposit());
@@ -66,10 +64,8 @@ public class ListingService {
         price.setAdvancerent(request.getAdvancerent() != null ? request.getAdvancerent() : 1);
         listing.setPrice(price);
 
-        // Save listing first to get ID (needed for lease terms foreign key)
         listing = listingRepository.save(listing);
 
-        // Create and add lease terms
         if (request.getLeaseterms() != null && !request.getLeaseterms().isEmpty()) {
             for (Integer months : request.getLeaseterms()) {
                 LeaseTerm leaseTerm = new LeaseTerm();
@@ -79,7 +75,6 @@ public class ListingService {
             }
         }
 
-        // Add photos
         if (request.getPhotourls() != null && !request.getPhotourls().isEmpty()) {
             for (String url : request.getPhotourls()) {
                 Photo photo = new Photo();
@@ -89,22 +84,17 @@ public class ListingService {
             }
         }
 
-        // Add inclusions
-        if (request.getInclusions() != null && !request.getInclusions().isEmpty()) {
-            Set<NeedsIncluded> inclusions = getOrCreateInclusions(request.getInclusions());
-            listing.setInclusions(inclusions);
+        // REFACTORED: Directly set the sets of strings
+        if (request.getInclusions() != null) {
+            listing.setInclusions(request.getInclusions());
         }
 
-        // Add amenities
-        if (request.getAmenities() != null && !request.getAmenities().isEmpty()) {
-            Set<Amenity> amenities = getOrCreateAmenities(request.getAmenities());
-            listing.setAmenities(amenities);
+        if (request.getAmenities() != null) {
+            listing.setAmenities(request.getAmenities());
         }
 
-        // Add establishments
-        if (request.getEstablishments() != null && !request.getEstablishments().isEmpty()) {
-            Set<Establishment> establishments = getOrCreateEstablishments(request.getEstablishments());
-            listing.setEstablishments(establishments);
+        if (request.getEstablishments() != null) {
+            listing.setEstablishments(request.getEstablishments());
         }
 
         return listingRepository.save(listing);
@@ -115,22 +105,18 @@ public class ListingService {
         Listing listing = listingRepository.findById(listingId)
                 .orElseThrow(() -> new RuntimeException("Listing not found"));
 
-        // Verify ownership
         if (!listing.getLandlord().getId().equals(landlordId)) {
             throw new RuntimeException("Unauthorized to update this listing");
         }
 
-        // Update basic info
         listing.setTitle(request.getTitle());
         listing.setDescription(request.getDescription());
         listing.setPropertytype(request.getPropertytype());
         listing.setRoomtype(request.getRoomtype());
 
-        // Update location
+        // Update Location
         Location location = listing.getLocation();
-        if (location == null) {
-            location = new Location();
-        }
+        if (location == null) location = new Location();
         location.setUnit(request.getUnit());
         location.setBuilding(request.getBuilding());
         location.setAddress(request.getAddress());
@@ -144,11 +130,9 @@ public class ListingService {
         location.setPlaceName(request.getPlacename());
         listing.setLocation(location);
 
-        // Update price
+        // Update Price
         Price price = listing.getPrice();
-        if (price == null) {
-            price = new Price();
-        }
+        if (price == null) price = new Price();
         price.setMonthlyrent(request.getMonthlyrent());
         price.setSecuritydeposit(request.getSecuritydeposit());
         price.setAppfee(request.getAppfee() != null ? request.getAppfee() : 0);
@@ -156,7 +140,7 @@ public class ListingService {
         price.setAdvancerent(request.getAdvancerent());
         listing.setPrice(price);
 
-        // Update lease terms
+        // Update Leaseterms
         if (request.getLeaseterms() != null) {
             listing.getLeaseterms().clear();
             for (Integer months : request.getLeaseterms()) {
@@ -167,7 +151,7 @@ public class ListingService {
             }
         }
 
-        // Update photos
+        // Update Photos
         if (request.getPhotourls() != null) {
             listing.getPhotos().clear();
             for (String url : request.getPhotourls()) {
@@ -178,27 +162,23 @@ public class ListingService {
             }
         }
 
-        // Update inclusions
+        // REFACTORED: Direct assignment for collections
         if (request.getInclusions() != null) {
-            Set<NeedsIncluded> inclusions = getOrCreateInclusions(request.getInclusions());
-            listing.setInclusions(inclusions);
+            listing.setInclusions(new HashSet<>(request.getInclusions()));
         }
 
-        // Update amenities
         if (request.getAmenities() != null) {
-            Set<Amenity> amenities = getOrCreateAmenities(request.getAmenities());
-            listing.setAmenities(amenities);
+            listing.setAmenities(new HashSet<>(request.getAmenities()));
         }
 
-        // Update establishments
         if (request.getEstablishments() != null) {
-            Set<Establishment> establishments = getOrCreateEstablishments(request.getEstablishments());
-            listing.setEstablishments(establishments);
+            listing.setEstablishments(new HashSet<>(request.getEstablishments()));
         }
 
         return listingRepository.save(listing);
     }
 
+    // ... keep getLandlordListings, getLandlordListingDetails, etc. as they are
     public List<LandlordListingCard> getLandlordListings(Long landlordId) {
         List<Listing> listings = listingRepository.findAllByLandlordIdWithPhotos(landlordId);
         return listings.stream()
@@ -207,11 +187,9 @@ public class ListingService {
     }
 
     public LandlordListingDetails getLandlordListingDetails(Long listingId, Long landlordId) {
-        // First check if listing exists at all
         Listing listing = listingRepository.findById(listingId)
                 .orElseThrow(() -> new RuntimeException("Listing not found with ID: " + listingId));
 
-        // Then check ownership
         if (!listing.getLandlord().getId().equals(landlordId)) {
             throw new RuntimeException("Unauthorized: This listing belongs to another landlord");
         }
@@ -244,46 +222,23 @@ public class ListingService {
         listingRepository.save(listing);
     }
 
-    // Helper methods to get or create reference data
-    private Set<Amenity> getOrCreateAmenities(Set<String> amenityNames) {
-        Set<Amenity> amenities = new HashSet<>();
-        for (String name : amenityNames) {
-            Amenity amenity = amenityRepository.findByName(name)
-                    .orElseGet(() -> {
-                        Amenity newAmenity = new Amenity();
-                        newAmenity.setName(name);
-                        return amenityRepository.save(newAmenity);
-                    });
-            amenities.add(amenity);
-        }
-        return amenities;
+    // TENANT OPERATIONS
+    public List<TenantListingCard> getAllListings() {
+        // Fetch only AVAILABLE listings
+        List<Listing> listings = listingRepository.findAllAvailableWithPhotosAndAmenities(ListingStatus.AVAILABLE);
+
+        return listings.stream()
+                .map(listingMapper::toTenantCardDTO)
+                .collect(Collectors.toList());
     }
 
-    private Set<NeedsIncluded> getOrCreateInclusions(Set<String> inclusionNames) {
-        Set<NeedsIncluded> inclusions = new HashSet<>();
-        for (String name : inclusionNames) {
-            NeedsIncluded inclusion = needsIncludedRepository.findByName(name)
-                    .orElseGet(() -> {
-                        NeedsIncluded newInclusion = new NeedsIncluded();
-                        newInclusion.setName(name);
-                        return needsIncludedRepository.save(newInclusion);
-                    });
-            inclusions.add(inclusion);
-        }
-        return inclusions;
-    }
+    public TenantListingDetails getListingDetails(Long id) {
+        Listing listing = listingRepository.findByIdWithAllDetails(id)
+                .orElseThrow(() -> new RuntimeException("Listing not found"));
 
-    private Set<Establishment> getOrCreateEstablishments(Set<String> establishmentNames) {
-        Set<Establishment> establishments = new HashSet<>();
-        for (String name : establishmentNames) {
-            Establishment establishment = establishmentRepository.findByName(name)
-                    .orElseGet(() -> {
-                        Establishment newEstablishment = new Establishment();
-                        newEstablishment.setName(name);
-                        return establishmentRepository.save(newEstablishment);
-                    });
-            establishments.add(establishment);
-        }
-        return establishments;
+        // Optional: Check if listing is actually available before showing it?
+        // For now, we allow viewing it, but the frontend might want to hide the "Book" button if it's not AVAILABLE.
+
+        return listingMapper.toTenantDetailsDTO(listing);
     }
 }
