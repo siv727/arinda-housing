@@ -3,7 +3,9 @@ package com.abemivi.arinda.arindabackend.entity;
 import com.abemivi.arinda.arindabackend.entity.enums.ListingStatus;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,6 +17,8 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @Table(name = "listing")
+@EqualsAndHashCode(exclude = {"leaseterms", "photos", "reviews", "landlord", "applications"})
+@ToString(exclude = {"leaseterms", "photos", "reviews", "landlord", "applications"})
 public class Listing {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +37,7 @@ public class Listing {
     private String roomtype;
 
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<LeaseTerm> leaseterms = new ArrayList<>();
+    private Set<LeaseTerm> leaseterms = new HashSet<>();
 
     @Column(nullable = false)
     private ListingStatus listingstatus;
@@ -55,7 +59,7 @@ public class Listing {
     private Set<String> inclusions = new HashSet<>();
 
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Photo> photos = new ArrayList<>();
+    private Set<Photo> photos = new HashSet<>();
 
     // REFACTORED
     @ElementCollection(fetch = FetchType.LAZY)
@@ -70,7 +74,7 @@ public class Listing {
     private Set<String> establishments = new HashSet<>();
 
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Review> reviews = new ArrayList<>();
+    private Set<Review> reviews = new HashSet<>();
 
     @OneToMany(mappedBy = "listing", fetch = FetchType.LAZY)
     private List<Application> applications = new ArrayList<>();

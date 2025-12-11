@@ -2,7 +2,9 @@ package com.abemivi.arinda.arindabackend.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -10,6 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "reviews")
+@EqualsAndHashCode(exclude = "listing")
+@ToString(exclude = "listing")
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

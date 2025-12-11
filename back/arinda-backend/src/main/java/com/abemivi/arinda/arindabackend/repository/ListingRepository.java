@@ -67,7 +67,9 @@ public interface ListingRepository extends JpaRepository<Listing, Long> {
         // Display detailed listing view for a specific listing
         @Query("""
                 SELECT DISTINCT l FROM Listing l
+                LEFT JOIN FETCH l.landlord
                 LEFT JOIN FETCH l.photos
+                LEFT JOIN FETCH l.leaseterms
                 LEFT JOIN FETCH l.amenities
                 LEFT JOIN FETCH l.inclusions
                 LEFT JOIN FETCH l.establishments

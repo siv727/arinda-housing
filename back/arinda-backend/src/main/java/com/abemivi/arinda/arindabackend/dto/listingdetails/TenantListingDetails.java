@@ -23,6 +23,8 @@ public record TenantListingDetails(
         // CHANGED: From List<AmenityDetails> amenitydetails to List<String> amenities
         List<String> amenities,
 
+        List<String> establishments,
+
         ReviewSummary reviewsummary,
         List<ReviewDetails> reviewdetails,
         LocationDetails locationdetails,
