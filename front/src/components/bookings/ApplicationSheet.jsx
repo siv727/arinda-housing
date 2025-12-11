@@ -9,35 +9,30 @@ import {
 } from '@/components/ui/sheet'
 import ApprovalSheet from './ApprovalSheet'
 import RejectionSheet from './RejectionSheet'
+import { approveApplication, rejectApplication } from '@/api/bookingsApi'
 
 const StatusBadge = ({ status }) => {
-  const map = {
-    Approved: 'bg-green-100 text-green-700',
-    Pending: 'bg-yellow-100 text-yellow-700',
-    Rejected: 'bg-red-100 text-red-700',
-  }
-  const dot = {
-    Approved: 'bg-green-500',
-    Pending: 'bg-yellow-500',
-    Rejected: 'bg-red-500',
-  }
+  const statusMap = {
+    APPROVED: { label: "Approved", bg: "bg-green-100 text-green-700", dot: "bg-green-500" },
+    PENDING: { label: "Pending", bg: "bg-yellow-100 text-yellow-700", dot: "bg-yellow-500" },
+    REJECTED: { label: "Rejected", bg: "bg-red-100 text-red-700", dot: "bg-red-500" },
+  };
+  const style = statusMap[status] || { label: status, bg: "bg-gray-100 text-gray-700", dot: "bg-gray-400" };
+  
   return (
-    <div
-      className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-        map[status] || 'bg-gray-100 text-gray-700'
-      }`}
-    >
-      <span className={`mr-2 h-2 w-2 rounded-full ${dot[status] || 'bg-gray-400'}`}></span>
-      {status}
+    <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${style.bg}`}>
+      <span className={`mr-2 h-2 w-2 rounded-full ${style.dot}`}></span>
+      {style.label}
     </div>
-  )
+  );
 }
 
-export default function ApplicationSheet({ open, onOpenChange, booking, onApprove = () => {}, onReject = () => {} }) {
+export default function ApplicationSheet({ open, onOpenChange, booking, loading, onApprove = () => {}, onReject = () => {} }) {
   const tenant = booking?.tenant
   const property = booking?.property
   const [approvalOpen, setApprovalOpen] = useState(false)
   const [rejectionOpen, setRejectionOpen] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
   const isActionSheetOpen = approvalOpen || rejectionOpen;
 
   const handleApprove = () => {
@@ -50,17 +45,44 @@ export default function ApplicationSheet({ open, onOpenChange, booking, onApprov
     setRejectionOpen(true)
   }
 
-  const handleApprovalConfirm = () => {
-    onApprove(booking)
-    setApprovalOpen(false)
-    onOpenChange(false)
+  const handleApprovalConfirm = async (payload) => {
+    try {
+      setSubmitting(true)
+      await approveApplication(booking.id, {
+        message: payload.message,
+        attachmentUrl: payload.file ? 'uploaded-file-url' : null // TODO: Handle file upload
+      })
+      setApprovalOpen(false)
+      onApprove()
+    } catch (err) {
+      console.error('Failed to approve application:', err)
+      alert(err.response?.data?.message || 'Failed to approve application')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
-  const handleRejectionConfirm = (payload) => {
-    onReject(booking, payload)
-    setRejectionOpen(false)
-    onOpenChange(false)
+  const handleRejectionConfirm = async (payload) => {
+    try {
+      setSubmitting(true)
+      await rejectApplication(booking.id, {
+        message: payload.message
+      })
+      setRejectionOpen(false)
+      onReject()
+    } catch (err) {
+      console.error('Failed to reject application:', err)
+      alert(err.response?.data?.message || 'Failed to reject application')
+    } finally {
+      setSubmitting(false)
+    }
   }
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '-';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  };
 
   
 
@@ -68,7 +90,7 @@ export default function ApplicationSheet({ open, onOpenChange, booking, onApprov
     <>
       <Sheet open={open} onOpenChange={onOpenChange}>
         <SheetContent
-          className={`${isActionSheetOpen ? 'sm:max-w-[580px] md:h-[85vh] md:mt-16' : 'sm:max-w-[600px] md:h-[97vh] md:mt-3 transition-all'} transition-all rounded-l-lg md:rounded-lg md:mr-3   flex flex-col`}
+          className={`${isActionSheetOpen ? 'sm:max-w-[580px] md:h-[85vh] md:mt-16' : 'sm:max-w-[600px] md:h-[97vh] md:mt-3 transition-all'} transition-all rounded-l-lg md:rounded-lg md:mr-3 flex flex-col`}
         >
           <SheetHeader>
             <SheetTitle>Application Details</SheetTitle>
@@ -134,7 +156,7 @@ export default function ApplicationSheet({ open, onOpenChange, booking, onApprov
                   Phone Number
                 </label>
                 <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
-                  {tenant?.phone}
+                  {booking?.phoneNumber ?? ""}
                 </div>
               </div>
               <div>
@@ -142,7 +164,7 @@ export default function ApplicationSheet({ open, onOpenChange, booking, onApprov
                   Move-in Date
                 </label>
                 <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
-                  {tenant?.moveInDate ?? booking?.checkIn}
+                  {formatDate(booking?.moveInDate)}
                 </div>
               </div>
               <div>
@@ -169,7 +191,7 @@ export default function ApplicationSheet({ open, onOpenChange, booking, onApprov
                 Additional Notes
               </label>
               <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50 min-h-[80px]">
-                {tenant?.notes ?? "-"}
+                {booking?.applicantMessage ?? "-"}
               </div>
             </div>
           </div>
@@ -179,13 +201,15 @@ export default function ApplicationSheet({ open, onOpenChange, booking, onApprov
             <div className="flex justify-end gap-3 w-full font-medium cursor-pointer">
               <button
                 onClick={handleReject}
-                className="hover:bg-[#FFF8F2] transition  border rounded-lg py-3 px-6 text-gray-700 cursor-pointer"
+                disabled={submitting || booking?.status !== 'PENDING'}
+                className="hover:bg-[#FFF8F2] transition border rounded-lg py-3 px-6 text-gray-700 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Reject<i className="fa-regular fa-circle-x pl-2"></i>
               </button>
               <button
                 onClick={handleApprove}
-                className="rounded-lg py-2 bg-[#F35E27] transition hover:bg-[#e7521c] px-6 text-white cursor-pointer"
+                disabled={submitting || booking?.status !== 'PENDING'}
+                className="rounded-lg py-2 bg-[#F35E27] transition hover:bg-[#e7521c] px-6 text-white cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Approve<i className="fa-regular fa-circle-check pl-2"></i>
               </button>

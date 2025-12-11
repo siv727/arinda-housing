@@ -203,7 +203,6 @@ public class ApplicationService {
                 .id(student.getId())
                 .name(tenantName)
                 .email(student.getEmail())
-                .phone(null)  // Phone not available in current User entity
                 .studentId(student.getStudentid())
                 .university(student.getSchool())
                 .build();
@@ -221,6 +220,7 @@ public class ApplicationService {
                 .moveInDate(application.getMoveInDate())
                 .status(application.getStatus())
                 .bookedDate(application.getCreatedAt())
+                .phoneNumber(application.getPhoneNumber())
                 .applicantMessage(application.getApplicantMessage())
                 .responseMessage(application.getResponseMessage())
                 .attachmentUrl(application.getAttachmentUrl())

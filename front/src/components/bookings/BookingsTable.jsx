@@ -1,29 +1,19 @@
 import React, { useState } from "react";
 import ApplicationSheet from "./ApplicationSheet";
+import { getBookingDetails } from "@/api/bookingsApi";
 
 const StatusBadge = ({ status }) => {
-  const map = {
-    Approved: "bg-green-100 text-green-700",
-    Pending: "bg-yellow-100 text-yellow-700",
-    Rejected: "bg-red-100 text-red-700",
+  const statusMap = {
+    APPROVED: { label: "Approved", bg: "bg-green-100 text-green-700", dot: "bg-green-500" },
+    PENDING: { label: "Pending", bg: "bg-yellow-100 text-yellow-700", dot: "bg-yellow-500" },
+    REJECTED: { label: "Rejected", bg: "bg-red-100 text-red-700", dot: "bg-red-500" },
   };
-  const dot = {
-    Approved: "bg-green-500",
-    Pending: "bg-yellow-500",
-    Rejected: "bg-red-500",
-  };
+  const style = statusMap[status] || { label: status, bg: "bg-gray-100 text-gray-700", dot: "bg-gray-400" };
+  
   return (
-    <div
-      className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-        map[status] || "bg-gray-100 text-gray-700"
-      }`}
-    >
-      <span
-        className={`mr-2 h-2 w-2 rounded-full ${
-          dot[status] || "bg-gray-400"
-        }`}
-      ></span>
-      {status}
+    <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${style.bg}`}>
+      <span className={`mr-2 h-2 w-2 rounded-full ${style.dot}`}></span>
+      {style.label}
     </div>
   );
 };
@@ -34,20 +24,45 @@ const BookingsTable = ({
   onReject = () => {},
 }) => {
   const [sheetOpen, setSheetOpen] = useState(false);
-  const [selected, setSelected] = useState(null);
+  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [loadingDetails, setLoadingDetails] = useState(false);
 
-  const openSheet = (b) => {
-    setSelected(b);
-    setSheetOpen(true);
+  const openSheet = async (bookingSummary) => {
+    try {
+      setLoadingDetails(true);
+      // Fetch full booking details
+      const fullBooking = await getBookingDetails(bookingSummary.id);
+      setSelectedBooking(fullBooking);
+      setSheetOpen(true);
+    } catch (err) {
+      console.error('Failed to fetch booking details:', err);
+      alert('Failed to load booking details');
+    } finally {
+      setLoadingDetails(false);
+    }
   };
 
-  const handleApprove = (b) => {
-    onAccept(b)
-  }
+  const handleApprove = () => {
+    onAccept();
+    setSheetOpen(false);
+  };
 
-  const handleReject = (b) => {
-    onReject(b)
-  }
+  const handleReject = () => {
+    onReject();
+    setSheetOpen(false);
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '-';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+
+  const formatDateTime = (dateTimeString) => {
+    if (!dateTimeString) return '-';
+    const date = new Date(dateTimeString);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
 
   return (
     <>
@@ -71,19 +86,17 @@ const BookingsTable = ({
               >
                 <td className="px-6 py-[26px] whitespace-nowrap align-top">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
-                      <img
-                        src={b.tenant?.avatar}
-                        alt={b.tenant?.name}
-                        className="w-full h-full object-cover"
-                      />
+                    <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 flex-shrink-0 flex items-center justify-center">
+                      <span className="text-sm font-semibold text-gray-600">
+                        {b.tenantName?.charAt(0) || '?'}
+                      </span>
                     </div>
                     <div>
                       <div className="text-sm font-semibold">
-                        {b.tenant.name}
+                        {b.tenantName}
                       </div>
                       <div className="text-xs text-gray-500">
-                        {b.tenant.email}
+                        {b.tenantEmail}
                       </div>
                     </div>
                   </div>
@@ -91,15 +104,15 @@ const BookingsTable = ({
 
                 <td className="px-6 py-[26px] whitespace-nowrap align-top">
                   <div className="text-sm font-semibold">
-                    {b.property.title}
+                    {b.propertyTitle}
                   </div>
                   <div className="text-xs text-gray-500">
-                    {b.property.address}
+                    {b.propertyAddress}
                   </div>
                 </td>
 
                 <td className="px-6 py-[26px] whitespace-nowrap align-top text-sm">
-                  {b.checkIn}
+                  {formatDate(b.moveInDate)}
                 </td>
 
                 <td className="px-6 py-[26px] whitespace-nowrap align-top">
@@ -107,16 +120,28 @@ const BookingsTable = ({
                 </td>
 
                 <td className="px-6 py-[26px] whitespace-nowrap align-top text-sm">
-                  {b.bookedDate}
+                  {formatDateTime(b.bookedDate)}
                 </td>
-
-                {/* actions removed — row click opens the sheet with full application */}
               </tr>
             ))}
           </tbody>
         </table>
+        
+        {bookings.length === 0 && (
+          <div className="flex items-center justify-center py-12">
+            <p className="text-gray-500">No bookings found</p>
+          </div>
+        )}
       </div>
-      <ApplicationSheet open={sheetOpen} onOpenChange={setSheetOpen} booking={selected} onApprove={handleApprove} onReject={handleReject} />
+      
+      <ApplicationSheet 
+        open={sheetOpen} 
+        onOpenChange={setSheetOpen} 
+        booking={selectedBooking}
+        loading={loadingDetails}
+        onApprove={handleApprove} 
+        onReject={handleReject} 
+      />
     </>
   );
 };
