@@ -12,6 +12,7 @@ import Register from './pages/Register'
 import TenantListings from './pages/tenant/Listings'
 import ListingDetail from './pages/tenant/ListingDetail'
 import BookingForm from './pages/tenant/BookingForm'
+import AccountSettings from './pages/tenant/AccountSettings'
 
 // Landlord dashboard pages
 import LandlordDashboardLayout from './pages/landlord/dashboard/LandlordDashboardLayout'
@@ -20,7 +21,7 @@ import LandlordBookings from './pages/landlord/dashboard/Bookings'
 import LandlordProperties from './pages/landlord/dashboard/Properties'
 import LandlordTenants from './pages/landlord/dashboard/Tenants'
 import AddPropertyPage from './pages/landlord/dashboard/AddProperty'
-import LandlordAccountSettings from './pages/landlord/AccountSettings'
+import LandlordAccountSettings from './pages/landlord/dashboard/AccountSettings'
 
 // Landing page
 import Landing from './pages/Landing'
@@ -54,6 +55,7 @@ function App() {
         <Route path="/tenant/listings" element={<ProtectedRoute allowedRole="STUDENT"><TenantListings /></ProtectedRoute>} />
         <Route path="/tenant/listings/:id" element={<ProtectedRoute allowedRole="STUDENT"><ListingDetail /></ProtectedRoute>} />
         <Route path="/tenant/listings/:id/book" element={<ProtectedRoute allowedRole="STUDENT"><BookingForm /></ProtectedRoute>} />
+        <Route path="/tenant/settings" element={<ProtectedRoute allowedRole="STUDENT"><AccountSettings /></ProtectedRoute>} />
 
         {/* Landlord dashboard routes */}
         <Route path="/landlord/dashboard" element={<ProtectedRoute allowedRole="LANDLORD"><LandlordDashboardLayout /></ProtectedRoute>}>

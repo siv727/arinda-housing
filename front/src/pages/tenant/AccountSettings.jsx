@@ -198,8 +198,8 @@ const AccountSettings = () => {
                                             key={tab.id}
                                             onClick={() => setActiveTab(tab.id)}
                                             className={`w-full flex items-center gap-3 px-4 py-3 rounded-md text-left transition-colors ${activeTab === tab.id
-                                                    ? 'bg-[#FFF5F0] text-[#F35E27] border border-[#F35E27]'
-                                                    : 'text-[#666666] hover:bg-[#FBF8F6]'
+                                                ? 'bg-[#FFF5F0] text-[#F35E27] border border-[#F35E27]'
+                                                : 'text-[#666666] hover:bg-[#FBF8F6]'
                                                 }`}
                                         >
                                             <Icon className="w-4 h-4" />
@@ -231,8 +231,8 @@ const AccountSettings = () => {
                                             form="profile-form"
                                             disabled={!isFormDirty || saving || loading}
                                             className={`px-6 py-2 rounded-md transition-all ${isFormDirty && !saving && !loading
-                                                    ? 'bg-[#F35E27] text-white hover:bg-[#D94E1F] cursor-pointer'
-                                                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                                ? 'bg-[#F35E27] text-white hover:bg-[#D94E1F] cursor-pointer'
+                                                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                                 }`}
                                         >
                                             {saving ? 'Saving...' : 'Save Changes'}
@@ -242,8 +242,8 @@ const AccountSettings = () => {
                                     {message.text && (
                                         <div
                                             className={`mb-6 p-4 rounded-md ${message.type === 'success'
-                                                    ? 'bg-green-50 text-green-800 border border-green-200'
-                                                    : 'bg-red-50 text-red-800 border border-red-200'
+                                                ? 'bg-green-50 text-green-800 border border-green-200'
+                                                : 'bg-red-50 text-red-800 border border-red-200'
                                                 }`}
                                         >
                                             {message.text}
@@ -361,8 +361,8 @@ const AccountSettings = () => {
                                         <button
                                             onClick={() => setLeaseFilter('all')}
                                             className={`px-6 py-2 rounded-md font-medium transition-colors ${leaseFilter === 'all'
-                                                    ? 'bg-[#F35E27] text-white'
-                                                    : 'bg-white text-[#666666] border border-[#EAD1C7] hover:bg-[#FBF8F6]'
+                                                ? 'bg-[#F35E27] text-white'
+                                                : 'bg-white text-[#666666] border border-[#EAD1C7] hover:bg-[#FBF8F6]'
                                                 }`}
                                         >
                                             All Rentals
@@ -370,8 +370,8 @@ const AccountSettings = () => {
                                         <button
                                             onClick={() => setLeaseFilter('current')}
                                             className={`px-6 py-2 rounded-md font-medium transition-colors ${leaseFilter === 'current'
-                                                    ? 'bg-[#F35E27] text-white'
-                                                    : 'bg-white text-[#666666] border border-[#EAD1C7] hover:bg-[#FBF8F6]'
+                                                ? 'bg-[#F35E27] text-white'
+                                                : 'bg-white text-[#666666] border border-[#EAD1C7] hover:bg-[#FBF8F6]'
                                                 }`}
                                         >
                                             Current
@@ -379,8 +379,8 @@ const AccountSettings = () => {
                                         <button
                                             onClick={() => setLeaseFilter('past')}
                                             className={`px-6 py-2 rounded-md font-medium transition-colors ${leaseFilter === 'past'
-                                                    ? 'bg-[#F35E27] text-white'
-                                                    : 'bg-white text-[#666666] border border-[#EAD1C7] hover:bg-[#FBF8F6]'
+                                                ? 'bg-[#F35E27] text-white'
+                                                : 'bg-white text-[#666666] border border-[#EAD1C7] hover:bg-[#FBF8F6]'
                                                 }`}
                                         >
                                             Past
@@ -450,10 +450,10 @@ const AccountSettings = () => {
                                                             </div>
                                                             <span
                                                                 className={`px-3 py-1 rounded-full text-xs font-medium ${lease.status === 'current'
-                                                                        ? 'bg-green-100 text-green-800'
-                                                                        : lease.status === 'past'
-                                                                            ? 'bg-gray-100 text-gray-800'
-                                                                            : 'bg-blue-100 text-blue-800'
+                                                                    ? 'bg-green-100 text-green-800'
+                                                                    : lease.status === 'past'
+                                                                        ? 'bg-gray-100 text-gray-800'
+                                                                        : 'bg-blue-100 text-blue-800'
                                                                     }`}
                                                             >
                                                                 {lease.status.charAt(0).toUpperCase() + lease.status.slice(1)}
