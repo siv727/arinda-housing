@@ -14,5 +14,8 @@ public record TenantListingCard(
                 int reviewcount,
                 List<String> amenities,
                 List<String> leaseterms,
-                String monthlyrent) {
+                String monthlyrent,
+                String propertytype,
+                String roomtype)
+{
 }

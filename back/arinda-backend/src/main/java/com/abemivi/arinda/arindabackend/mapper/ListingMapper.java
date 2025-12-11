@@ -98,6 +98,8 @@ public class ListingMapper {
                 .amenities(amenityNames)
                 .leaseterms(leaseTerms)
                 .monthlyrent("₱" + listing.getPrice().getMonthlyrent() + "/month")
+                .propertytype(listing.getPropertytype())
+                .roomtype(listing.getRoomtype())
                 .build();
     }
 
