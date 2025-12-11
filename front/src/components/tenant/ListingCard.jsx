@@ -1,28 +1,30 @@
-import { useState } from 'react'
+import { Link } from 'react-router-dom' // Changed from 'a' tag to Link for faster navigation
 
-const ListingCard = ({ listing, onFavoriteToggle }) => {
-  // const [isFavorite, setIsFavorite] = useState(false)
+const ListingCard = ({ listing }) => {
+  // 1. SAFE IMAGE HANDLING
+  // Check for 'image' (API) first, then fallback to 'images' array (Mock data), then placeholder
+  const imageUrl = listing.image ||
+    (listing.images && listing.images.length > 0 ? listing.images[0] : "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267");
 
-  // const handleFavoriteClick = () => {
-  //   setIsFavorite(!isFavorite)
-  //   if (onFavoriteToggle) {
-  //     onFavoriteToggle(listing.id, !isFavorite)
-  //   }
-  // }
+  // 2. SAFE PRICE HANDLING
+  // If API gives "₱8000/month", we use that. Otherwise fallback to old "$" format
+  const priceDisplay = listing.displayPrice
+    ? listing.displayPrice.split('/')[0] // Extracts "₱8000" from "₱8000/month"
+    : `$${listing.price}`;
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
       {/* Image Section */}
       <div className="relative h-48 overflow-hidden">
         <img
-          src={listing.images[0]}
+          src={imageUrl}
           alt={listing.title}
           className="w-full h-full object-cover hover:scale-115 transition-scale duration-500"
         />
 
         {/* Property Type Label */}
         <div className="absolute bottom-3 left-3 bg-black/60 text-white text-xs px-3 py-1 rounded">
-          {listing.roomType}
+          {listing.roomType || listing.propertyType || "Property"}
         </div>
       </div>
 
@@ -36,21 +38,26 @@ const ListingCard = ({ listing, onFavoriteToggle }) => {
             </h3>
             <div className="flex items-center gap-1 text-sm whitespace-nowrap">
               <i className="fa-solid fa-star text-[#FFA500]"></i>
-              <span className="font-semibold">{listing.rating}</span>
-              <span className="text-gray-500">({listing.reviewCount})</span>
+              <span className="font-semibold">{listing.rating || "New"}</span>
+              {listing.reviewCount > 0 && (
+                <span className="text-gray-500">({listing.reviewCount})</span>
+              )}
             </div>
           </div>
 
           {/* Location */}
           <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
             <i className="fa-solid fa-location-dot"></i>
-            <span>{listing.location}</span>
-            <span className="text-[#DD4912]">• {listing.distance}</span>
+            <span className="truncate">{listing.location}</span>
+            {/* Only show distance if it exists in data */}
+            {listing.distance && (
+              <span className="text-[#DD4912]">• {listing.distance}</span>
+            )}
           </div>
 
           {/* Amenities */}
           <div className="flex flex-wrap gap-2 mb-4">
-            {listing.amenities.slice(0, 3).map((amenity, index) => (
+            {listing.amenities && listing.amenities.slice(0, 3).map((amenity, index) => (
               <span
                 key={index}
                 className="text-xs bg-orange-50 text-[#DD4912] px-2 py-1 rounded"
@@ -58,7 +65,7 @@ const ListingCard = ({ listing, onFavoriteToggle }) => {
                 {amenity}
               </span>
             ))}
-            {listing.amenities.length > 3 && (
+            {listing.amenities && listing.amenities.length > 3 && (
               <span className="text-xs text-gray-500">+{listing.amenities.length - 3} more</span>
             )}
           </div>
@@ -68,16 +75,22 @@ const ListingCard = ({ listing, onFavoriteToggle }) => {
           {/* Price and Button */}
           <div className="flex justify-between items-center pt-3 border-t border-gray-200">
             <div>
-              <span className="text-2xl font-bold text-gray-800">${listing.price}</span>
+              <span className="text-2xl font-bold text-gray-800">{priceDisplay}</span>
               <span className="text-sm text-gray-500">/month</span>
-              <div className="text-xs text-gray-500 mt-1">Available {listing.availableDate}</div>
+
+              {/* Only show date if available */}
+              {listing.availableDate && (
+                <div className="text-xs text-gray-500 mt-1">Available {listing.availableDate}</div>
+              )}
             </div>
-            <a
-              href={`/tenant/listings/${listing.id}`}
+
+            {/* Use Link instead of 'a' tag to prevent page reload */}
+            <Link
+              to={`/tenant/listings/${listing.id}`}
               className="bg-gradient-to-r from-[#DD4912] to-[#FFA500] text-white px-4 py-2 rounded text-sm font-semibold hover:opacity-90 transition-opacity cursor-pointer"
             >
               View Details
-            </a>
+            </Link>
           </div>
         </div>
       </div>
