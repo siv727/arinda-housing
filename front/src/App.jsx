@@ -12,7 +12,7 @@ import Register from './pages/Register'
 import TenantListings from './pages/tenant/Listings'
 import ListingDetail from './pages/tenant/ListingDetail'
 import BookingForm from './pages/tenant/BookingForm'
-import MyApplication from './pages/tenant/MyApplication'
+import AccountSettings from './pages/tenant/AccountSettings'
 
 // Landlord dashboard pages
 import LandlordDashboardLayout from './pages/landlord/dashboard/LandlordDashboardLayout'
@@ -27,15 +27,15 @@ import Landing from './pages/Landing'
 
 function App() {
   return (
-     <Router>
+    <Router>
       <Routes>
 
         {/* Default */}
         <Route path="/" element={<Navigate to="/landing" replace />} />
-        
+
         {/* Landing */}
         <Route path="/landing" element={<Landing />} />
-        
+
         {/* Redirect old landing routes to unified landing */}
         <Route path="/tenant" element={<Navigate to="/landing" replace />} />
         <Route path="/landlord" element={<Navigate to="/landing" replace />} />
@@ -43,7 +43,7 @@ function App() {
         {/* Unified auth routes */}
         <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
         <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
-        
+
         {/* Redirect old auth routes to unified auth */}
         <Route path="/tenant/login" element={<Navigate to="/login" replace />} />
         <Route path="/tenant/register" element={<Navigate to="/register" replace />} />
@@ -54,7 +54,7 @@ function App() {
         <Route path="/tenant/listings" element={<ProtectedRoute allowedRole="STUDENT"><TenantListings /></ProtectedRoute>} />
         <Route path="/tenant/listings/:id" element={<ProtectedRoute allowedRole="STUDENT"><ListingDetail /></ProtectedRoute>} />
         <Route path="/tenant/listings/:id/book" element={<ProtectedRoute allowedRole="STUDENT"><BookingForm /></ProtectedRoute>} />
-        <Route path="/tenant/applications" element={<ProtectedRoute allowedRole="STUDENT"><MyApplication /></ProtectedRoute>} />
+        <Route path="/tenant/settings" element={<ProtectedRoute allowedRole="STUDENT"><AccountSettings /></ProtectedRoute>} />
 
         {/* Landlord dashboard routes */}
         <Route path="/landlord/dashboard" element={<ProtectedRoute allowedRole="LANDLORD"><LandlordDashboardLayout /></ProtectedRoute>}>
