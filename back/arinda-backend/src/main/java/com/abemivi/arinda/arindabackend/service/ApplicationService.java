@@ -76,6 +76,7 @@ public class ApplicationService {
         application.setMoveInDate(request.moveInDate());
         application.setApplicantMessage(request.applicantMessage());
         application.setPhoneNumber(request.phoneNumber());
+        application.setLeaseTerm(request.leaseTerm());
 
         Application savedApplication = applicationRepository.save(application);
 
@@ -237,6 +238,7 @@ public class ApplicationService {
                 .tenant(tenantInfo)
                 .property(propertyInfo)
                 .moveInDate(application.getMoveInDate())
+                .leaseTerm(application.getLeaseTerm())
                 .status(application.getStatus())
                 .bookedDate(application.getCreatedAt())
                 .phoneNumber(application.getPhoneNumber())
@@ -260,6 +262,7 @@ public class ApplicationService {
                 .propertyTitle(listing.getTitle())
                 .propertyAddress(listingAddress)
                 .moveInDate(application.getMoveInDate())
+                .leaseTerm(application.getLeaseTerm())
                 .status(application.getStatus())
                 .bookedDate(application.getCreatedAt())
                 .build();

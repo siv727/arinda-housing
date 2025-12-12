@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react'
 const BookingFormCard = ({ 
   listing, 
   initialData = {}, 
-  leaseTerm,
   onSubmit, 
   submitting = false,
   submitError = null 
@@ -13,7 +12,6 @@ const BookingFormCard = ({
     lastName: '',
     email: '',
     phoneNumber: '',
-    moveInDate: '',
     studentId: '',
     university: '',
     additionalNotes: ''
@@ -31,7 +29,6 @@ const BookingFormCard = ({
         lastName: initialData.lastName || '',
         email: initialData.email || '',
         phoneNumber: initialData.phoneNumber || '',
-        moveInDate: initialData.moveInDate || '',
         studentId: initialData.studentId || '',
         university: initialData.university || '',
         additionalNotes: initialData.additionalNotes || ''
@@ -85,10 +82,6 @@ const BookingFormCard = ({
       }
     }
     
-    if (!formData.moveInDate) {
-      newErrors.moveInDate = 'Move-in date is required'
-    }
-    
     if (!formData.studentId.trim()) newErrors.studentId = 'Student ID is required'
     if (!formData.university.trim()) newErrors.university = 'University is required'
     
@@ -111,7 +104,6 @@ const BookingFormCard = ({
   // Helper to get input styling based on pre-filled status
   const getInputClass = (fieldName) => {
     const baseClass = 'w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:opacity-50 transition-colors'
-    const errorClass = errors[fieldName] ? 'border-red-500' : ''
     const preFilledClass = preFilledFields[fieldName] ? 'bg-blue-50/50 border-blue-200' : 'bg-gray-50 border-gray-300'
     
     if (errors[fieldName]) {
@@ -129,12 +121,12 @@ const BookingFormCard = ({
       <div className="mb-6 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center gap-2">
         <i className="fa-solid fa-circle-info text-blue-500"></i>
         <p className="text-blue-700 text-sm">
-          We've pre-filled some fields from your profile to save you time. Feel free to edit if needed.
+          Some fields are pre-filled from your profile. Edit if needed.
         </p>
       </div>
 
       <form onSubmit={handleSubmit}>
-        {/* First Name and Last Name */}
+        {/* Row 1: First Name and Last Name */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
             <label htmlFor="firstName" className="block text-sm font-semibold text-gray-700 mb-2">
@@ -171,7 +163,44 @@ const BookingFormCard = ({
           </div>
         </div>
 
-        {/* Email and Phone Number */}
+        {/* Row 2: Student ID and University */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label htmlFor="university" className="block text-sm font-semibold text-gray-700 mb-2">
+              University <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="university"
+              name="university"
+              value={formData.university}
+              onChange={handleChange}
+              placeholder="Enter your university"
+              disabled={submitting}
+              className={getInputClass('university')}
+            />
+            {errors.university && <p className="text-red-500 text-xs mt-1">{errors.university}</p>}
+          </div>
+
+          <div>
+            <label htmlFor="studentId" className="block text-sm font-semibold text-gray-700 mb-2">
+              Student ID <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="studentId"
+              name="studentId"
+              value={formData.studentId}
+              onChange={handleChange}
+              placeholder="Enter your student ID"
+              disabled={submitting}
+              className={getInputClass('studentId')}
+            />
+            {errors.studentId && <p className="text-red-500 text-xs mt-1">{errors.studentId}</p>}
+          </div>
+        </div>
+
+        {/* Row 3: Email and Phone Number */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
             <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
@@ -208,62 +237,7 @@ const BookingFormCard = ({
           </div>
         </div>
 
-        {/* Move-in Date and Student ID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div>
-            <label htmlFor="moveInDate" className="block text-sm font-semibold text-gray-700 mb-2">
-              Move-in Date <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="date"
-              id="moveInDate"
-              name="moveInDate"
-              value={formData.moveInDate}
-              onChange={handleChange}
-              min={new Date().toISOString().split('T')[0]}
-              disabled={submitting}
-              className={getInputClass('moveInDate')}
-            />
-            {errors.moveInDate && <p className="text-red-500 text-xs mt-1">{errors.moveInDate}</p>}
-          </div>
-
-          <div>
-            <label htmlFor="studentId" className="block text-sm font-semibold text-gray-700 mb-2">
-              Student ID <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              id="studentId"
-              name="studentId"
-              value={formData.studentId}
-              onChange={handleChange}
-              placeholder="Enter your student ID"
-              disabled={submitting}
-              className={getInputClass('studentId')}
-            />
-            {errors.studentId && <p className="text-red-500 text-xs mt-1">{errors.studentId}</p>}
-          </div>
-        </div>
-
-        {/* University */}
-        <div className="mb-4">
-          <label htmlFor="university" className="block text-sm font-semibold text-gray-700 mb-2">
-            University <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="university"
-            name="university"
-            value={formData.university}
-            onChange={handleChange}
-            placeholder="Enter your university"
-            disabled={submitting}
-            className={getInputClass('university')}
-          />
-          {errors.university && <p className="text-red-500 text-xs mt-1">{errors.university}</p>}
-        </div>
-
-        {/* Additional Notes */}
+        {/* Row 4: Additional Notes */}
         <div className="mb-6">
           <label htmlFor="additionalNotes" className="block text-sm font-semibold text-gray-700 mb-2">
             Additional Notes <span className="text-gray-400">(optional)</span>

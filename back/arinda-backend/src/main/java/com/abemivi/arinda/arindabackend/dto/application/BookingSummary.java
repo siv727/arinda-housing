@@ -14,6 +14,7 @@ public record BookingSummary(
         String propertyTitle,
         String propertyAddress,
         LocalDate moveInDate,
+        Integer leaseTerm,  // in months
         ApplicationStatus status,
         LocalDateTime bookedDate
 ) {}
