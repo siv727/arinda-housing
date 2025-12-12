@@ -63,10 +63,17 @@ const ListingDetail = () => {
           })) || [],
 
           // Map Price Data (For BookingCard)
-          price: data.pricingdetails?.monthlyrent, // Raw number for calculations
-          displayPrice: data.monthlyrent, // Formatted string "₱8000/month"
+          price: data.pricingdetails?.monthlyrent,
+          displayPrice: data.monthlyrent,
           securityDeposit: data.pricingdetails?.securitydeposit,
           applicationFee: data.pricingdetails?.appfee,
+          petFee: data.pricingdetails?.petfee,
+          advanceRent: data.pricingdetails?.advancerent,
+          advanceRentCost: data.pricingdetails?.advancerentcost,
+          totalMoveInCost: data.pricingdetails?.totalmoveincost,
+
+          // Lease terms
+          leaseterms: data.leaseterms || [],
 
           // Map Location Details
           // Note: Backend JSON provided shows address/city but missing lat/lng. 

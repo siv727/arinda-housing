@@ -24,4 +24,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     
     @Query("SELECT a FROM Application a WHERE a.listing.landlord = :landlord ORDER BY a.createdAt DESC")
     List<Application> findByListingLandlord(@Param("landlord") Landlord landlord);
+    
+    // Check if student has an approved application for a listing (for review validation)
+    boolean existsByStudentAndListingAndStatus(Student student, Listing listing, com.abemivi.arinda.arindabackend.entity.enums.ApplicationStatus status);
 }
