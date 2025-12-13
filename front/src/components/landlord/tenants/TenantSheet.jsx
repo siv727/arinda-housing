@@ -9,16 +9,14 @@ import {
 
 const StatusBadge = ({ status }) => {
   const map = {
-    Completed: "bg-yellow-100 text-yellow-700",
-    Paid: "bg-yellow-100 text-yellow-700",
     "Active Tenant": "bg-green-100 text-green-700",
-    Evicted: "bg-red-100 text-red-700",
+    "Completed Tenant": "bg-blue-100 text-blue-700",
+    "Evicted Tenant": "bg-red-100 text-red-700",
   };
   const dot = {
-    Completed: "bg-yellow-500",
-    Paid: "bg-green-500",
     "Active Tenant": "bg-green-500",
-    Evicted: "bg-red-500",
+    "Completed Tenant": "bg-blue-500",
+    "Evicted Tenant": "bg-red-500",
   };
   return (
     <div
@@ -38,48 +36,40 @@ export default function TenantSheet({
   open,
   onOpenChange,
   booking,
-  paymentStatus = "Active Tenant",
-  onUpdatePayment = () => {},
+  leaseStatus = "Active Tenant",
+  onUpdateStatus = () => {},
   onEndLease = () => {},
+  onEvict = () => {},
 }) {
   const tenant = booking?.tenant;
   const property = booking?.property;
-  const [status, setStatus] = useState(paymentStatus);
-  const [draftStatus, setDraftStatus] = useState(paymentStatus);
-  const [confirming, setConfirming] = useState(false);
+  const [status, setStatus] = useState(leaseStatus);
+  const [confirmingEndLease, setConfirmingEndLease] = useState(false);
+  const [confirmingEvict, setConfirmingEvict] = useState(false);
   
 
-  // 1. Define your color mapping for the buttons here
-  const selectionColors = {
-    Paid: "bg-green-100 border-green-500 text-green-700",
-    "Active Tenant": "bg-yellow-100 border-yellow-500 text-yellow-700",
-    Evicted: "bg-red-100 border-red-500 text-red-700",
-  };
+  useEffect(() => {
+    setStatus(leaseStatus);
+  }, [leaseStatus, booking]);
 
   useEffect(() => {
-    setStatus(paymentStatus);
-    setDraftStatus(paymentStatus);
-  }, [paymentStatus, booking]);
-
-  useEffect(() => {
-    if (!open) setConfirming(false);
+    if (!open) {
+      setConfirmingEndLease(false);
+      setConfirmingEvict(false);
+    }
   }, [open]);
 
-  const handleStatusChange = (value) => {
-    setDraftStatus(value);
-  };
-
-  const savePayment = () => {
-    if (!booking) return;
-    if (onUpdatePayment) onUpdatePayment(booking.id, draftStatus);
-    setStatus(draftStatus);
-  };
-
-
-  const performEnd = async () => {
+  const performEndLease = async () => {
     if (!booking) return;
     if (onEndLease) onEndLease(booking);
-    setConfirming(false);
+    setConfirmingEndLease(false);
+    onOpenChange(false);
+  };
+
+  const performEvict = async () => {
+    if (!booking) return;
+    if (onEvict) onEvict(booking);
+    setConfirmingEvict(false);
     onOpenChange(false);
   };
 
@@ -127,7 +117,7 @@ export default function TenantSheet({
             </div>
 
             <div className="flex items-center justify-center">
-              <StatusBadge status={"Active Tenant"} />
+              <StatusBadge status={status} />
             </div>
           </div>
 
@@ -191,7 +181,7 @@ export default function TenantSheet({
         </div>
 
         <SheetFooter className="border-t pt-4">
-          {!confirming ? (
+          {!confirmingEndLease && !confirmingEvict ? (
             <div className="flex justify-end gap-3 w-full font-semibold">
               <button
                 onClick={() => onOpenChange(false)}
@@ -200,31 +190,48 @@ export default function TenantSheet({
                 Close <i className="fa-solid fa-arrow-turn-down-left pl-1"></i>
               </button>
               <button
-                onClick={() => setConfirming(true)}
+                onClick={() => setConfirmingEndLease(true)}
                 className="rounded-lg py-2 px-6 text-white transition bg-[#F35E27] hover:bg-[#e7521c] cursor-pointer "
+                disabled={status === 'Completed Tenant' || status === 'Evicted Tenant'}
               >
                 End Lease <i className="fa-regular fa-note pl-2"></i>
               </button>
               <button
-                onClick={() => setConfirming(true)}
+                onClick={() => setConfirmingEvict(true)}
                 className="rounded-lg py-2 px-6 text-white transition border-[#a11313] border-2 bg-[#c92121] hover:bg-[#a71616] cursor-pointer "
+                disabled={status === 'Completed Tenant' || status === 'Evicted Tenant'}
               >
-                Evict Tenant <i class="fa-solid fa-link-slash pl-2"></i>
+                Evict Tenant <i className="fa-solid fa-link-slash pl-2"></i>
               </button>
             </div>
-          ) : (
+          ) : confirmingEndLease ? (
             <div className="flex justify-end gap-3 w-full font-semibold">
               <button
-                onClick={() => setConfirming(false)}
+                onClick={() => setConfirmingEndLease(false)}
                 className="hover:bg-[#FFF8F2] transition  border rounded-lg py-3 px-6 text-gray-700 cursor-pointer"
               >
                 Cancel
               </button>
               <button
-                onClick={performEnd}
-                className="rounded-lg py-2 px-6 text-white transition bg-[#F35E27] hover:bg-[#e7521c]"
+                onClick={performEndLease}
+                className="rounded-lg py-2 px-6 text-white transition bg-[#F35E27] hover:bg-[#e7521c] cursor-pointer"
               >
                 Yes, End Lease
+              </button>
+            </div>
+          ) : (
+            <div className="flex justify-end gap-3 w-full font-semibold">
+              <button
+                onClick={() => setConfirmingEvict(false)}
+                className="hover:bg-[#FFF8F2] transition  border rounded-lg py-3 px-6 text-gray-700 cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={performEvict}
+                className="rounded-lg py-2 px-6 text-white transition bg-[#c92121] hover:bg-[#a71616] cursor-pointer"
+              >
+                Yes, Evict Tenant
               </button>
             </div>
           )}

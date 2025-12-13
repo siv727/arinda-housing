@@ -4,14 +4,14 @@ import { properties as mockProperties } from '@/data/mockProperties'
 
 const PaymentBadge = ({ status }) => {
   const map = {
-    Completed: 'bg-green-200 text-green-800',
     'Active Tenant': 'bg-green-100 text-green-700',
-    Evicted: 'bg-red-100 text-red-700',
+    'Completed Tenant': 'bg-blue-100 text-blue-700',
+    'Evicted Tenant': 'bg-red-100 text-red-700',
   }
   const dot = {
-    Completed: "bg-yellow-500",
     'Active Tenant': "bg-green-500",
-    Evicted: "bg-red-500",
+    'Completed Tenant': "bg-blue-500",
+    'Evicted Tenant': "bg-red-500",
   };
   return (
     <div
@@ -29,18 +29,18 @@ const PaymentBadge = ({ status }) => {
   );
 }
 
-const TenantsTable = ({ bookings = [], onEndLease = () => {} }) => {
+const TenantsTable = ({ bookings = [], onEndLease = () => {}, onEvict = () => {} }) => {
   const [sheetOpen, setSheetOpen] = useState(false)
   const [selected, setSelected] = useState(null)
-  const [paymentMap, setPaymentMap] = useState({})
+  const [statusMap, setStatusMap] = useState({})
 
   useEffect(() => {
-    // initialize payment statuses from bookings (default to 'Active Tenant')
+    // initialize lease statuses from bookings (default to 'Active Tenant')
     const map = {}
     bookings.forEach(b => {
-      map[b.id] = b.paymentStatus || 'Active Tenant'
+      map[b.id] = b.leaseStatus || 'Active Tenant'
     })
-    setPaymentMap(map)
+    setStatusMap(map)
   }, [bookings])
 
   const openSheet = (b) => { setSelected(b); setSheetOpen(true) }
@@ -51,8 +51,8 @@ const TenantsTable = ({ bookings = [], onEndLease = () => {} }) => {
     return p?.price || '-'
   }
 
-  const updatePayment = (id, status) => {
-    setPaymentMap(prev => ({ ...prev, [id]: status }))
+  const updateStatus = (id, status) => {
+    setStatusMap(prev => ({ ...prev, [id]: status }))
   }
 
   return (
@@ -88,7 +88,7 @@ const TenantsTable = ({ bookings = [], onEndLease = () => {} }) => {
                 </td>
 
                 <td className="px-6 py-[22px] whitespace-nowrap align-top">
-                  <PaymentBadge status={paymentMap[b.id] || 'Active Tenant'} />
+                  <PaymentBadge status={statusMap[b.id] || 'Active Tenant'} />
                 </td>
 
                 <td className="px-6 py-[22px] whitespace-nowrap align-top text-sm">{findPrice(b.property.title)}</td>
@@ -97,7 +97,15 @@ const TenantsTable = ({ bookings = [], onEndLease = () => {} }) => {
           </tbody>
         </table>
       </div>
-      <TenantSheet open={sheetOpen} onOpenChange={setSheetOpen} booking={selected} paymentStatus={selected ? (paymentMap[selected.id] || 'Active Tenant') : 'Active Tenant'} onUpdatePayment={updatePayment} onEndLease={(b) => { onEndLease(b); setSheetOpen(false); }} />
+      <TenantSheet 
+        open={sheetOpen} 
+        onOpenChange={setSheetOpen} 
+        booking={selected} 
+        leaseStatus={selected ? (statusMap[selected.id] || 'Active Tenant') : 'Active Tenant'} 
+        onUpdateStatus={updateStatus} 
+        onEndLease={(b) => { onEndLease(b); setSheetOpen(false); }} 
+        onEvict={(b) => { onEvict(b); setSheetOpen(false); }}
+      />
     </>
   )
 }

@@ -1,0 +1,62 @@
+package com.abemivi.arinda.arindabackend.service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.abemivi.arinda.arindabackend.dto.lease.TenantResponse;
+import com.abemivi.arinda.arindabackend.entity.Application;
+import com.abemivi.arinda.arindabackend.entity.Landlord;
+import com.abemivi.arinda.arindabackend.entity.Lease;
+import com.abemivi.arinda.arindabackend.entity.enums.ApplicationStatus;
+import com.abemivi.arinda.arindabackend.entity.enums.LeaseStatus;
+import com.abemivi.arinda.arindabackend.mapper.TenantMapper;
+import com.abemivi.arinda.arindabackend.repository.ApplicationRepository;
+import com.abemivi.arinda.arindabackend.repository.LeaseRepository;
+import com.abemivi.arinda.arindabackend.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class TenantService {
+    private final LeaseRepository leaseRepository;
+    private final ApplicationRepository applicationRepository;
+    private final UserRepository userRepository;
+    private final TenantMapper tenantMapper;
+
+    @Transactional(readOnly = true)
+    public List<TenantResponse> getLandlordTenants(Long landlordId) {
+        // Fetch landlord to use in query
+        Landlord landlord = (Landlord) userRepository.findById(landlordId)
+                .orElseThrow(() -> new RuntimeException("Landlord not found"));
+        
+        // Get all approved applications for this landlord's listings
+        List<Application> approvedApplications = applicationRepository.findByListingLandlord(landlord)
+                .stream()
+                .filter(app -> app.getStatus() == ApplicationStatus.APPROVED)
+                .collect(Collectors.toList());
+        
+        return approvedApplications.stream()
+                .map(tenantMapper::toTenantResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void endLease(Long leaseId) {
+        Lease lease = leaseRepository.findById(leaseId)
+                .orElseThrow(() -> new RuntimeException("Lease not found"));
+        lease.setLeaseStatus(LeaseStatus.COMPLETED);
+        leaseRepository.save(lease);
+    }
+
+    @Transactional
+    public void evictTenant(Long leaseId) {
+        Lease lease = leaseRepository.findById(leaseId)
+                .orElseThrow(() -> new RuntimeException("Lease not found"));
+        lease.setLeaseStatus(LeaseStatus.EVICTED);
+        leaseRepository.save(lease);
+    }
+}

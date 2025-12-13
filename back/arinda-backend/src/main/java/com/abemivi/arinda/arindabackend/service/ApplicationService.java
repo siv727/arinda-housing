@@ -15,11 +15,14 @@ import com.abemivi.arinda.arindabackend.dto.application.CreateApplicationRequest
 import com.abemivi.arinda.arindabackend.dto.application.RejectApplicationRequest;
 import com.abemivi.arinda.arindabackend.entity.Application;
 import com.abemivi.arinda.arindabackend.entity.Landlord;
+import com.abemivi.arinda.arindabackend.entity.Lease;
 import com.abemivi.arinda.arindabackend.entity.Listing;
 import com.abemivi.arinda.arindabackend.entity.Student;
 import com.abemivi.arinda.arindabackend.entity.User;
 import com.abemivi.arinda.arindabackend.entity.enums.ApplicationStatus;
+import com.abemivi.arinda.arindabackend.entity.enums.LeaseStatus;
 import com.abemivi.arinda.arindabackend.repository.ApplicationRepository;
+import com.abemivi.arinda.arindabackend.repository.LeaseRepository;
 import com.abemivi.arinda.arindabackend.repository.ListingRepository;
 import com.abemivi.arinda.arindabackend.repository.UserRepository;
 
@@ -32,6 +35,7 @@ public class ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final UserRepository userRepository;
     private final ListingRepository listingRepository;
+    private final LeaseRepository leaseRepository;
 
     @Transactional
     public ApplicationResponse createApplication(String email, CreateApplicationRequest request) {
@@ -178,6 +182,11 @@ public class ApplicationService {
             throw new RuntimeException("You don't have permission to approve this application");
         }
 
+        // Validate application is in PENDING status
+        if (application.getStatus() != ApplicationStatus.PENDING) {
+            throw new RuntimeException("Only pending applications can be approved. Current status: " + application.getStatus());
+        }
+
         // Update application status
         application.setStatus(ApplicationStatus.APPROVED);
         application.setResponseMessage(request.message());
@@ -189,6 +198,23 @@ public class ApplicationService {
         }
 
         Application updated = applicationRepository.save(application);
+
+        // Create Lease entry for approved application
+        Lease lease = new Lease();
+        lease.setStudent(application.getStudent());
+        lease.setApplication(updated);
+        lease.setStartDate(updated.getMoveInDate());
+        
+        // Calculate end date based on lease term (in months)
+        if (updated.getLeaseTerm() != null) {
+            lease.setEndDate(updated.getMoveInDate().plusMonths(updated.getLeaseTerm()));
+        }
+        
+        lease.setDocumentUrl(request.attachmentUrl());
+        lease.setLeaseStatus(LeaseStatus.ACTIVE);
+        
+        leaseRepository.save(lease);
+
         return buildBookingResponse(updated);
     }
 
@@ -207,6 +233,11 @@ public class ApplicationService {
         // Verify landlord owns this listing
         if (!application.getListing().getLandlord().getId().equals(landlord.getId())) {
             throw new RuntimeException("You don't have permission to reject this application");
+        }
+
+        // Validate application is in PENDING status
+        if (application.getStatus() != ApplicationStatus.PENDING) {
+            throw new RuntimeException("Only pending applications can be rejected. Current status: " + application.getStatus());
         }
 
         // Update application status
