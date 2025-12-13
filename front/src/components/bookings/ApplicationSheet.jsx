@@ -172,7 +172,7 @@ export default function ApplicationSheet({
                   Lease Term
                 </label>
                 <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
-                 
+                  {booking?.leaseTerm ? `${booking.leaseTerm} month${booking.leaseTerm !== 1 ? 's' : ''}` : '-'}
                 </div>
             </div>
               {/* split name into first/last */}
