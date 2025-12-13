@@ -9,16 +9,16 @@ import {
 
 const StatusBadge = ({ status }) => {
   const map = {
-    Active: "bg-green-100 text-green-700",
-    Paid: "bg-green-100 text-green-700",
-    "Due Soon": "bg-yellow-100 text-yellow-700",
-    Overdue: "bg-red-100 text-red-700",
+    Completed: "bg-yellow-100 text-yellow-700",
+    Paid: "bg-yellow-100 text-yellow-700",
+    "Active Tenant": "bg-green-100 text-green-700",
+    Evicted: "bg-red-100 text-red-700",
   };
   const dot = {
-    Active: "bg-green-500",
+    Completed: "bg-yellow-500",
     Paid: "bg-green-500",
-    "Due Soon": "bg-yellow-500",
-    Overdue: "bg-red-500",
+    "Active Tenant": "bg-green-500",
+    Evicted: "bg-red-500",
   };
   return (
     <div
@@ -29,7 +29,7 @@ const StatusBadge = ({ status }) => {
       <span
         className={`mr-2 h-2 w-2 rounded-full ${dot[status] || "bg-gray-400"}`}
       ></span>
-      {status} Tenant
+      {status}
     </div>
   );
 };
@@ -38,7 +38,7 @@ export default function TenantSheet({
   open,
   onOpenChange,
   booking,
-  paymentStatus = "Due Soon",
+  paymentStatus = "Active Tenant",
   onUpdatePayment = () => {},
   onEndLease = () => {},
 }) {
@@ -52,8 +52,8 @@ export default function TenantSheet({
   // 1. Define your color mapping for the buttons here
   const selectionColors = {
     Paid: "bg-green-100 border-green-500 text-green-700",
-    "Due Soon": "bg-yellow-100 border-yellow-500 text-yellow-700",
-    Overdue: "bg-red-100 border-red-500 text-red-700",
+    "Active Tenant": "bg-yellow-100 border-yellow-500 text-yellow-700",
+    Evicted: "bg-red-100 border-red-500 text-red-700",
   };
 
   useEffect(() => {
@@ -127,7 +127,7 @@ export default function TenantSheet({
             </div>
 
             <div className="flex items-center justify-center">
-              <StatusBadge status={"Active"} />
+              <StatusBadge status={"Active Tenant"} />
             </div>
           </div>
 
@@ -145,11 +145,11 @@ export default function TenantSheet({
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-xs text-gray-500">Move-in Date</label>
-                  <div className="text-sm font-semibold">{booking?.checkIn }</div>
+                  <div className="text-sm font-semibold">{booking?.moveInDate }</div>
                 </div>
                 <div>
                   <label className="text-xs text-gray-500">Lease Contract</label>
-                  <div className="text-sm font-semibold">-</div>
+                  <div className="text-sm font-semibold">{booking?.leaseTerm} months</div>
                 </div>
               </div>
             </div>

@@ -6,7 +6,6 @@ import TenantFilters from '@/components/landlord/tenants/TenantFilters'
 export default function Tenants() {
   const [query, setQuery] = useState('')
   const [bookings, setBookings] = useState(mockBookings)
-  // Payment status filter: 'All' | 'Paid' | 'Due Soon' | 'Overdue'
   const [paymentFilter, setPaymentFilter] = useState('All')
   const [showFilters, setShowFilters] = useState(false)
 
@@ -20,7 +19,7 @@ export default function Tenants() {
 
   // helper to read payment status from booking shape (fallbacks for different shapes)
   const getPaymentStatus = (b) => {
-    return b.paymentStatus ?? b.payment?.status ?? 'Due Soon'
+    return b.paymentStatus ?? b.payment?.status ?? 'Active Tenant'
   }
 
   const paymentFiltered = filtered.filter(b => {

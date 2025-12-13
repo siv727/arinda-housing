@@ -4,14 +4,14 @@ import { properties as mockProperties } from '@/data/mockProperties'
 
 const PaymentBadge = ({ status }) => {
   const map = {
-    Paid: 'bg-green-100 text-green-700',
-    'Due Soon': 'bg-yellow-100 text-yellow-700',
-    Overdue: 'bg-red-100 text-red-700',
+    Completed: 'bg-green-200 text-green-800',
+    'Active Tenant': 'bg-green-100 text-green-700',
+    Evicted: 'bg-red-100 text-red-700',
   }
   const dot = {
-    Paid: "bg-green-500",
-    'Due Soon': "bg-yellow-500",
-    Overdue: "bg-red-500",
+    Completed: "bg-yellow-500",
+    'Active Tenant': "bg-green-500",
+    Evicted: "bg-red-500",
   };
   return (
     <div
@@ -35,10 +35,10 @@ const TenantsTable = ({ bookings = [], onEndLease = () => {} }) => {
   const [paymentMap, setPaymentMap] = useState({})
 
   useEffect(() => {
-    // initialize payment statuses from bookings (default to 'Due Soon')
+    // initialize payment statuses from bookings (default to 'Active Tenant')
     const map = {}
     bookings.forEach(b => {
-      map[b.id] = b.paymentStatus || 'Due Soon'
+      map[b.id] = b.paymentStatus || 'Active Tenant'
     })
     setPaymentMap(map)
   }, [bookings])
@@ -88,7 +88,7 @@ const TenantsTable = ({ bookings = [], onEndLease = () => {} }) => {
                 </td>
 
                 <td className="px-6 py-[22px] whitespace-nowrap align-top">
-                  <PaymentBadge status={paymentMap[b.id] || 'Due Soon'} />
+                  <PaymentBadge status={paymentMap[b.id] || 'Active Tenant'} />
                 </td>
 
                 <td className="px-6 py-[22px] whitespace-nowrap align-top text-sm">{findPrice(b.property.title)}</td>
@@ -97,7 +97,7 @@ const TenantsTable = ({ bookings = [], onEndLease = () => {} }) => {
           </tbody>
         </table>
       </div>
-      <TenantSheet open={sheetOpen} onOpenChange={setSheetOpen} booking={selected} paymentStatus={selected ? (paymentMap[selected.id] || 'Due Soon') : 'Due Soon'} onUpdatePayment={updatePayment} onEndLease={(b) => { onEndLease(b); setSheetOpen(false); }} />
+      <TenantSheet open={sheetOpen} onOpenChange={setSheetOpen} booking={selected} paymentStatus={selected ? (paymentMap[selected.id] || 'Active Tenant') : 'Active Tenant'} onUpdatePayment={updatePayment} onEndLease={(b) => { onEndLease(b); setSheetOpen(false); }} />
     </>
   )
 }
