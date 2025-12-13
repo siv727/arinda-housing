@@ -76,6 +76,7 @@ export default function ApplicationSheet({
       await approveApplication(booking.id, {
         message: payload.message,
         attachmentUrl: payload.file ? "uploaded-file-url" : null, // TODO: Handle file upload
+        confirmedMoveInDate: payload.confirmedMoveInDate,
       });
       setApprovalOpen(false);
       onApprove();
@@ -264,6 +265,7 @@ export default function ApplicationSheet({
         open={approvalOpen}
         onOpenChange={setApprovalOpen}
         to={tenant?.email}
+        currentMoveInDate={booking?.moveInDate}
         onConfirm={handleApprovalConfirm}
         onCancel={() => setApprovalOpen(false)}
       />

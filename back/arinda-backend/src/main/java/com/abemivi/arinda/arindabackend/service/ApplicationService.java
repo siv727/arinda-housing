@@ -182,6 +182,11 @@ public class ApplicationService {
         application.setStatus(ApplicationStatus.APPROVED);
         application.setResponseMessage(request.message());
         application.setAttachmentUrl(request.attachmentUrl());
+        
+        // Update move-in date if landlord provides a confirmed date
+        if (request.confirmedMoveInDate() != null) {
+            application.setMoveInDate(request.confirmedMoveInDate());
+        }
 
         Application updated = applicationRepository.save(application);
         return buildBookingResponse(updated);
