@@ -23,12 +23,21 @@ export default function ApprovalSheet({
   open,
   onOpenChange,
   to = "",
+  currentMoveInDate = null,
   onConfirm = () => {},
   onCancel = () => {},
 }) {
   const [message, setMessage] = useState("");
   const [file, setFile] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [confirmedMoveInDate, setConfirmedMoveInDate] = useState("");
+
+  // Initialize confirmed move-in date with current move-in date
+  React.useEffect(() => {
+    if (currentMoveInDate) {
+      setConfirmedMoveInDate(currentMoveInDate);
+    }
+  }, [currentMoveInDate, open]);
 
   const handleFileChange = (e) => {
     setFile(e.target.files?.[0] ?? null);
@@ -55,7 +64,7 @@ export default function ApprovalSheet({
   // --- End Drag and Drop ---
 
   const submit = () => {
-    onConfirm({ to, message, file });
+    onConfirm({ to, message, file, confirmedMoveInDate });
     onOpenChange(false);
   };
 
@@ -74,6 +83,17 @@ export default function ApprovalSheet({
               className="mt-1 w-full px-3 py-2 border rounded-md bg-gray-50"
               value={to}
               readOnly
+            />
+          </div>
+
+          <div>
+            <label className="text-sm text-gray-600 font-medium">Confirmed Move-In Date</label>
+            <input
+              type="date"
+              min={new Date().toISOString().split("T")[0]}
+              className="mt-1 w-full px-3 py-2 border rounded-md"
+              value={confirmedMoveInDate}
+              onChange={(e) => setConfirmedMoveInDate(e.target.value)}
             />
           </div>
 

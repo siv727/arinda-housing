@@ -76,6 +76,7 @@ public class ApplicationService {
         application.setMoveInDate(request.moveInDate());
         application.setApplicantMessage(request.applicantMessage());
         application.setPhoneNumber(request.phoneNumber());
+        application.setLeaseTerm(request.leaseTerm());
 
         Application savedApplication = applicationRepository.save(application);
 
@@ -181,6 +182,11 @@ public class ApplicationService {
         application.setStatus(ApplicationStatus.APPROVED);
         application.setResponseMessage(request.message());
         application.setAttachmentUrl(request.attachmentUrl());
+        
+        // Update move-in date if landlord provides a confirmed date
+        if (request.confirmedMoveInDate() != null) {
+            application.setMoveInDate(request.confirmedMoveInDate());
+        }
 
         Application updated = applicationRepository.save(application);
         return buildBookingResponse(updated);
@@ -237,6 +243,7 @@ public class ApplicationService {
                 .tenant(tenantInfo)
                 .property(propertyInfo)
                 .moveInDate(application.getMoveInDate())
+                .leaseTerm(application.getLeaseTerm())
                 .status(application.getStatus())
                 .bookedDate(application.getCreatedAt())
                 .phoneNumber(application.getPhoneNumber())
@@ -260,6 +267,7 @@ public class ApplicationService {
                 .propertyTitle(listing.getTitle())
                 .propertyAddress(listingAddress)
                 .moveInDate(application.getMoveInDate())
+                .leaseTerm(application.getLeaseTerm())
                 .status(application.getStatus())
                 .bookedDate(application.getCreatedAt())
                 .build();

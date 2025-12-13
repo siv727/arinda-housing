@@ -15,6 +15,7 @@ public record BookingResponse(
         PropertyInfo property,
         // Application details
         LocalDate moveInDate,
+        Integer leaseTerm,  // in months
         ApplicationStatus status,
         LocalDateTime bookedDate,  // createdAt
         String phoneNumber,  // from application, not tenant
