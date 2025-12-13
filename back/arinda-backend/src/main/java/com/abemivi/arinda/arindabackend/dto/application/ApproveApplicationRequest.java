@@ -4,6 +4,6 @@ import java.time.LocalDate;
 
 public record ApproveApplicationRequest(
         String message,
-        String attachmentUrl,  // Optional: for lease agreement or approval documents
+        String attachmentUrl, 
         LocalDate confirmedMoveInDate  // Optional: landlord can adjust the move-in date
 ) {}
