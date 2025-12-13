@@ -16,5 +16,8 @@ public record CreateApplicationRequest(
         String applicantMessage,
 
         @NotNull(message = "Phone number is required")
-        String phoneNumber
+        String phoneNumber,
+
+        @NotNull(message = "Lease term is required")
+        Integer leaseTerm  // in months
 ) {}

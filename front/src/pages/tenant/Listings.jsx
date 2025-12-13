@@ -13,7 +13,7 @@ const Listings = () => {
 
   // Filter States
   const [searchQuery, setSearchQuery] = useState('')
-  const [sortBy, setSortBy] = useState('recommended')
+  const [sortBy, setSortBy] = useState('recent')
   const [filters, setFilters] = useState({
     priceRange: 'all',
     propertyTypes: [],
@@ -100,7 +100,7 @@ const Listings = () => {
       neighborhood: []
     })
     setSearchQuery('')
-    setSortBy('recommended')
+    setSortBy('recent')
   }
 
   const applyFilters = (search, sort, currentFilters) => {
@@ -216,14 +216,16 @@ const Listings = () => {
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
-                      className="pl-4 pr-8 py-2 border bg-white border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F35E27] cursor-pointer appearance-none"
+                      className="pl-4 pr-10 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-700 font-medium text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent cursor-pointer appearance-none shadow-sm hover:border-gray-300 transition-colors"
                     >
-                      <option value="recommended">Recommended</option>
+                      <option value="recent">Recent</option>
                       <option value="price-low">Price: Low to High</option>
                       <option value="price-high">Price: High to Low</option>
                       <option value="rating">Highest Rated</option>
                     </select>
-                    <i className="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-800 text-xs"></i>
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-400">
+                      <i className="fa-solid fa-chevron-down text-xs"></i>
+                    </div>
                   </div>
                 </div>
               )}

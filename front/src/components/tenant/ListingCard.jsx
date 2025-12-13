@@ -29,20 +29,21 @@ const ListingCard = ({ listing }) => {
       </div>
 
       {/* Content Section */}
-      <div className="p-4 flex flex-col justify-between min-h-60">
+      <div className="p-4 flex flex-col justify-between">
         <div>
           {/* Title and Rating */}
           <div className="flex justify-between items-start mb-2">
             <h3 className="font-semibold text-lg text-gray-800 flex-1 pr-2 truncate">
               {listing.title}
             </h3>
-            <div className="flex items-center gap-1 text-sm whitespace-nowrap">
-              <i className="fa-solid fa-star text-[#FFA500]"></i>
-              <span className="font-semibold">{listing.rating || "New"}</span>
-              {listing.reviewCount > 0 && (
+            {/* Only show rating if there are reviews */}
+            {listing.reviewCount > 0 && (
+              <div className="flex items-center gap-1 text-sm whitespace-nowrap">
+                <i className="fa-solid fa-star text-[#FFA500]"></i>
+                <span className="font-semibold">{listing.rating?.toFixed(1) || listing.rating}</span>
                 <span className="text-gray-500">({listing.reviewCount})</span>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
           {/* Location */}
@@ -56,7 +57,7 @@ const ListingCard = ({ listing }) => {
           </div>
 
           {/* Amenities */}
-          <div className="flex flex-wrap gap-2 mb-4">
+          <div className="flex flex-wrap gap-2 mb-4 items-center">
             {listing.amenities && listing.amenities.slice(0, 3).map((amenity, index) => (
               <span
                 key={index}

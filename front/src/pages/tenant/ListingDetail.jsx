@@ -63,10 +63,17 @@ const ListingDetail = () => {
           })) || [],
 
           // Map Price Data (For BookingCard)
-          price: data.pricingdetails?.monthlyrent, // Raw number for calculations
-          displayPrice: data.monthlyrent, // Formatted string "₱8000/month"
+          price: data.pricingdetails?.monthlyrent,
+          displayPrice: data.monthlyrent,
           securityDeposit: data.pricingdetails?.securitydeposit,
           applicationFee: data.pricingdetails?.appfee,
+          petFee: data.pricingdetails?.petfee,
+          advanceRent: data.pricingdetails?.advancerent,
+          advanceRentCost: data.pricingdetails?.advancerentcost,
+          totalMoveInCost: data.pricingdetails?.totalmoveincost,
+
+          // Lease terms
+          leaseterms: data.leaseterms || [],
 
           // Map Location Details
           // Note: Backend JSON provided shows address/city but missing lat/lng. 
@@ -153,11 +160,13 @@ const ListingDetail = () => {
                   <i className="fa-solid fa-location-dot mr-2 text-gray-400"></i>
                   {listing.location}
                 </span>
-                <span className="flex items-center">
-                  <i className="fa-solid fa-star text-yellow-500 mr-1"></i>
-                  {listing.rating ? listing.rating : "New"}
-                  {listing.reviewCount > 0 && ` (${listing.reviewCount} reviews)`}
-                </span>
+                {listing.reviewCount > 0 && (
+                  <span className="flex items-center">
+                    <i className="fa-solid fa-star text-yellow-500 mr-1"></i>
+                    {listing.rating?.toFixed(1) || listing.rating}
+                    {` (${listing.reviewCount} review${listing.reviewCount !== 1 ? 's' : ''})`}
+                  </span>
+                )}
               </div>
 
               {/* Note: Bedrooms/Bathrooms data is missing from current API response. Hidden for now. */}

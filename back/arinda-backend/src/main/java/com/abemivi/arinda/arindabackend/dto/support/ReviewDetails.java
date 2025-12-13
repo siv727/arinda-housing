@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 @Builder
 public record ReviewDetails(
         Long id,
+        Long listingId,
         int rating,
         String comment,
         String reviewername,
