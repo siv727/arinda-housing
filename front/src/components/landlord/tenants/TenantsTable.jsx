@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react'
-import TenantSheet from '@/components/landlord/tenants/TenantSheet'
-import { properties as mockProperties } from '@/data/mockProperties'
+import React, { useState, useEffect } from "react";
+import TenantSheet from "@/components/landlord/tenants/TenantSheet";
+import { properties as mockProperties } from "@/data/mockProperties";
 
 const PaymentBadge = ({ status }) => {
   const map = {
-    'Active Tenant': 'bg-green-100 text-green-700',
-    'Completed Tenant': 'bg-blue-100 text-blue-700',
-    'Evicted Tenant': 'bg-red-100 text-red-700',
-  }
+    "Active Tenant": "bg-green-100 text-green-700",
+    "Completed Tenant": "bg-blue-100 text-blue-700",
+    "Evicted Tenant": "bg-red-100 text-red-700",
+  };
   const dot = {
-    'Active Tenant': "bg-green-500",
-    'Completed Tenant': "bg-blue-500",
-    'Evicted Tenant': "bg-red-500",
+    "Active Tenant": "bg-green-500",
+    "Completed Tenant": "bg-blue-500",
+    "Evicted Tenant": "bg-red-500",
   };
   return (
     <div
@@ -20,42 +20,64 @@ const PaymentBadge = ({ status }) => {
       }`}
     >
       <span
-        className={`mr-2 h-2 w-2 rounded-full ${
-          dot[status] || "bg-gray-400"
-        }`}
+        className={`mr-2 h-2 w-2 rounded-full ${dot[status] || "bg-gray-400"}`}
       ></span>
       {status}
     </div>
   );
-}
+};
 
-const TenantsTable = ({ bookings = [], onEndLease = () => {}, onEvict = () => {} }) => {
-  const [sheetOpen, setSheetOpen] = useState(false)
-  const [selected, setSelected] = useState(null)
-  const [statusMap, setStatusMap] = useState({})
+const TenantsTable = ({
+  bookings = [],
+  onEndLease = () => {},
+  onEvict = () => {},
+}) => {
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [selected, setSelected] = useState(null);
+  const [statusMap, setStatusMap] = useState({});
 
   useEffect(() => {
     // initialize lease statuses from bookings (default to 'Active Tenant')
-    const map = {}
-    bookings.forEach(b => {
-      map[b.id] = b.leaseStatus || 'Active Tenant'
-    })
-    setStatusMap(map)
-  }, [bookings])
+    const map = {};
+    bookings.forEach((b) => {
+      map[b.id] = b.leaseStatus || "Active Tenant";
+    });
+    setStatusMap(map);
+  }, [bookings]);
 
-  const openSheet = (b) => { setSelected(b); setSheetOpen(true) }
+  const openSheet = (b) => {
+    setSelected(b);
+    setSheetOpen(true);
+  };
 
   // helper to find property price by title
   const findPrice = (title) => {
-    const p = mockProperties.find(x => x.title === title)
-    return p?.price || '-'
-  }
+    const p = mockProperties.find((x) => x.title === title);
+    return p?.price || "-";
+  };
 
   const updateStatus = (id, status) => {
-    setStatusMap(prev => ({ ...prev, [id]: status }))
-  }
+    setStatusMap((prev) => ({ ...prev, [id]: status }));
+  };
+  const formatCurrency = (amount) => {
+    if (!amount) return "-";
+    return new Intl.NumberFormat("en-PH", {
+      style: "currency",
+      currency: "PHP",
+      minimumFractionDigits: 0,
+    }).format(amount);
+  };
 
-  
+  const formatDate = (dateString) => {
+    if (!dateString) return "-";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
+
   return (
     <>
       <div className="overflow-auto bg-white border border-[#EAD1C7] rounded-lg">
@@ -66,49 +88,79 @@ const TenantsTable = ({ bookings = [], onEndLease = () => {}, onEvict = () => {}
               <th className="px-6 py-4 text-left font-medium">Property</th>
               <th className="px-6 py-4 text-left font-medium">Status</th>
               <th className="px-6 py-4 text-left font-medium">Monthly Rent</th>
+              <th className="px-6 py-4 text-left font-medium">Move-in Date</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-300">
-            {bookings.map(b => (
-              <tr key={b.id} onClick={() => openSheet(b)} className="hover:bg-gray-50 cursor-pointer">
+            {bookings.map((b) => (
+              <tr
+                key={b.id}
+                onClick={() => openSheet(b)}
+                className="hover:bg-gray-50 cursor-pointer"
+              >
                 <td className="px-6 py-[22px] whitespace-nowrap align-top">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
-                      <img src={b.tenant?.avatar} alt={b.tenant?.name} className="w-full h-full object-cover" />
+                      <img
+                        src={b.tenant?.avatar}
+                        alt={b.tenant?.name}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                     <div>
-                      <div className="text-sm font-semibold">{b.tenant.name}</div>
-                      <div className="text-xs text-gray-500">{b.tenant.email}</div>
+                      <div className="text-sm font-semibold">
+                        {b.tenant.name}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {b.tenant.email}
+                      </div>
                     </div>
                   </div>
                 </td>
 
                 <td className="px-6 py-[22px] whitespace-nowrap align-top">
-                  <div className="text-sm font-semibold">{b.property.title}</div>
-                  <div className="text-xs text-gray-500">{b.property.address}</div>
+                  <div className="text-sm font-semibold">
+                    {b.property.title}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    {b.property.address}
+                  </div>
                 </td>
 
                 <td className="px-6 py-[22px] whitespace-nowrap align-top">
-                  <PaymentBadge status={statusMap[b.id] || 'Active Tenant'} />
+                  <PaymentBadge status={statusMap[b.id] || "Active Tenant"} />
                 </td>
 
-                <td className="px-6 py-[22px] whitespace-nowrap align-top text-sm">{findPrice(b.property.title)}</td>
+                <td className="px-6 py-[22px] whitespace-nowrap align-top text-sm">
+                  {formatCurrency(b?.monthlyRent)}
+                </td>
+                <td className="px-6 py-[22px] whitespace-nowrap align-top text-sm">
+                  {formatDate(b.startDate)}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <TenantSheet 
-        open={sheetOpen} 
-        onOpenChange={setSheetOpen} 
-        booking={selected} 
-        leaseStatus={selected ? (statusMap[selected.id] || 'Active Tenant') : 'Active Tenant'} 
-        onUpdateStatus={updateStatus} 
-        onEndLease={(b) => { onEndLease(b); setSheetOpen(false); }} 
-        onEvict={(b) => { onEvict(b); setSheetOpen(false); }}
+      <TenantSheet
+        open={sheetOpen}
+        onOpenChange={setSheetOpen}
+        booking={selected}
+        leaseStatus={
+          selected ? statusMap[selected.id] || "Active Tenant" : "Active Tenant"
+        }
+        onUpdateStatus={updateStatus}
+        onEndLease={(b) => {
+          onEndLease(b);
+          setSheetOpen(false);
+        }}
+        onEvict={(b) => {
+          onEvict(b);
+          setSheetOpen(false);
+        }}
       />
     </>
-  )
-}
+  );
+};
 
-export default TenantsTable
+export default TenantsTable;
