@@ -20,10 +20,11 @@ const BookingFormCard = ({
   const [agreedToTerms, setAgreedToTerms] = useState(false)
   const [errors, setErrors] = useState({})
   const [preFilledFields, setPreFilledFields] = useState({})
+  const [isInitialized, setIsInitialized] = useState(false)
 
-  // Pre-fill form with initial data when it becomes available
+  // Pre-fill form with initial data ONLY ONCE when it first becomes available
   useEffect(() => {
-    if (initialData) {
+    if (initialData && !isInitialized) {
       const newFormData = {
         firstName: initialData.firstName || '',
         lastName: initialData.lastName || '',
@@ -43,8 +44,9 @@ const BookingFormCard = ({
         }
       })
       setPreFilledFields(filled)
+      setIsInitialized(true)
     }
-  }, [initialData])
+  }, [initialData, isInitialized])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -248,7 +250,7 @@ const BookingFormCard = ({
               className="mt-1 w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500 cursor-pointer"
             />
             <span className="text-sm text-gray-700">
-              I agree to the <a href="#" className="text-orange-600 hover:underline">Terms and Conditions</a> and <a href="#" className="text-orange-600 hover:underline">Privacy Policy</a>. I understand that this application does not guarantee approval and that additional documentation may be required.
+              I understand that this application does not guarantee approval and that additional documentation may be required.
             </span>
           </label>
         </div>
