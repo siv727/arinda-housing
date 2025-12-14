@@ -22,6 +22,7 @@ import LandlordBookings from './pages/landlord/dashboard/Bookings'
 import LandlordProperties from './pages/landlord/dashboard/Properties'
 import LandlordTenants from './pages/landlord/dashboard/Tenants'
 import AddPropertyPage from './pages/landlord/dashboard/AddProperty'
+import EditPropertyPage from './pages/landlord/dashboard/EditProperty'
 import LandlordAccountSettings from './pages/landlord/dashboard/AccountSettings'
 
 // Landing page
@@ -66,6 +67,7 @@ function App() {
           <Route path="bookings" element={<LandlordBookings />} />
           <Route path="properties" element={<LandlordProperties />} />
           <Route path="properties/add" element={<AddPropertyPage />} />
+          <Route path="properties/edit/:id" element={<EditPropertyPage />} />
           <Route path="tenants" element={<LandlordTenants />} />
         </Route>
 

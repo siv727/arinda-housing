@@ -189,7 +189,7 @@ export default function Properties() {
           open={dialogOpen}
           onOpenChange={setDialogOpen}
           property={selectedProperty}
-          onEdit={(p) => navigate('/landlord/dashboard/properties/edit')}
+          onEdit={(p) => navigate(`/landlord/dashboard/properties/edit/${p.id}`)}
           onRemoveSuccess={handleListingDeleted}
         />
       </div>
