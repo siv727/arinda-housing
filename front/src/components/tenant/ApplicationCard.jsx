@@ -3,7 +3,7 @@ import React from "react";
 const StatusBadge = ({ status }) => {
   // Normalize status to title case for display
   const displayStatus = status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
-  
+
   const map = {
     Approved: "bg-green-100 text-green-700",
     Pending: "bg-yellow-100 text-yellow-700",
@@ -16,9 +16,8 @@ const StatusBadge = ({ status }) => {
   };
   return (
     <div
-      className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-        map[displayStatus] || "bg-gray-100 text-gray-700"
-      }`}
+      className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${map[displayStatus] || "bg-gray-100 text-gray-700"
+        }`}
     >
       <span
         className={`mr-2 h-2 w-2 rounded-full ${dot[displayStatus] || "bg-gray-400"}`}
@@ -41,7 +40,7 @@ export default function ApplicationCard({ application }) {
                 alt={application.propertyTitle}
                 className="w-full h-full object-cover "
               />
-              </div>
+            </div>
           </div>
           <div className="flex-1">
             <h3 className="text-xl font-bold text-gray-900 mb-1">
@@ -136,7 +135,12 @@ export default function ApplicationCard({ application }) {
                         <p className="text-xs text-gray-500">{doc.size}</p>
                       </div>
                     </div>
-                    <button className="px-4 py-2 bg-[#F35E27] cursor-pointer text-white text-sm font-semibold rounded-lg hover:bg-[#e7521c] transition-colors">
+                    <button
+                      onClick={() => window.open(doc.url, '_blank')}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-4 py-2 bg-[#F35E27] cursor-pointer text-white text-sm font-semibold rounded-lg hover:bg-[#e7521c] transition-colors"
+                    >
                       Download
                     </button>
                   </div>
