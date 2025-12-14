@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { checkApplicationEligibility } from '../../api/applicationApi'
 
 const BookingInfoCard = ({ listing }) => {
   // Parse lease terms from listing or use defaults
@@ -16,6 +17,11 @@ const BookingInfoCard = ({ listing }) => {
 
   const [moveInDate, setMoveInDate] = useState('')
   const [leaseTerm, setLeaseTerm] = useState(leaseTermOptions[0]?.value || '6')
+  
+  // Eligibility state
+  const [eligibility, setEligibility] = useState(null)
+  const [eligibilityLoading, setEligibilityLoading] = useState(true)
+  const [timeRemaining, setTimeRemaining] = useState(null)
 
   // Update default lease term when options change
   useEffect(() => {
@@ -23,6 +29,69 @@ const BookingInfoCard = ({ listing }) => {
       setLeaseTerm(leaseTermOptions[0].value)
     }
   }, [listing.leaseterms])
+
+  // Check eligibility on mount
+  useEffect(() => {
+    const fetchEligibility = async () => {
+      try {
+        setEligibilityLoading(true)
+        const response = await checkApplicationEligibility(listing.id)
+        setEligibility(response.data)
+        
+        // Calculate time remaining for countdown
+        if (response.data.blockedUntil) {
+          const blockedUntil = new Date(response.data.blockedUntil)
+          const now = new Date()
+          const diffMs = blockedUntil - now
+          if (diffMs > 0) {
+            setTimeRemaining(Math.ceil(diffMs / 1000))
+          }
+        }
+      } catch (err) {
+        console.error('Failed to check eligibility:', err)
+        // If check fails, allow booking (backend will validate)
+        setEligibility({ canApply: true, reason: 'ELIGIBLE' })
+      } finally {
+        setEligibilityLoading(false)
+      }
+    }
+
+    if (listing?.id) {
+      fetchEligibility()
+    }
+  }, [listing?.id])
+
+  // Countdown timer
+  useEffect(() => {
+    if (!timeRemaining || timeRemaining <= 0) return
+
+    const timer = setInterval(() => {
+      setTimeRemaining(prev => {
+        if (prev <= 1) {
+          // Refresh eligibility when timer expires
+          checkApplicationEligibility(listing.id).then(response => {
+            setEligibility(response.data)
+          }).catch(() => {})
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+
+    return () => clearInterval(timer)
+  }, [timeRemaining, listing?.id])
+
+  // Format time remaining for display
+  const formatTimeRemaining = (seconds) => {
+    if (!seconds || seconds <= 0) return null
+    const hours = Math.floor(seconds / 3600)
+    const minutes = Math.floor((seconds % 3600) / 60)
+    
+    if (hours > 0) {
+      return `${hours}h ${minutes}m`
+    }
+    return `${minutes}m`
+  }
 
   // Pricing details
   const monthlyRent = listing.price || 0
@@ -34,6 +103,91 @@ const BookingInfoCard = ({ listing }) => {
   
   // Use backend total if available, otherwise calculate
   const totalMoveInCost = listing.totalMoveInCost || (monthlyRent + securityDeposit + applicationFee + petFee + advanceRentCost)
+
+  // Render the appropriate button/badge based on eligibility
+  const renderBookingButton = () => {
+    if (eligibilityLoading) {
+      return (
+        <div className="w-full bg-gray-100 text-gray-400 font-bold py-3 rounded-lg text-center mb-6">
+          <i className="fa-solid fa-spinner fa-spin mr-2"></i>
+          Checking availability...
+        </div>
+      )
+    }
+
+    if (!eligibility || eligibility.canApply) {
+      // Eligible - show normal Book Now button
+      return (
+        <Link
+          to={`/tenant/listings/${listing.id}/book`}
+          state={{ moveInDate, leaseTerm }}
+          className="block w-full bg-gradient-to-r from-[#DD4912] to-[#FFA500] text-white font-bold py-3 rounded-lg text-center hover:opacity-90 transition-opacity mb-6 cursor-pointer"
+        >
+          Book Now
+        </Link>
+      )
+    }
+
+    // Not eligible - show status badge
+    const getStatusConfig = () => {
+      switch (eligibility.reason) {
+        case 'PENDING':
+          return {
+            icon: 'fa-clock',
+            bgClass: 'bg-yellow-100 border-yellow-300',
+            textClass: 'text-yellow-800',
+            iconClass: 'text-yellow-600',
+            title: 'Pending Application',
+            subtitle: 'Waiting for landlord review'
+          }
+        case 'ACTIVE_LEASE':
+          return {
+            icon: 'fa-home',
+            bgClass: 'bg-blue-100 border-blue-300',
+            textClass: 'text-blue-800',
+            iconClass: 'text-blue-600',
+            title: 'Active Lease',
+            subtitle: 'You have an active lease here'
+          }
+        case 'COOLDOWN':
+          return {
+            icon: 'fa-hourglass-half',
+            bgClass: 'bg-orange-100 border-orange-300',
+            textClass: 'text-orange-800',
+            iconClass: 'text-orange-600',
+            title: 'Cooldown Period',
+            subtitle: timeRemaining && timeRemaining > 0 
+              ? `Can reapply in ${formatTimeRemaining(timeRemaining)}`
+              : 'Please wait before reapplying'
+          }
+        default:
+          return {
+            icon: 'fa-circle-xmark',
+            bgClass: 'bg-gray-100 border-gray-300',
+            textClass: 'text-gray-800',
+            iconClass: 'text-gray-600',
+            title: 'Cannot Apply',
+            subtitle: 'Not eligible at this time'
+          }
+      }
+    }
+
+    const config = getStatusConfig()
+
+    return (
+      <div className={`w-full ${config.bgClass} border rounded-lg py-4 px-4 mb-6`}>
+        <div className="flex items-center gap-3">
+          <div className={`${config.iconClass} text-2xl`}>
+            <i className={`fa-solid ${config.icon}`}></i>
+          </div>
+          <div className="flex-1">
+            <div className={`font-bold ${config.textClass}`}>{config.title}</div>
+            <div className={`text-sm ${config.textClass} opacity-80`}>{config.subtitle}</div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6 sticky top-24">
@@ -94,14 +248,8 @@ const BookingInfoCard = ({ listing }) => {
         </div>
       </div>
 
-      {/* Book Now Button */}
-      <Link
-        to={`/tenant/listings/${listing.id}/book`}
-        state={{ moveInDate, leaseTerm }}
-        className="block w-full bg-gradient-to-r from-[#DD4912] to-[#FFA500] text-white font-bold py-3 rounded-lg text-center hover:opacity-90 transition-opacity mb-6 cursor-pointer"
-      >
-        Book Now
-      </Link>
+      {/* Book Now Button or Status Badge */}
+      {renderBookingButton()}
 
       {/* Cost Breakdown */}
       <div className="space-y-3">

@@ -6,7 +6,7 @@ import BookingFormCard from '../../components/tenant/BookingFormCard'
 import SuccessModal from '../../components/tenant/SuccessModal'
 import { getListingById } from '../../api/listingApi'
 import { getProfile } from '../../api/profileApi'
-import { submitApplication } from '../../api/applicationApi'
+import { submitApplication, checkApplicationEligibility } from '../../api/applicationApi'
 
 const BookingForm = () => {
   const { id } = useParams()
@@ -77,6 +77,20 @@ const BookingForm = () => {
           const firstTerm = parseInt(data.leaseterms[0]) || 12
           setLeaseTerm(String(firstTerm).replace(' months', ''))
         }
+        
+        // Fallback eligibility check - redirect if not eligible
+        // (In case user navigates directly to booking URL)
+        try {
+          const eligibilityRes = await checkApplicationEligibility(data.id)
+          if (!eligibilityRes.data.canApply) {
+            // Redirect back to listing page - the BookingInfoCard will show the status
+            navigate(`/tenant/listings/${id}`, { replace: true })
+            return
+          }
+        } catch (eligErr) {
+          // If eligibility check fails, continue (backend will validate on submit)
+          console.error('Eligibility check failed:', eligErr)
+        }
       } catch (err) {
         console.error('Failed to fetch data:', err)
         setError('Failed to load booking form. Please try again.')
@@ -88,7 +102,7 @@ const BookingForm = () => {
     if (id) {
       fetchData()
     }
-  }, [id])
+  }, [id, navigate])
 
   const handleFormSubmit = async (formData) => {
     // Validate booking details
