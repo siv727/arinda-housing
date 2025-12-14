@@ -42,6 +42,7 @@ public class DashboardService {
                     .applicantPhotoUrl(photoUrl)
                     .listingTitle(app.getListing().getTitle())
                     .dateBooked(app.getCreatedAt())
+                    .moveInDate(app.getMoveInDate())
                     .status(app.getStatus().name())
                     .build();
         }).collect(Collectors.toList());

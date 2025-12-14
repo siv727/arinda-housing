@@ -25,6 +25,7 @@ const StatusBadge = ({ status }) => {
       {status}
     </div>
   );
+    
 };
 
 
@@ -36,6 +37,16 @@ const getInitials = (name) => {
     .toUpperCase()
     .slice(0, 2);
 };
+
+const formatDate = (dateString) => {
+    if (!dateString) return "-";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
 
 export default function RecentBookingRequests({ bookings = [] }) {
   // Only show max 3 recent bookings
@@ -96,10 +107,10 @@ export default function RecentBookingRequests({ bookings = [] }) {
                   <div className="flex items-center gap-2 mt-2 flex-wrap">
                     <span className="inline-flex items-center px-2 py-1 rounded-md bg-gray-100 text-gray-600 text-xs">
                       <i className="fa-regular fa-calendar text-xs mr-1"></i>
-                      {booking.checkIn}
+                      {formatDate(booking.moveInDate)}
                     </span>
                     <span className="text-xs text-gray-400">
-                      Applied {booking.bookedDate}
+                      Booked Date: {formatDate(booking.bookedDate)}
                     </span>
                   </div>
                 </div>
