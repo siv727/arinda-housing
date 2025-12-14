@@ -26,4 +26,8 @@ public interface LeaseRepository extends JpaRepository<Lease, Long> {
     
     @Query("SELECT l FROM Lease l WHERE l.application.id = :applicationId")
     Optional<Lease> findByApplicationId(@Param("applicationId") Long applicationId);
+
+    // Custom query to count distinct students who have leases with this landlord
+    @Query("SELECT COUNT(DISTINCT l.application.student.id) FROM Lease l WHERE l.application.listing.landlord.id = :landlordId")
+    long countDistinctTenantsByLandlordId(@Param("landlordId") Long landlordId);
 }
