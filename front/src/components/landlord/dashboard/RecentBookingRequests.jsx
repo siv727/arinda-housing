@@ -1,28 +1,21 @@
 import React from "react";
 
 const StatusBadge = ({ status }) => {
-  const map = {
-    Approved: "bg-green-100 text-green-700",
-    Pending: "bg-yellow-100 text-yellow-700",
-    Rejected: "bg-red-100 text-red-700",
+  const statusMap = {
+    APPROVED: { label: "Approved", bg: "bg-green-100 text-green-700", dot: "bg-green-500" },
+    PENDING: { label: "Pending", bg: "bg-yellow-100 text-yellow-700", dot: "bg-yellow-500" },
+    REJECTED: { label: "Rejected", bg: "bg-red-100 text-red-700", dot: "bg-red-500" },
   };
-  const dot = {
-    Approved: "bg-green-500",
-    Pending: "bg-yellow-500",
-    Rejected: "bg-red-500",
-  };
+  const style = statusMap[status] || { label: status, bg: "bg-gray-100 text-gray-700", dot: "bg-gray-400" };
+  
   return (
     <div
-      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-        map[status] || "bg-gray-100 text-gray-700"
-      }`}
+      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${style.bg}`}
     >
       <span
-        className={`mr-2 h-2 w-2 rounded-full ${
-          dot[status] || "bg-gray-400"
-        }`}
+        className={`mr-2 h-1.5 w-1.5 rounded-full ${style.dot}`}
       ></span>
-      {status}
+      {style.label}
     </div>
   );
     
