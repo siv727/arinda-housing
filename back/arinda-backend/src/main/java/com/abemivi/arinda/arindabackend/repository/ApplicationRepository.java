@@ -3,6 +3,8 @@ package com.abemivi.arinda.arindabackend.repository;
 import java.util.List;
 import java.util.Optional;
 
+import com.abemivi.arinda.arindabackend.entity.enums.ApplicationStatus;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -46,7 +48,16 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
            "WHERE a.student = :student AND a.listing = :listing " +
            "AND a.status = 'APPROVED' AND l.endDate >= CURRENT_DATE")
     Optional<Application> findActiveApprovedApplicationWithLease(@Param("student") Student student, @Param("listing") Listing listing);
-    
+
+    // 1. Stats Counts (Using the relationship path listing.landlord.id)
+    long countByListingLandlordId(Long landlordId);
+
+    long countByListingLandlordIdAndStatus(Long landlordId, ApplicationStatus status);
+
+    // 2. Get Top 3 Recent Applications (Fetching Student and Listing details eagerly)
+    @EntityGraph(attributePaths = {"student", "listing"})
+    List<Application> findTop3ByListingLandlordIdOrderByCreatedAtDesc(Long landlordId);
+
     // Find all applications for a student-listing pair (handles multiple applications)
     List<Application> findAllByStudentAndListing(Student student, Listing listing);
 }

@@ -2,6 +2,7 @@ package com.abemivi.arinda.arindabackend.repository;
 
 import com.abemivi.arinda.arindabackend.entity.Listing;
 import com.abemivi.arinda.arindabackend.entity.enums.ListingStatus;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -52,6 +53,9 @@ public interface ListingRepository extends JpaRepository<Listing, Long> {
 
         // Count all listings by landlord
         long countByLandlordId(Long landlordId);
+
+        @EntityGraph(attributePaths = "photos")
+        List<Listing> findTop3ByLandlordIdOrderByCreatedatDesc(Long landlordId);
 
         // TENANT OPERATIONS
         // Display all listings

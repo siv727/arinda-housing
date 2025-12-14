@@ -1,31 +1,5 @@
 import React from "react";
 
-const StatusBadge = ({ status }) => {
-  const styles = {
-    Available: "bg-green-100 text-green-700",
-    Occupied: "bg-orange-100 text-orange-700",
-  };
-  const dot = {
-    Available: "bg-green-500",
-    Occupied: "bg-orange-500",
-  };
-
-  return (
-    <div
-      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-        styles[status] || "bg-gray-100 text-gray-700"
-      }`}
-    >
-      <span
-        className={`mr-2 h-2 w-2 rounded-full ${
-          dot[status] || "bg-gray-400"
-        }`}
-      ></span>
-      {status}
-    </div>
-  );
-};
-
 export default function PropertyStatusOverview({ properties = [] }) {
   // Only show max 3 properties
   const recentProperties = properties.slice(0, 3);
@@ -77,8 +51,6 @@ export default function PropertyStatusOverview({ properties = [] }) {
                       </p>
                     </div>
 
-                    {/* Status Badge */}
-                    <StatusBadge status={property.status} />
                   </div>
 
                   {/* Additional Info */}
