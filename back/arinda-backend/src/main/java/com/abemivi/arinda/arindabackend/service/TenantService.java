@@ -1,6 +1,7 @@
 package com.abemivi.arinda.arindabackend.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -76,16 +77,30 @@ public class TenantService {
 
     @Transactional
     public void endLease(Long leaseId) {
-        Lease lease = leaseRepository.findById(leaseId)
-                .orElseThrow(() -> new RuntimeException("Lease not found"));
+        // Try to find lease by lease ID first
+        Optional<Lease> leaseOpt = leaseRepository.findById(leaseId);
+        
+        // If not found, try to find by application ID (fallback)
+        if (leaseOpt.isEmpty()) {
+            leaseOpt = leaseRepository.findByApplicationId(leaseId);
+        }
+        
+        Lease lease = leaseOpt.orElseThrow(() -> new RuntimeException("Lease not found"));
         lease.setLeaseStatus(LeaseStatus.COMPLETED);
         leaseRepository.save(lease);
     }
 
     @Transactional
     public void evictTenant(Long leaseId) {
-        Lease lease = leaseRepository.findById(leaseId)
-                .orElseThrow(() -> new RuntimeException("Lease not found"));
+        // Try to find lease by lease ID first
+        Optional<Lease> leaseOpt = leaseRepository.findById(leaseId);
+        
+        // If not found, try to find by application ID (fallback)
+        if (leaseOpt.isEmpty()) {
+            leaseOpt = leaseRepository.findByApplicationId(leaseId);
+        }
+        
+        Lease lease = leaseOpt.orElseThrow(() -> new RuntimeException("Lease not found"));
         lease.setLeaseStatus(LeaseStatus.EVICTED);
         leaseRepository.save(lease);
     }
