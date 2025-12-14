@@ -17,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -152,6 +153,17 @@ public class LandlordController {
             errorResponse.put("message", "Failed to upload photos: " + e.getMessage());
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
+
+    @PostMapping("/upload-document")
+    public ResponseEntity<Map<String, String>> uploadDocument(
+            @RequestParam("file") MultipartFile file) {
+        try {
+            String url = cloudinaryService.uploadImage(file, "arinda/documents");
+            return ResponseEntity.ok(Map.of("url", url));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

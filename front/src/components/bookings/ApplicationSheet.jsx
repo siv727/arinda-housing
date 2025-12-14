@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/sheet";
 import ApprovalSheet from "./ApprovalSheet";
 import RejectionSheet from "./RejectionSheet";
-import { approveApplication, rejectApplication } from "@/api/bookingsApi";
+import { approveApplication, rejectApplication, uploadDocument } from "@/api/bookingsApi";
 
 const StatusBadge = ({ status }) => {
   const statusMap = {
@@ -78,14 +78,29 @@ export default function ApplicationSheet({
     try {
       setSubmitting(true);
       setError(null);
+
+      let documentUrl = null;
+
+      // 1. Upload File if present
+      if (payload.file) {
+        const formData = new FormData();
+        formData.append('file', payload.file);
+
+        const uploadRes = await uploadDocument(formData);
+        documentUrl = uploadRes.data.url; // Get URL from backend response
+      }
+
+      // 2. Approve Application with URL
       await approveApplication(booking.id, {
         message: payload.message,
-        attachmentUrl: payload.file ? "uploaded-file-url" : null, // TODO: Handle file upload
+        attachmentUrl: documentUrl, // Send the real Cloudinary URL
         confirmedMoveInDate: payload.confirmedMoveInDate,
       });
+
       setApprovalOpen(false);
-      onApprove();
       onOpenChange(false);
+      onApprove(); // Refresh parent list
+
     } catch (err) {
       console.error("Failed to approve application:", err);
       const errorMessage = err.response?.data?.message || "Failed to approve application";
@@ -132,11 +147,10 @@ export default function ApplicationSheet({
     <>
       <Sheet open={open} onOpenChange={onOpenChange}>
         <SheetContent
-          className={`${
-            isActionSheetOpen
-              ? "sm:max-w-[580px] md:h-[85vh] md:mt-16"
-              : "sm:max-w-[600px] md:h-[97vh] md:mt-3 transition-all"
-          } transition-all rounded-l-lg md:rounded-lg md:mr-3 flex flex-col`}
+          className={`${isActionSheetOpen
+            ? "sm:max-w-[580px] md:h-[85vh] md:mt-16"
+            : "sm:max-w-[600px] md:h-[97vh] md:mt-3 transition-all"
+            } transition-all rounded-l-lg md:rounded-lg md:mr-3 flex flex-col`}
         >
           <SheetHeader>
             <SheetTitle>Application Details</SheetTitle>
@@ -149,8 +163,8 @@ export default function ApplicationSheet({
             <div className="mx-5 mt-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2">
               <i className="fa-solid fa-circle-exclamation text-red-500"></i>
               <p className="text-red-700 text-sm flex-1">{error}</p>
-              <button 
-                onClick={() => setError(null)} 
+              <button
+                onClick={() => setError(null)}
                 className="text-red-500 hover:text-red-700"
               >
                 <i className="fa-solid fa-xmark"></i>
@@ -182,7 +196,7 @@ export default function ApplicationSheet({
               <p className="text-sm font-bold uppercase text-center text-gray-900">
                 <i class="fa-regular fa-house pr-1"></i>Property & Dates
               </p>
-            
+
               {/* Property  */}
               <div>
                 <label className="text-sm font-medium text-gray-700">
@@ -220,9 +234,8 @@ export default function ApplicationSheet({
                   </label>
                   <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
                     {booking?.leaseTerm
-                      ? `${booking.leaseTerm} month${
-                          booking.leaseTerm !== 1 ? "s" : ""
-                        }`
+                      ? `${booking.leaseTerm} month${booking.leaseTerm !== 1 ? "s" : ""
+                      }`
                       : "-"}
                   </div>
                 </div>
@@ -232,7 +245,7 @@ export default function ApplicationSheet({
             {/* 2. PERSONAL CONTACT */}
             <div className="space-y-4 pt-4 border-t">
               <p className="text-sm font-bold uppercase text-center text-gray-900">
-               <i class="fa-regular fa-phone pr-1"></i> Personal Contact
+                <i class="fa-regular fa-phone pr-1"></i> Personal Contact
               </p>
               <div className="grid grid-cols-2 gap-4">
                 {/* First Name */}
