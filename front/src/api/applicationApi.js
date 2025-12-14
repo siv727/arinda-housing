@@ -12,3 +12,11 @@ export const submitApplication = async (data) => {
 export const checkApplicationEligibility = async (listingId) => {
   return axiosClient.get(`/tenant/applications/eligibility?listingId=${listingId}`);
 };
+
+/**
+ * Get all applications submitted by the authenticated tenant
+ * Returns array of ApplicationResponse objects
+ */
+export const getMyApplications = async () => {
+  return axiosClient.get('/tenant/applications');
+};

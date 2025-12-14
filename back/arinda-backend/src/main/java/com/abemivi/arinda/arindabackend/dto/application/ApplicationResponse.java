@@ -10,9 +10,13 @@ import java.time.LocalDateTime;
 public record ApplicationResponse(
         Long id,
         Long listingId,
+        String mainphotourl,
         String listingTitle,
         String listingAddress,
+        String propertyPrice,
         LocalDate moveInDate,
+        Integer leaseTerm,
+        String phoneNumber,
         String applicantMessage,
         ApplicationStatus status,
         LocalDateTime createdAt,
@@ -21,14 +25,6 @@ public record ApplicationResponse(
         String responseMessage,
         String attachmentUrl,
         
-        // Tenant info
-        Long tenantId,
-        String tenantName,
-        String tenantEmail,
-        
-        // Landlord info
-        Long landlordId,
-        String landlordName,
-        String landlordEmail,
-        String landlordPhone
+        // Landlord info (minimal for display)
+        String landlordName
 ) {}

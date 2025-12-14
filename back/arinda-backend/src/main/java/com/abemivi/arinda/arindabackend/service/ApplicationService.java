@@ -173,32 +173,35 @@ public class ApplicationService {
     }
 
     private ApplicationResponse buildApplicationResponse(Application application) {
-        Student student = application.getStudent();
         Listing listing = application.getListing();
         Landlord landlord = listing.getLandlord();
         
-        String tenantName = student.getFirstname() + " " + student.getLastname();
         String listingAddress = listing.getLocation().getAddress() + ", " + listing.getLocation().getCity();
         String landlordName = landlord.getFirstname() + " " + landlord.getLastname();
+        String propertyPrice = "₱" + listing.getPrice().getMonthlyrent() + "/month";
+        
+        // Get main photo URL (first photo from listing)
+        String mainPhotoUrl = listing.getPhotos().stream()
+                .findFirst()
+                .map(photo -> photo.getUrl())
+                .orElse(null);
 
         return ApplicationResponse.builder()
                 .id(application.getId())
                 .listingId(listing.getId())
+                .mainphotourl(mainPhotoUrl)
                 .listingTitle(listing.getTitle())
                 .listingAddress(listingAddress)
+                .propertyPrice(propertyPrice)
                 .moveInDate(application.getMoveInDate())
+                .leaseTerm(application.getLeaseTerm())
+                .phoneNumber(application.getPhoneNumber())
                 .applicantMessage(application.getApplicantMessage())
                 .status(application.getStatus())
                 .createdAt(application.getCreatedAt())
                 .responseMessage(application.getResponseMessage())
                 .attachmentUrl(application.getAttachmentUrl())
-                .tenantId(student.getId())
-                .tenantName(tenantName)
-                .tenantEmail(student.getEmail())
-                .landlordId(landlord.getId())
                 .landlordName(landlordName)
-                .landlordEmail(landlord.getEmail())
-                .landlordPhone(landlord.getPhonenumber())
                 .build();
     }
 
