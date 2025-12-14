@@ -29,37 +29,9 @@ const AccountSettings = () => {
     // Places Rented state
     const [leases, setLeases] = useState([])
     const [leasesLoading, setLeasesLoading] = useState(false)
-    const [leaseFilter, setLeaseFilter] = useState('all')
+    const [leaseFilter, setLeaseFilter] = useState('current')
 
-    // Mock lease data for testing
-    const mockLeases = [
-        {
-            id: 1,
-            listingId: 1,
-            propertyName: "Loy's Dormitory",
-            propertyAddress: "321 Art District, Midtown",
-            propertyType: "Dormitory",
-            monthlyPrice: 1150,
-            photoUrl: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400",
-            startDate: "2024-04-20",
-            endDate: "2024-04-27",
-            landlordName: "Andrei Sam Loy",
-            status: "current"
-        },
-        {
-            id: 2,
-            listingId: 2,
-            propertyName: "Loy's Dormitory",
-            propertyAddress: "321 Art District, Midtown",
-            propertyType: "Dormitory",
-            monthlyPrice: 1150,
-            photoUrl: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400",
-            startDate: "2024-04-20",
-            endDate: "2024-04-27",
-            landlordName: "Kurt David",
-            status: "past"
-        }
-    ]
+
 
     useEffect(() => {
         fetchProfile()
@@ -136,19 +108,8 @@ const AccountSettings = () => {
     const fetchLeases = async () => {
         try {
             setLeasesLoading(true)
-            // TODO: Replace with real API call when backend has lease data
-            // const response = await getStudentLeases(leaseFilter)
-            // setLeases(response.data)
-
-            // Using mock data for now
-            await new Promise(resolve => setTimeout(resolve, 500)) // Simulate API delay
-
-            const filteredMockLeases = mockLeases.filter(lease => {
-                if (leaseFilter === 'all') return true
-                return lease.status === leaseFilter
-            })
-
-            setLeases(filteredMockLeases)
+            const response = await getStudentLeases(leaseFilter)
+            setLeases(response.data)
         } catch (error) {
             console.error('Error fetching leases:', error)
         } finally {
@@ -360,15 +321,6 @@ const AccountSettings = () => {
                                     {/* Filter Tabs */}
                                     <div className="flex gap-2 mb-6">
                                         <button
-                                            onClick={() => setLeaseFilter('all')}
-                                            className={`px-6 py-2 rounded-md font-medium transition-colors ${leaseFilter === 'all'
-                                                ? 'bg-[#F35E27] text-white'
-                                                : 'bg-white text-[#666666] border border-[#EAD1C7] hover:bg-[#FBF8F6]'
-                                                }`}
-                                        >
-                                            All Rentals
-                                        </button>
-                                        <button
                                             onClick={() => setLeaseFilter('current')}
                                             className={`px-6 py-2 rounded-md font-medium transition-colors ${leaseFilter === 'current'
                                                 ? 'bg-[#F35E27] text-white'
@@ -400,9 +352,9 @@ const AccountSettings = () => {
                                                 No rentals found
                                             </h3>
                                             <p className="text-[#666666]">
-                                                {leaseFilter === 'all'
-                                                    ? "You haven't rented any places yet"
-                                                    : `You have no ${leaseFilter} rentals`}
+                                                {leaseFilter === 'current'
+                                                    ? "You don't have any current rentals"
+                                                    : "You don't have any past rentals"}
                                             </p>
                                         </div>
                                     ) : (
@@ -449,16 +401,6 @@ const AccountSettings = () => {
                                                                     })}
                                                                 </p>
                                                             </div>
-                                                            <span
-                                                                className={`px-3 py-1 rounded-full text-xs font-medium ${lease.status === 'current'
-                                                                    ? 'bg-green-100 text-green-800'
-                                                                    : lease.status === 'past'
-                                                                        ? 'bg-gray-100 text-gray-800'
-                                                                        : 'bg-blue-100 text-blue-800'
-                                                                    }`}
-                                                            >
-                                                                {lease.status.charAt(0).toUpperCase() + lease.status.slice(1)}
-                                                            </span>
                                                             <span className="text-lg font-bold text-[#2C2C2C]">
                                                                 ₱{lease.monthlyPrice.toLocaleString()}/month
                                                             </span>
