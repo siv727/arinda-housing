@@ -148,7 +148,14 @@ export default function ApplicationSheet({
                   <StatusBadge status={booking?.status} />
                 </div>
               </div>
+            </div>
 
+            <div className="space-y-4">
+              <p className="text-sm font-bold uppercase text-center text-gray-900">
+                <i class="fa-regular fa-house pr-1"></i>Property & Dates
+              </p>
+            
+              {/* Property  */}
               <div>
                 <label className="text-sm font-medium text-gray-700">
                   Property
@@ -157,83 +164,128 @@ export default function ApplicationSheet({
                   {property?.title ?? "-"}
                 </div>
               </div>
-            </div>
 
-            <div className="grid grid-cols-2 gap-4">
-               <div>
-               <label className="text-sm font-medium text-gray-700">
-                  Move-in Date
-                </label>
-                <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
-                  {formatDate(booking?.moveInDate)}
-                </div>
-            </div>
-             <div>
-               <label className="text-sm font-medium text-gray-700">
-                  Lease Term
-                </label>
-                <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
-                  {booking?.leaseTerm ? `${booking.leaseTerm} month${booking.leaseTerm !== 1 ? 's' : ''}` : '-'}
-                </div>
-            </div>
-              {/* split name into first/last */}
+              {/* Address  */}
               <div>
                 <label className="text-sm font-medium text-gray-700">
-                  First Name
+                  Address
                 </label>
-                <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
-                  {tenant?.name?.split(" ")[0] ?? ""}
+                <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50 ">
+                  {property?.address ?? "-"}
                 </div>
               </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">
-                  Last Name
-                </label>
-                <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
-                  {tenant?.name?.split(" ").slice(1).join(" ") ?? ""}
+
+              <div className="grid grid-cols-2 gap-4">
+                {/* Move-in Date */}
+                <div>
+                  <label className="text-sm font-medium text-gray-700">
+                    Move-in Date
+                  </label>
+                  <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
+                    {formatDate(booking?.moveInDate)}
+                  </div>
                 </div>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">
-                  Email Address
-                </label>
-                <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
-                  {tenant?.email}
-                </div>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">
-                  Phone Number
-                </label>
-                <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
-                  {booking?.phoneNumber ?? ""}
-                </div>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">
-                  University
-                </label>
-                <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50 overflow-x-auto whitespace-nowrap">
-                  {tenant?.university ?? ""}
-                </div>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">
-                  Student ID
-                </label>
-                <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
-                  {tenant?.studentId ?? ""}
+                {/* Lease Term */}
+                <div>
+                  <label className="text-sm font-medium text-gray-700">
+                    Lease Term
+                  </label>
+                  <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
+                    {booking?.leaseTerm
+                      ? `${booking.leaseTerm} month${
+                          booking.leaseTerm !== 1 ? "s" : ""
+                        }`
+                      : "-"}
+                  </div>
                 </div>
               </div>
             </div>
 
+            {/* 2. PERSONAL CONTACT */}
+            <div className="space-y-4 pt-4 border-t">
+              <p className="text-sm font-bold uppercase text-center text-gray-900">
+               <i class="fa-regular fa-phone pr-1"></i> Personal Contact
+              </p>
+              <div className="grid grid-cols-2 gap-4">
+                {/* First Name */}
+                <div>
+                  <label className="text-sm font-medium text-gray-700">
+                    First Name
+                  </label>
+                  <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
+                    {tenant?.name?.split(" ")[0] ?? ""}
+                  </div>
+                </div>
+                {/* Last Name */}
+                <div>
+                  <label className="text-sm font-medium text-gray-700">
+                    Last Name
+                  </label>
+                  <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
+                    {tenant?.name?.split(" ").slice(1).join(" ") ?? ""}
+                  </div>
+                </div>
+                {/* Email Address */}
+                <div>
+                  <label className="text-sm font-medium text-gray-700">
+                    Email Address
+                  </label>
+                  <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
+                    {tenant?.email}
+                  </div>
+                </div>
+                {/* Phone Number */}
+                <div>
+                  <label className="text-sm font-medium text-gray-700">
+                    Phone Number
+                  </label>
+                  <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
+                    {booking?.phoneNumber ?? ""}
+                  </div>
+                </div>
+              </div>
+            </div>
 
-            <div>
-              <label className="text-sm font-medium text-gray-700">
-                Additional Notes
-              </label>
-              <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50 min-h-[80px]">
-                {booking?.applicantMessage ?? "-"}
+            {/* 3. VERIFICATION */}
+            <div className="space-y-4 pt-4 border-t ">
+              <p className="text-sm font-bold  uppercase text-center text-gray-900">
+                <i class="fa-regular fa-badge-check pr-1"></i>Verification
+              </p>
+              <div className="grid grid-cols-2 gap-4">
+                {/* University */}
+                <div>
+                  <label className="text-sm font-medium text-gray-700">
+                    University
+                  </label>
+                  <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50 overflow-x-auto whitespace-nowrap">
+                    {tenant?.university ?? ""}
+                  </div>
+                </div>
+                {/* Student ID */}
+                <div>
+                  <label className="text-sm font-medium text-gray-700">
+                    Student ID
+                  </label>
+                  <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
+                    {tenant?.studentId ?? ""}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 4. APPLICANT MESSAGE */}
+            <div className="space-y-4 pt-4 border-t pb-10">
+
+              <p className="text-sm font-bold  uppercase text-center text-gray-900">
+                <i class="fa-regular fa-message pr-1"></i>Applicant Message
+              </p>
+              <div>
+                <label className="text-sm font-medium text-gray-700">
+                  Additional Notes
+                </label>
+                <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50 min-h-[80px]">
+                  {booking?.applicantMessage ?? "-"}
+                </div>
               </div>
             </div>
           </div>

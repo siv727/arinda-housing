@@ -1,35 +1,70 @@
-import { useState } from 'react'
-import { bookings as mockBookings } from '@/data/mockBookings'
+import { useState, useEffect } from 'react'
+import { getLandlordTenants, endLease, evictTenant } from '@/api/tenantsApi'
 import TenantsTable from '@/components/landlord/tenants/TenantsTable'
 import TenantFilters from '@/components/landlord/tenants/TenantFilters'
 
 export default function Tenants() {
   const [query, setQuery] = useState('')
-  const [bookings, setBookings] = useState(mockBookings)
-  // Payment status filter: 'All' | 'Paid' | 'Due Soon' | 'Overdue'
-  const [paymentFilter, setPaymentFilter] = useState('All')
+  const [tenants, setTenants] = useState([])
+  const [leaseStatusFilter, setLeaseStatusFilter] = useState('All')
   const [showFilters, setShowFilters] = useState(false)
+  const [loading, setLoading] = useState(true)
 
-  const confirmed = bookings.filter(b => b.status === 'Approved')
+  useEffect(() => {
+    fetchTenants()
+  }, [])
 
-  const filtered = confirmed.filter(b => {
-    const q = query.trim().toLowerCase()
-    if (!q) return true
-    return (`${b.tenant.name} ${b.tenant.email} ${b.property.title}`.toLowerCase()).includes(q)
-  })
-
-  // helper to read payment status from booking shape (fallbacks for different shapes)
-  const getPaymentStatus = (b) => {
-    return b.paymentStatus ?? b.payment?.status ?? 'Due Soon'
+  const fetchTenants = async () => {
+    try {
+      setLoading(true)
+      const data = await getLandlordTenants()
+      setTenants(data)
+    } catch (error) {
+      console.error('Failed to fetch tenants:', error)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const paymentFiltered = filtered.filter(b => {
-    if (paymentFilter === 'All') return true
-    return getPaymentStatus(b) === paymentFilter
+  const filtered = tenants.filter(t => {
+    const q = query.trim().toLowerCase()
+    if (!q) return true
+    return (`${t.tenant.name} ${t.tenant.email} ${t.property.title}`.toLowerCase()).includes(q)
   })
 
-  const handleEndLease = (b) => {
-    setBookings(prev => prev.map(x => x.id === b.id ? { ...x, status: 'Rejected' } : x))
+  // Map backend enum to display format
+  const mapLeaseStatus = (status) => {
+    const map = {
+      'ACTIVE': 'Active Tenant',
+      'COMPLETED': 'Completed Tenant',
+      'EVICTED': 'Evicted Tenant'
+    }
+    return map[status] || status
+  }
+
+  const statusFiltered = filtered.filter(t => {
+    if (leaseStatusFilter === 'All') return true
+    return mapLeaseStatus(t.leaseStatus) === leaseStatusFilter
+  })
+
+  const handleEndLease = async (tenant) => {
+    try {
+      await endLease(tenant.leaseId)
+      await fetchTenants()
+    } catch (error) {
+      console.error('Failed to end lease:', error)
+      alert(error.response?.data?.message || 'Failed to end lease')
+    }
+  }
+
+  const handleEvict = async (tenant) => {
+    try {
+      await evictTenant(tenant.leaseId)
+      await fetchTenants()
+    } catch (error) {
+      console.error('Failed to evict tenant:', error)
+      alert(error.response?.data?.message || 'Failed to evict tenant')
+    }
   }
 
   return (
@@ -65,11 +100,23 @@ export default function Tenants() {
       </form>
 
       {showFilters && (
-        <TenantFilters status={paymentFilter} setStatus={setPaymentFilter} onClose={() => setShowFilters(false)} />
+        <TenantFilters status={leaseStatusFilter} setStatus={setLeaseStatusFilter} onClose={() => setShowFilters(false)} />
       )}
 
       <div>
-        <TenantsTable bookings={paymentFiltered} onEndLease={handleEndLease} />
+        {loading ? (
+          <div className="text-center py-10">Loading tenants...</div>
+        ) : (
+          <TenantsTable 
+            bookings={statusFiltered.map(t => ({
+              ...t,
+              id: t.leaseId,
+              leaseStatus: mapLeaseStatus(t.leaseStatus)
+            }))} 
+            onEndLease={handleEndLease} 
+            onEvict={handleEvict}
+          />
+        )}
       </div>
     </div>
   )

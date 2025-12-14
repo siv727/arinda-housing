@@ -14,9 +14,9 @@ export default function TenantFilters({ status, setStatus, onClose }) {
         <label className="block text-gray-600 mb-2 text-sm">Filter by Status:</label>
         <div className="flex gap-2">
           <button type="button" onClick={() => setStatus('All')} className={`${btn('All')} cursor-pointer`}>All</button>
-          <button type="button" onClick={() => setStatus('Paid')} className={`${btn('Paid')} cursor-pointer`}>Paid</button>
-          <button type="button" onClick={() => setStatus('Due Soon')} className={`${btn('Due Soon')} cursor-pointer`}>Due Soon</button>
-          <button type="button" onClick={() => setStatus('Overdue')} className={`${btn('Overdue')} cursor-pointer`}>Overdue</button>
+          <button type="button" onClick={() => setStatus('Active Tenant')} className={`${btn('Active Tenant')} cursor-pointer`}>Active Tenant</button>
+          <button type="button" onClick={() => setStatus('Completed Tenant')} className={`${btn('Completed Tenant')} cursor-pointer`}>Completed Tenant</button>
+          <button type="button" onClick={() => setStatus('Evicted Tenant')} className={`${btn('Evicted Tenant')} cursor-pointer`}>Evicted Tenant</button>
         </div>
       </div>
     </div>
