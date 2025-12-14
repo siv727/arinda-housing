@@ -18,9 +18,7 @@ const Listings = () => {
     priceRange: 'all',
     propertyTypes: [],
     roomTypes: [],
-    amenities: [],
-    inclusions: [],
-    neighborhood: []
+    amenities: []
   })
 
   // --- 1. Fetch Data on Mount ---
@@ -95,9 +93,7 @@ const Listings = () => {
       priceRange: 'all',
       propertyTypes: [],
       roomTypes: [],
-      amenities: [],
-      inclusions: [],
-      neighborhood: []
+      amenities: []
     })
     setSearchQuery('')
     setSortBy('recent')
