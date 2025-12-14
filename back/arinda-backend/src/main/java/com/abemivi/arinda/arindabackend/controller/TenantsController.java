@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.abemivi.arinda.arindabackend.dto.lease.TenantResponse;
+import com.abemivi.arinda.arindabackend.dto.lease.TenantSummary;
 import com.abemivi.arinda.arindabackend.entity.Landlord;
 import com.abemivi.arinda.arindabackend.service.TenantService;
 
@@ -23,10 +24,18 @@ public class TenantsController {
     private final TenantService tenantService;
 
     @GetMapping
-    public ResponseEntity<List<TenantResponse>> getLandlordTenants(
+    public ResponseEntity<List<TenantSummary>> getLandlordTenants(
             @AuthenticationPrincipal Landlord landlord) {
-        List<TenantResponse> tenants = tenantService.getLandlordTenants(landlord.getId());
+        List<TenantSummary> tenants = tenantService.getLandlordTenants(landlord.getId());
         return ResponseEntity.ok(tenants);
+    }
+
+    @GetMapping("/{leaseId}")
+    public ResponseEntity<TenantResponse> getTenantDetails(
+            @PathVariable Long leaseId,
+            @AuthenticationPrincipal Landlord landlord) {
+        TenantResponse tenant = tenantService.getTenantDetails(landlord.getId(), leaseId);
+        return ResponseEntity.ok(tenant);
     }
 
     @PatchMapping("/{leaseId}/end-lease")

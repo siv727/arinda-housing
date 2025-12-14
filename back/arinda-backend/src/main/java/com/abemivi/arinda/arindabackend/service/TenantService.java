@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.abemivi.arinda.arindabackend.dto.lease.TenantResponse;
+import com.abemivi.arinda.arindabackend.dto.lease.TenantSummary;
 import com.abemivi.arinda.arindabackend.entity.Application;
 import com.abemivi.arinda.arindabackend.entity.Landlord;
 import com.abemivi.arinda.arindabackend.entity.Lease;
@@ -28,7 +29,7 @@ public class TenantService {
     private final TenantMapper tenantMapper;
 
     @Transactional(readOnly = true)
-    public List<TenantResponse> getLandlordTenants(Long landlordId) {
+    public List<TenantSummary> getLandlordTenants(Long landlordId) {
         // Fetch landlord to use in query
         Landlord landlord = (Landlord) userRepository.findById(landlordId)
                 .orElseThrow(() -> new RuntimeException("Landlord not found"));
@@ -40,8 +41,37 @@ public class TenantService {
                 .collect(Collectors.toList());
         
         return approvedApplications.stream()
-                .map(tenantMapper::toTenantResponse)
+                .map(tenantMapper::toTenantSummary)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public TenantResponse getTenantDetails(Long landlordId, Long leaseId) {
+        // Fetch landlord to use in query
+        Landlord landlord = (Landlord) userRepository.findById(landlordId)
+                .orElseThrow(() -> new RuntimeException("Landlord not found"));
+        
+        // Get all approved applications for this landlord's listings
+        List<Application> approvedApplications = applicationRepository.findByListingLandlord(landlord)
+                .stream()
+                .filter(app -> app.getStatus() == ApplicationStatus.APPROVED)
+                .collect(Collectors.toList());
+        
+        // Find the specific tenant by leaseId (which could be lease ID or application ID)
+        Application application = approvedApplications.stream()
+                .filter(app -> {
+                    // Try to find lease by application ID
+                    var leaseOpt = leaseRepository.findByApplicationId(app.getId());
+                    if (leaseOpt.isPresent() && leaseOpt.get().getId().equals(leaseId)) {
+                        return true;
+                    }
+                    // Fallback to application ID
+                    return app.getId().equals(leaseId);
+                })
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Tenant not found"));
+        
+        return tenantMapper.toTenantResponse(application);
     }
 
     @Transactional

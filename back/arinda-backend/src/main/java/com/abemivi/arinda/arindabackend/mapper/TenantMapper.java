@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 import com.abemivi.arinda.arindabackend.dto.lease.TenantResponse;
+import com.abemivi.arinda.arindabackend.dto.lease.TenantSummary;
 import com.abemivi.arinda.arindabackend.entity.Application;
 import com.abemivi.arinda.arindabackend.entity.Lease;
 import com.abemivi.arinda.arindabackend.entity.Listing;
@@ -55,6 +56,36 @@ public class TenantMapper {
                 .phoneNumber(application.getPhoneNumber())
                 .leaseTerm(application.getLeaseTerm())
                 .monthlyRent(listing.getPrice() != null ? (double) listing.getPrice().getMonthlyrent() : null)
+                .build();
+    }
+
+    public TenantSummary toTenantSummary(Application application) {
+        Student student = application.getStudent();
+        Listing listing = application.getListing();
+        
+        // Try to get lease if it exists (using application ID to find lease)
+        Optional<Lease> leaseOpt = leaseRepository.findByApplicationId(application.getId());
+        Lease lease = leaseOpt.orElse(null);
+        
+        // Determine lease status
+        LeaseStatus leaseStatus = (lease != null) ? lease.getLeaseStatus() : LeaseStatus.ACTIVE;
+        Long leaseId = (lease != null) ? lease.getId() : application.getId();
+
+        return TenantSummary.builder()
+                .leaseId(leaseId)
+                .tenant(TenantSummary.TenantInfo.builder()
+                        .id(student.getId())
+                        .name(student.getFirstname() + " " + student.getLastname())
+                        .email(student.getEmail())
+                        .build())
+                .property(TenantSummary.PropertyInfo.builder()
+                        .id(listing.getId())
+                        .title(listing.getTitle())
+                        .address(listing.getLocation() != null ? listing.getLocation().getAddress() : null)
+                        .build())
+                .leaseStatus(leaseStatus)
+                .monthlyRent(listing.getPrice() != null ? (double) listing.getPrice().getMonthlyrent() : null)
+                .startDate(application.getMoveInDate())
                 .build();
     }
 }

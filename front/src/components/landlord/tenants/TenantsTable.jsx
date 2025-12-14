@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import TenantSheet from "@/components/landlord/tenants/TenantSheet";
-import { properties as mockProperties } from "@/data/mockProperties";
+import { getTenantDetails } from "@/api/tenantsApi";
 
 const PaymentBadge = ({ status }) => {
   const map = {
@@ -34,6 +34,8 @@ const TenantsTable = ({
 }) => {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [selected, setSelected] = useState(null);
+  const [selectedDetails, setSelectedDetails] = useState(null);
+  const [loadingDetails, setLoadingDetails] = useState(false);
   const [statusMap, setStatusMap] = useState({});
 
   useEffect(() => {
@@ -45,15 +47,20 @@ const TenantsTable = ({
     setStatusMap(map);
   }, [bookings]);
 
-  const openSheet = (b) => {
+  const openSheet = async (b) => {
     setSelected(b);
     setSheetOpen(true);
-  };
-
-  // helper to find property price by title
-  const findPrice = (title) => {
-    const p = mockProperties.find((x) => x.title === title);
-    return p?.price || "-";
+    setLoadingDetails(true);
+    
+    try {
+      const details = await getTenantDetails(b.leaseId);
+      setSelectedDetails(details);
+    } catch (error) {
+      console.error('Failed to fetch tenant details:', error);
+      alert('Failed to load tenant details');
+    } finally {
+      setLoadingDetails(false);
+    }
   };
 
   const updateStatus = (id, status) => {
@@ -145,7 +152,8 @@ const TenantsTable = ({
       <TenantSheet
         open={sheetOpen}
         onOpenChange={setSheetOpen}
-        booking={selected}
+        booking={selectedDetails || selected}
+        loading={loadingDetails}
         leaseStatus={
           selected ? statusMap[selected.id] || "Active Tenant" : "Active Tenant"
         }

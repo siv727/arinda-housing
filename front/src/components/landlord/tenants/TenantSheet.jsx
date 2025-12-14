@@ -36,6 +36,7 @@ export default function TenantSheet({
   open,
   onOpenChange,
   booking,
+  loading = false,
   leaseStatus = "Active Tenant",
   onUpdateStatus = () => {},
   onEndLease = () => {},
@@ -100,23 +101,31 @@ export default function TenantSheet({
 
         <hr />
 
-        <div className="flex-1 overflow-y-auto ">
-          <div className="space-y-2">
-            <div className="flex justify-center px-5">
-              <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center">
-                <img
-                  src={tenant?.avatar}
-                  alt={tenant?.name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+        {loading ? (
+          <div className="flex-1 flex items-center justify-center">
+            <div className="text-center space-y-2">
+              <div className="w-8 h-8 border-4 border-[#D87C51] border-t-transparent rounded-full animate-spin mx-auto"></div>
+              <p className="text-sm text-gray-500">Loading tenant details...</p>
             </div>
+          </div>
+        ) : (
+          <div className="flex-1 overflow-y-auto ">
+            <div className="space-y-2">
+              <div className="flex justify-center px-5">
+                <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center">
+                  <img
+                    src={tenant?.avatar}
+                    alt={tenant?.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
 
-            <div className="space-y-1">
-              <div className="text-[20px] font-semibold text-center flex flex-row mx-auto justify-center gap-2">
-                <div className=" ">{tenant?.name?.split(" ")[0] ?? ""}</div>
-                <div className="">
-                  {tenant?.name?.split(" ").slice(1).join(" ") ?? ""}
+              <div className="space-y-1">
+                <div className="text-[20px] font-semibold text-center flex flex-row mx-auto justify-center gap-2">
+                  <div className=" ">{tenant?.name?.split(" ")[0] ?? ""}</div>
+                  <div className="">
+                    {tenant?.name?.split(" ").slice(1).join(" ") ?? ""}
                 </div>
               </div>
             </div>
@@ -267,6 +276,7 @@ export default function TenantSheet({
             )}
           </div>
         </div>
+        )}
 
         <SheetFooter className="border-t pt-4">
           {!confirmingEndLease && !confirmingEvict ? (
