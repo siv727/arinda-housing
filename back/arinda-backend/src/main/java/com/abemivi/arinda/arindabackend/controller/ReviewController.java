@@ -77,7 +77,7 @@ public class ReviewController {
         // Validate that student has an approved application for this listing
         if (!reviewService.hasApprovedApplication(listingId, student)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(Map.of("error", "You need an approved application to review this property."));
+                    .body(Map.of("error", "You need to be a current or past tenant to review this property."));
         }
 
         // Extract rating and comment from request body
