@@ -3,14 +3,16 @@ import { Link } from 'react-router-dom'
 
 const BookingInfoCard = ({ listing }) => {
   // Parse lease terms from listing or use defaults
-  const leaseTermOptions = listing.leaseterms?.map(term => {
-    // Extract number from strings like "6 months" or just use the value
-    const months = parseInt(term) || term
-    return { value: String(months).replace(' months', ''), label: term }
-  }) || [
-    { value: '6', label: '6 months' },
-    { value: '12', label: '12 months' }
-  ]
+  const leaseTermOptions = listing.leaseterms && listing.leaseterms.length > 0
+    ? listing.leaseterms.map(term => {
+        // Extract number from strings like "6 months" or just use the value
+        const months = parseInt(term) || term
+        return { value: String(months).replace(' months', ''), label: term }
+      })
+    : [
+        { value: '6', label: '6 months' },
+        { value: '12', label: '12 months' }
+      ]
 
   const [moveInDate, setMoveInDate] = useState('')
   const [leaseTerm, setLeaseTerm] = useState(leaseTermOptions[0]?.value || '6')
@@ -22,11 +24,16 @@ const BookingInfoCard = ({ listing }) => {
     }
   }, [listing.leaseterms])
 
-  // Calculate total move-in cost
+  // Pricing details
   const monthlyRent = listing.price || 0
   const securityDeposit = listing.securityDeposit || 0
   const applicationFee = listing.applicationFee || 0
-  const totalMoveInCost = monthlyRent + securityDeposit + applicationFee
+  const petFee = listing.petFee || 0
+  const advanceRent = listing.advanceRent || 0
+  const advanceRentCost = listing.advanceRentCost || 0
+  
+  // Use backend total if available, otherwise calculate
+  const totalMoveInCost = listing.totalMoveInCost || (monthlyRent + securityDeposit + applicationFee + petFee + advanceRentCost)
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6 sticky top-24">
@@ -116,6 +123,20 @@ const BookingInfoCard = ({ listing }) => {
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">Application Fee</span>
             <span className="font-semibold text-gray-900">₱{applicationFee.toLocaleString()}</span>
+          </div>
+        )}
+
+        {petFee > 0 && (
+          <div className="flex justify-between text-sm">
+            <span className="text-gray-600">Pet Fee</span>
+            <span className="font-semibold text-gray-900">₱{petFee.toLocaleString()}</span>
+          </div>
+        )}
+
+        {advanceRent > 0 && (
+          <div className="flex justify-between text-sm">
+            <span className="text-gray-600">Advance Rent ({advanceRent} month{advanceRent > 1 ? 's' : ''})</span>
+            <span className="font-semibold text-gray-900">₱{advanceRentCost.toLocaleString()}</span>
           </div>
         )}
 

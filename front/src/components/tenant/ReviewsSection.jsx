@@ -16,7 +16,7 @@ const ReviewSkeleton = () => (
             <div className="h-3 bg-gray-200 rounded w-24"></div>
           </div>
           <div className="flex gap-1">
-            {[1,2,3,4,5].map(i => (
+            {[1, 2, 3, 4, 5].map(i => (
               <div key={i} className="w-4 h-4 bg-gray-200 rounded"></div>
             ))}
           </div>
@@ -143,10 +143,10 @@ const ReviewsSection = ({ listing }) => {
       await fetchData();
     } catch (err) {
       const errorMsg = err.response?.data?.error || err.response?.data?.message || 'Something went wrong';
-      
+
       // Handle specific error cases - show in modal
       if (err.response?.status === 403) {
-        setModalError('You need an approved application to review this property.');
+        setModalError('You need to be a current or past tenant to review this property.');
       } else if (err.response?.status === 409) {
         setModalError('You have already reviewed this listing.');
       } else {
@@ -167,7 +167,7 @@ const ReviewsSection = ({ listing }) => {
   // Handle delete
   const handleDelete = async () => {
     if (!confirmDeleteId) return;
-    
+
     setSubmitting(true);
     try {
       const reviewToDelete = reviews.find(r => r.id === confirmDeleteId);
@@ -195,9 +195,8 @@ const ReviewsSection = ({ listing }) => {
     return Array.from({ length: 5 }, (_, i) => (
       <i
         key={i}
-        className={`fa-solid fa-star text-sm ${
-          i < rating ? 'text-yellow-500' : 'text-gray-300'
-        }`}
+        className={`fa-solid fa-star text-sm ${i < rating ? 'text-yellow-500' : 'text-gray-300'
+          }`}
       ></i>
     ));
   };
@@ -240,11 +239,11 @@ const ReviewsSection = ({ listing }) => {
   if (!reviews || reviews.length === 0) {
     return (
       <div>
-        <EmptyState 
-          onWriteReview={() => setModalOpen(true)} 
-          canReview={canReview} 
+        <EmptyState
+          onWriteReview={() => setModalOpen(true)}
+          canReview={canReview}
         />
-        
+
         {/* Action Error */}
         {actionError && (
           <div className="mt-4">
@@ -303,15 +302,15 @@ const ReviewsSection = ({ listing }) => {
               <div className="flex-1 bg-gray-200 rounded-full h-2 overflow-hidden">
                 <div
                   className="bg-gray-900 h-full rounded-full transition-all duration-500"
-                  style={{ 
+                  style={{
                     width: `${getRatingPercentage(
-                      ratingSummary?.[`${['one','two','three','four','five'][star-1]}starcount`] || 0
-                    )}%` 
+                      ratingSummary?.[`${['one', 'two', 'three', 'four', 'five'][star - 1]}starcount`] || 0
+                    )}%`
                   }}
                 ></div>
               </div>
               <span className="text-sm text-gray-600 w-8 text-right">
-                {ratingSummary?.[`${['one','two','three','four','five'][star-1]}starcount`] || 0}
+                {ratingSummary?.[`${['one', 'two', 'three', 'four', 'five'][star - 1]}starcount`] || 0}
               </span>
             </div>
           ))}
@@ -348,7 +347,7 @@ const ReviewsSection = ({ listing }) => {
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="flex gap-1">{renderStars(review.rating)}</div>
-                  
+
                   {/* Edit/Delete buttons - always visible for logged in tenants */}
                   {isLoggedIn && isTenant && (
                     <div className="flex gap-1">
