@@ -88,7 +88,8 @@ const ListingDetail = () => {
         setListing(mappedListing)
       } catch (err) {
         console.error("Failed to fetch listing:", err)
-        setError("Failed to load listing details.")
+        const errorMsg = err.response?.data?.error || err.response?.data?.message || "Failed to load listing details."
+        setError(errorMsg)
       } finally {
         setLoading(false)
       }
@@ -111,13 +112,15 @@ const ListingDetail = () => {
   // --- Render Error/Not Found State ---
   if (error || !listing) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 flex flex-col">
         <Navbar />
-        <div className="max-w-7xl mx-auto px-6 py-12 text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">{error || "Listing not found"}</h1>
-          <Link to="/tenant/listings" className="text-orange-600 hover:underline">
-            Back to Listings
-          </Link>
+        <div className="flex-1 flex items-center justify-center px-6">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">{error || "Listing not found"}</h1>
+            <Link to="/tenant/listings" className="text-orange-600 hover:underline">
+              Back to Listings
+            </Link>
+          </div>
         </div>
       </div>
     )
