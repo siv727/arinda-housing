@@ -65,7 +65,7 @@ const MyApplication = () => {
   return (
     <div className="min-h-screen bg-gradient-to-bl from-[#FFF1EB] to-[#FFFDFA]">
       <Navbar />
-      <div className="pt-24 p-6  mx-auto">
+      <div className="pt-24 p-6  mx-auto max-w-[1250px]">
         <div className="space-y-4 mb-6">
           <h1 className="text-[32px] font-bold">My Applications</h1>
           <p className="text-gray-600">
@@ -91,7 +91,7 @@ const MyApplication = () => {
         </div>
 
         {/* Applications Grid */}
-        <div className="grid grid-cols-1 gap-6">
+        <div className="grid grid-cols-1 gap-6  mx-auto">
           {loading ? (
             <div className="col-span-full flex flex-col items-center justify-center py-16">
               <i className="fa-solid fa-circle-notch fa-spin text-[#F35E27] text-5xl mb-4"></i>
