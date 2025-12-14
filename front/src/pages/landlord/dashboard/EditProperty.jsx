@@ -25,7 +25,7 @@ export default function EditPropertyPage() {
         title: data.title,
         description: data.description,
 
-        // Type (Map backend -> frontend keys)
+        // Type
         propertyType: getPropertyTypeKey(data.propertytype),
         roomType: getRoomTypeKey(data.roomtype),
 
@@ -38,22 +38,23 @@ export default function EditPropertyPage() {
         zip: data.postcode,
         province: data.province,
 
-        // Pricing
-        monthlyRent: data.monthlyrent,
+        // Pricing (Use the new raw number fields)
+        monthlyRent: data.monthlyRentValue,
         securityDeposit: data.securitydeposit,
         applicationFee: data.appfee || 0,
         petFee: data.petfee || 0,
         advanceRentMonths: data.advancerent || 0,
 
         // Arrays
-        leaseTerms: data.leaseterms || [],
+        // Note: Checkboxes expect strings, so we map integers to strings
+        leaseTerms: (data.leaseterms || []).map(String),
         includedUtilities: data.inclusions || [],
         amenities: data.amenities || [],
         neighborhood: data.establishments || [],
 
-        // Photos (store URLs for display, we'll handle new uploads separately)
-        existingPhotos: data.photos || [],
-        photos: [], // New photos to upload
+        // Photos
+        existingPhotos: data.photourls || [],
+        photos: [],
       }
 
       setInitialData(mappedData)
@@ -66,7 +67,7 @@ export default function EditPropertyPage() {
     }
   }
 
-  // Helper functions to reverse map backend types to frontend keys
+  // Helper functions (Keep these as they were)
   const getPropertyTypeKey = (backendType) => {
     const map = {
       'Boarding House': 'BoardingHouse',
@@ -104,8 +105,8 @@ export default function EditPropertyPage() {
     <div className="pt-6 2xl:p-6 bg-[#FFFDFA]">
       <div className="flex items-center justify-between mb-6 mx-auto">
         <h1 className="text-[32px] font-bold">Edit Property</h1>
-        <button 
-          onClick={() => navigate('/landlord/dashboard/properties')} 
+        <button
+          onClick={() => navigate('/landlord/dashboard/properties')}
           className="text-sm px-6 py-2 text-[#222222] font-medium rounded-full border border-[#DDDDDD] hover:bg-[#FFF8F2] cursor-pointer transition"
         >
           Cancel
@@ -113,8 +114,8 @@ export default function EditPropertyPage() {
       </div>
 
       {initialData && (
-        <AddPropertyForm 
-          editMode={true} 
+        <AddPropertyForm
+          editMode={true}
           listingId={id}
           initialData={initialData}
         />
