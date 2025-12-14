@@ -56,6 +56,7 @@ public class ApplicationService {
         ApplicationEligibilityResponse eligibility = checkEligibilityInternal(student, listing);
         if (!eligibility.canApply()) {
             String message = switch (eligibility.reason()) {
+                case "HAS_ACTIVE_LEASE" -> "You already have an active lease. You cannot apply to new listings until your current lease ends";
                 case "PENDING" -> "You have already submitted a pending application for this listing";
                 case "ACTIVE_LEASE" -> "You have an active lease for this property";
                 case "COOLDOWN" -> "You must wait " + eligibility.hoursRemaining() + " more hour(s) before reapplying to this listing";
@@ -101,7 +102,27 @@ public class ApplicationService {
      * Internal helper for eligibility checking - used by both createApplication and checkEligibility.
      */
     private ApplicationEligibilityResponse checkEligibilityInternal(Student student, Listing listing) {
-        // 1. Check for pending application
+        // 0. GLOBAL CHECK: Check if student has an active lease on ANY property
+        // This prevents tenants from applying to new listings while they have an active lease anywhere
+        Optional<Lease> anyActiveLease = leaseRepository.findByStudentIdAndLeaseStatus(
+                student.getId(), 
+                LeaseStatus.ACTIVE
+        );
+        
+        if (anyActiveLease.isPresent()) {
+            Lease activeLease = anyActiveLease.get();
+            LocalDateTime leaseEndDateTime = activeLease.getEndDate().atStartOfDay();
+            long hoursRemaining = java.time.Duration.between(LocalDateTime.now(), leaseEndDateTime).toHours();
+            
+            return ApplicationEligibilityResponse.builder()
+                    .canApply(false)
+                    .reason("HAS_ACTIVE_LEASE")
+                    .blockedUntil(leaseEndDateTime)
+                    .hoursRemaining(Math.max(0, hoursRemaining))
+                    .build();
+        }
+
+        // 1. Check for pending application on THIS listing
         Optional<Application> pendingApp = applicationRepository.findPendingApplication(student, listing);
         if (pendingApp.isPresent()) {
             return ApplicationEligibilityResponse.builder()

@@ -140,6 +140,15 @@ const BookingInfoCard = ({ listing }) => {
             title: 'Pending Application',
             subtitle: 'Waiting for landlord review'
           }
+        case 'HAS_ACTIVE_LEASE':
+          return {
+            icon: 'fa-house-lock',
+            bgClass: 'bg-red-100 border-red-300',
+            textClass: 'text-red-800',
+            iconClass: 'text-red-600',
+            title: 'Active Lease Exists',
+            subtitle: 'You cannot apply while you have an active lease'
+          }
         case 'ACTIVE_LEASE':
           return {
             icon: 'fa-home',
