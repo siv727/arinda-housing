@@ -4,7 +4,6 @@ import Navbar from '../../components/tenant/Navbar'
 import PhotoGallery from '../../components/tenant/PhotoGallery'
 import BookingInfoCard from '../../components/tenant/BookingInfoCard'
 import ReviewsSection from '../../components/tenant/ReviewsSection'
-import LocationMap from '../../components/tenant/LocationMap'
 import { getListingById } from '../../api/listingApi' // Import the new API function
 
 const ListingDetail = () => {
@@ -75,14 +74,8 @@ const ListingDetail = () => {
           // Lease terms
           leaseterms: data.leaseterms || [],
 
-          // Map Location Details
-          // Note: Backend JSON provided shows address/city but missing lat/lng. 
-          // Defaulting to Manila coordinates if missing.
-          mapLocation: {
-            address: `${data.locationdetails?.address}, ${data.locationdetails?.barangay}`,
-            lat: data.locationdetails?.latitude || 14.5995,
-            lng: data.locationdetails?.longitude || 120.9842
-          }
+          // Location Details (for property address display)
+          locationDetails: data.locationdetails
         }
 
         setListing(mappedListing)
@@ -161,7 +154,9 @@ const ListingDetail = () => {
                 </span>
                 <span className="flex items-center">
                   <i className="fa-solid fa-location-dot mr-2 text-gray-400"></i>
-                  {listing.location}
+                  {listing.locationDetails 
+                    ? `${listing.locationDetails.address}, ${listing.locationDetails.barangay}, ${listing.locationDetails.city}, ${listing.locationDetails.province}`
+                    : listing.location}
                 </span>
                 {listing.reviewCount > 0 && (
                   <span className="flex items-center">
@@ -261,11 +256,6 @@ const ListingDetail = () => {
 
             {/* Reviews Section - Passing mapped listing object */}
             <ReviewsSection listing={listing} />
-
-            <hr className="border-gray-200" />
-
-            {/* Location Map */}
-            <LocationMap mapLocation={listing.mapLocation} title={listing.title} />
           </div>
 
           {/* Right Column - Booking Card */}

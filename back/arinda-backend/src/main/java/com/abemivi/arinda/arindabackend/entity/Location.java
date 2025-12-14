@@ -25,10 +25,6 @@ public class Location {
     @Column(nullable = false)
     private String province;
 
-    // For mapbox API; not sure if it can be implemented on time
-    private Double latitude;
-    private Double longitude;
-
     @Column(length = 500)
     private String formataddress;
 
