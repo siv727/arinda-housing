@@ -37,3 +37,14 @@ export const rejectApplication = async (bookingId, data) => {
   const response = await axiosClient.patch(`/landlord/bookings/${bookingId}/reject`, data);
   return response.data;
 };
+
+/**
+ * Upload lease document (PDF/Image)
+ * @param {FormData} formData - Contains the 'file' key
+ */
+export const uploadDocument = async (formData) => {
+  // Matches the endpoint in LandlordController
+  return axiosClient.post('/landlord/listings/upload-document', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  });
+};
