@@ -88,6 +88,13 @@ public class TenantService {
         Lease lease = leaseOpt.orElseThrow(() -> new RuntimeException("Lease not found"));
         lease.setLeaseStatus(LeaseStatus.COMPLETED);
         leaseRepository.save(lease);
+        
+        // Also update the Application status so tenant's view reflects the change
+        Application application = lease.getApplication();
+        if (application != null) {
+            application.setStatus(ApplicationStatus.COMPLETED);
+            applicationRepository.save(application);
+        }
     }
 
     @Transactional
@@ -103,5 +110,12 @@ public class TenantService {
         Lease lease = leaseOpt.orElseThrow(() -> new RuntimeException("Lease not found"));
         lease.setLeaseStatus(LeaseStatus.EVICTED);
         leaseRepository.save(lease);
+        
+        // Also update the Application status so tenant's view reflects the change
+        Application application = lease.getApplication();
+        if (application != null) {
+            application.setStatus(ApplicationStatus.EVICTED);
+            applicationRepository.save(application);
+        }
     }
 }

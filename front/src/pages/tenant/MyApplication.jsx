@@ -8,7 +8,7 @@ const MyApplication = () => {
   const [applications, setApplications] = useState([])
   const [loading, setLoading] = useState(true)
 
-  const filters = ['All Applications', 'Pending', 'Approved', 'Rejected']
+  const filters = ['All Applications', 'Pending', 'Approved', 'Rejected', 'Completed', 'Evicted']
 
   useEffect(() => {
     fetchApplications()
