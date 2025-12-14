@@ -147,7 +147,7 @@ const TenantLandingContent = () => {
 
             <div className="text-[20px] font-bold text-[#333333]">Smart Search</div>
             <div className="text-[14px] text-[#666666]">
-              Advanced filters and map-based navigation help you find rentals
+              Advanced filters help you find rentals
               that match your budget and school proximity.
             </div>
           </div>

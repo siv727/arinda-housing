@@ -50,10 +50,6 @@ const ListingCard = ({ listing }) => {
           <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
             <i className="fa-solid fa-location-dot"></i>
             <span className="truncate">{listing.location}</span>
-            {/* Only show distance if it exists in data */}
-            {listing.distance && (
-              <span className="text-[#DD4912]">• {listing.distance}</span>
-            )}
           </div>
 
           {/* Amenities */}

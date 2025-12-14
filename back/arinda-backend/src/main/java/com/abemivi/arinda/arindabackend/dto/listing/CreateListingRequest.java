@@ -46,8 +46,6 @@ public class CreateListingRequest {
     @NotBlank(message = "Province is required")
     private String province;
 
-    private Double latitude;
-    private Double longitude;
     private String formataddress;
     private String placename;
 

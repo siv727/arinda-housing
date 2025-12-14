@@ -55,8 +55,6 @@ class ListingRepositoryTest {
 
         // --- ADD THESE TO FIX THE ERROR ---
         location.setPostcode("6000");       // Fixes the current error
-        location.setLatitude(10.3);         // Likely required
-        location.setLongitude(123.9);       // Likely required
         location.setFormataddress("Talamban, Cebu City, 6000"); // Likely required
         location.setPlaceName("Test Apartment"); // Likely required
 

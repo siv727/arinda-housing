@@ -49,8 +49,6 @@ public class ListingService {
         location.setCity(request.getCity());
         location.setPostcode(request.getPostcode());
         location.setProvince(request.getProvince());
-        location.setLatitude(request.getLatitude());
-        location.setLongitude(request.getLongitude());
         location.setFormataddress(request.getFormataddress());
         location.setPlaceName(request.getPlacename());
         listing.setLocation(location);
@@ -124,8 +122,6 @@ public class ListingService {
         location.setCity(request.getCity());
         location.setPostcode(request.getPostcode());
         location.setProvince(request.getProvince());
-        location.setLatitude(request.getLatitude());
-        location.setLongitude(request.getLongitude());
         location.setFormataddress(request.getFormataddress());
         location.setPlaceName(request.getPlacename());
         listing.setLocation(location);
