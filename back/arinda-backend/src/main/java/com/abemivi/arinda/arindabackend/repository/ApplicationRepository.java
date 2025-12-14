@@ -43,10 +43,10 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     @Query("SELECT a FROM Application a WHERE a.student = :student AND a.listing = :listing AND a.status = 'PENDING'")
     Optional<Application> findPendingApplication(@Param("student") Student student, @Param("listing") Listing listing);
     
-    // Find approved application with active lease (lease not yet ended) - blocks until lease ends
+    // Find approved application with active lease (lease status is ACTIVE) - blocks until lease ends
     @Query("SELECT a FROM Application a JOIN a.lease l " +
            "WHERE a.student = :student AND a.listing = :listing " +
-           "AND a.status = 'APPROVED' AND l.endDate >= CURRENT_DATE")
+           "AND a.status = 'APPROVED' AND l.leaseStatus = 'ACTIVE'")
     Optional<Application> findActiveApprovedApplicationWithLease(@Param("student") Student student, @Param("listing") Listing listing);
 
     // 1. Stats Counts (Using the relationship path listing.landlord.id)
