@@ -7,28 +7,49 @@ import {
   SheetDescription,
   SheetFooter,
 } from "@/components/ui/sheet";
+import { deleteListing } from "../../api/landlordListingApi";
 
 export default function PropertySheet({
   open,
   onOpenChange,
   property = null,
-  onEdit = () => {},
-  onRemove = () => {},
+  onEdit = () => { },
+  onRemoveSuccess = () => { },
 }) {
   const [confirming, setConfirming] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Reset confirming state
   useEffect(() => {
-    if (!open) setConfirming(false);
+    if (!open) {
+      setConfirming(false);
+      setIsDeleting(false);
+    }
   }, [open]);
 
-  const handleRemove = () => {
-    onRemove(property);
-    setConfirming(false);
-    onOpenChange(false);
+  const handleRemove = async () => {
+    setIsDeleting(true);
+    try {
+      // 1. Call API directly from this component
+      await deleteListing(property.id);
+
+      // 2. Notify parent to remove from the list UI
+      onRemoveSuccess(property.id);
+
+      // 3. Close the sheet
+      setConfirming(false);
+      onOpenChange(false);
+    } catch (error) {
+      console.error("Failed to delete property:", error);
+      alert("Failed to delete property. Please try again.");
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const p = property || {};
+  const statusDisplay = p.status ? p.status.charAt(0).toUpperCase() + p.status.slice(1).toLowerCase() : "Available";
+  const isAvailable = statusDisplay === "Available";
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -40,11 +61,9 @@ export default function PropertySheet({
         <SheetDescription>
           <div className="flex-1 overflow-y-auto px-5  space-y-4">
             <div className="w-full h-56 bg-gray-100 rounded-t-md overflow-hidden mb-4">
-              <img
-                src={p.image}
-                alt={p.title}
-                className="w-full h-full object-cover"
-              />
+              <div className="w-full h-56 bg-gray-100 rounded-t-md overflow-hidden mb-4">
+                <img src={p.image} alt={p.title} className="w-full h-full object-cover" />
+              </div>
             </div>
 
             <div>
@@ -59,18 +78,16 @@ export default function PropertySheet({
                 <p className="text-sm">{p.location}</p>
                 <div>
                   <div
-                    className={`px-3 py-1 rounded-full flex items-center border  ${
-                      p.status === "Available"
-                        ? "bg-white text-green-600"
-                        : "bg-white text-orange-600"
-                    }`}
+                    className={`px-3 py-1 rounded-full flex items-center border  ${p.status === "Available"
+                      ? "bg-white text-green-600"
+                      : "bg-white text-orange-600"
+                      }`}
                   >
                     <span
-                      className={`mr-2 h-2 w-2 rounded-full ${
-                        p.status === "Available"
-                          ? "bg-green-500"
-                          : "bg-orange-500"
-                      }`}
+                      className={`mr-2 h-2 w-2 rounded-full ${p.status === "Available"
+                        ? "bg-green-500"
+                        : "bg-orange-500"
+                        }`}
                     ></span>
                     <span className="text-xs font-medium">
                       {p.status}
@@ -110,21 +127,20 @@ export default function PropertySheet({
 
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
-                        <div class = "flex flex-col space-y-0.5 mb-2">
+                        <div class="flex flex-col space-y-0.5 mb-2">
                           <div className="font-semibold text-base">{r.name}</div>
                           <p className="text-sm text-gray-500">{r.date}</p>
                         </div>
-                        
+
 
                         <div className="flex items-center text-yellow-500">
                           {Array.from({ length: 5 }).map((_, i) => (
                             <i
                               key={i}
-                              className={`fa-solid fa-star text-sm ${
-                                i < r.rating
-                                  ? "text-yellow-500"
-                                  : "text-gray-300"
-                              }`}
+                              className={`fa-solid fa-star text-sm ${i < r.rating
+                                ? "text-yellow-500"
+                                : "text-gray-300"
+                                }`}
                             />
                           ))}
                         </div>
@@ -151,9 +167,9 @@ export default function PropertySheet({
             <div className="flex justify-end gap-3 w-full font-medium">
               <button
                 onClick={() => setConfirming(true)}
-                className="hover:bg-[#FFF8F2] transition  border rounded-lg py-3 px-6 text-gray-700 cursor-pointer"
+                className="hover:bg-[#FFF8F2] transition border rounded-lg py-3 px-6 text-gray-700 cursor-pointer"
               >
-               Remove <i className="fa-regular fa-trash pl-2"></i> 
+                Remove <i className="fa-regular fa-trash pl-2"></i>
               </button>
               <button
                 onClick={() => onEdit(property)}
@@ -166,15 +182,18 @@ export default function PropertySheet({
             <div className="flex justify-end gap-3 w-full font-semibold">
               <button
                 onClick={() => setConfirming(false)}
-                className="hover:bg-[#FFF8F2] transition  border rounded-lg py-3 px-6 text-gray-700 cursor-pointer"
+                disabled={isDeleting}
+                className="hover:bg-[#FFF8F2] transition border rounded-lg py-3 px-6 text-gray-700 cursor-pointer disabled:opacity-50"
               >
-                Cancel <i class="fa-solid fa-arrow-turn-down-left pl-1"></i>
+                Cancel
               </button>
               <button
                 onClick={handleRemove}
-                className="rounded-lg py-2 bg-[#F35E27] transition hover:bg-[#e7521c] px-6 text-white cursor-pointer"
+                disabled={isDeleting}
+                className="rounded-lg py-2 bg-[#F35E27] transition hover:bg-[#e7521c] px-6 text-white cursor-pointer disabled:opacity-50 flex items-center gap-2"
               >
-                Yes, remove <i className="fa-regular fa-trash pl-2"></i>
+                {isDeleting ? "Deleting..." : "Yes, remove"}
+                {!isDeleting && <i className="fa-regular fa-trash"></i>}
               </button>
             </div>
           )}
