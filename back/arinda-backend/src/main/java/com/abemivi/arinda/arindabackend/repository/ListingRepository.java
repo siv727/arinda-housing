@@ -25,13 +25,17 @@ public interface ListingRepository extends JpaRepository<Listing, Long> {
 
         // For Detailed Listing Management View
         @Query("""
-                SELECT DISTINCT l FROM Listing l
-                LEFT JOIN FETCH l.photos
-                LEFT JOIN FETCH l.reviews r
-                LEFT JOIN FETCH r.student
-                WHERE l.id = :id
-                AND l.landlord.id = :landlordId
-            """)
+                    SELECT DISTINCT l FROM Listing l
+                    LEFT JOIN FETCH l.photos
+                    LEFT JOIN FETCH l.leaseterms
+                    LEFT JOIN FETCH l.amenities
+                    LEFT JOIN FETCH l.inclusions
+                    LEFT JOIN FETCH l.establishments
+                    LEFT JOIN FETCH l.reviews r
+                    LEFT JOIN FETCH r.student
+                    WHERE l.id = :id
+                    AND l.landlord.id = :landlordId
+                """)
         Optional<Listing> findByIdAndLandlordIdWithReviews(
                 @Param("id") Long id,
                 @Param("landlordId") Long landlordId);
