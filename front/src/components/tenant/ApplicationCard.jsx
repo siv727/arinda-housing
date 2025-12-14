@@ -57,11 +57,11 @@ export default function ApplicationCard({ application }) {
             <h4 className="text-sm font-semibold text-gray-700 mb-3">Application Details</h4>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="text-xs text-gray-500">Check-in Date</label>
+                <label className="text-xs text-gray-500">Move-in Date</label>
                 <p className="text-sm font-medium text-gray-900">{application.checkInDate}</p>
               </div>
               <div>
-                <label className="text-xs text-gray-500">Move-in Date</label>
+                <label className="text-xs text-gray-500">Booked Date</label>
                 <p className="text-sm font-medium text-gray-900">{application.moveInDate}</p>
               </div>
             </div>
