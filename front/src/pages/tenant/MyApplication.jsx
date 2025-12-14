@@ -1,16 +1,66 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Navbar from '../../components/tenant/Navbar'
 import ApplicationCard from '../../components/tenant/ApplicationCard'
-import { mockApplications } from '../../data/mockApplications'
+import { getMyApplications } from '../../api/applicationApi'
 
 const MyApplication = () => {
   const [selectedFilter, setSelectedFilter] = useState('All Applications')
+  const [applications, setApplications] = useState([])
+  const [loading, setLoading] = useState(true)
 
   const filters = ['All Applications', 'Pending', 'Approved', 'Rejected']
 
+  useEffect(() => {
+    fetchApplications()
+  }, [])
+
+  const fetchApplications = async () => {
+    try {
+      setLoading(true)
+      const response = await getMyApplications()
+      
+      // Map backend response to frontend format
+      const mappedApplications = response.data.map(app => ({
+        id: app.id,
+        propertyImage: app.mainphotourl || 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800',
+        propertyTitle: app.listingTitle,
+        propertyLocation: app.listingAddress,
+        propertyPrice: app.propertyPrice,
+        landlordName: app.landlordName,
+        phoneNumber: app.phoneNumber,
+        status: app.status, 
+        moveInDate: new Date(app.moveInDate).toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'short', 
+          day: 'numeric' 
+        }),
+        checkInDate: new Date(app.createdAt).toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'short', 
+          day: 'numeric' 
+        }),
+        leaseTerm: app.leaseTerm ? `${app.leaseTerm} months` : '-',
+        responseMessage: app.responseMessage,
+        documents: app.attachmentUrl ? [
+          {
+            name: 'Lease Agreement',
+            size: 'PDF',
+            url: app.attachmentUrl
+          }
+        ] : []
+      }))
+      
+      setApplications(mappedApplications)
+    } catch (error) {
+      console.error('Failed to fetch applications:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const filteredApplications = selectedFilter === 'All Applications' 
-    ? mockApplications 
-    : mockApplications.filter(app => app.status === selectedFilter)
+    ? applications 
+    : applications.filter(app => app.status === selectedFilter.toUpperCase())
 
   return (
     <div className="min-h-screen bg-gradient-to-bl from-[#FFF1EB] to-[#FFFDFA]">
@@ -42,7 +92,12 @@ const MyApplication = () => {
 
         {/* Applications Grid */}
         <div className="grid grid-cols-1 gap-6">
-          {filteredApplications.length > 0 ? (
+          {loading ? (
+            <div className="col-span-full flex flex-col items-center justify-center py-16">
+              <i className="fa-solid fa-circle-notch fa-spin text-[#F35E27] text-5xl mb-4"></i>
+              <p className="text-gray-500 text-lg font-medium">Loading applications...</p>
+            </div>
+          ) : filteredApplications.length > 0 ? (
             filteredApplications.map((application) => (
               <ApplicationCard key={application.id} application={application} />
             ))
