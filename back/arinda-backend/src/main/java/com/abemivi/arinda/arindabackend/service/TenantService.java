@@ -35,13 +35,16 @@ public class TenantService {
         Landlord landlord = (Landlord) userRepository.findById(landlordId)
                 .orElseThrow(() -> new RuntimeException("Landlord not found"));
         
-        // Get all approved applications for this landlord's listings
-        List<Application> approvedApplications = applicationRepository.findByListingLandlord(landlord)
+        // Get all tenant applications (APPROVED, COMPLETED, EVICTED) for this landlord's listings
+        // These are tenants who have been/are living in the landlord's properties
+        List<Application> tenantApplications = applicationRepository.findByListingLandlord(landlord)
                 .stream()
-                .filter(app -> app.getStatus() == ApplicationStatus.APPROVED)
+                .filter(app -> app.getStatus() == ApplicationStatus.APPROVED 
+                            || app.getStatus() == ApplicationStatus.COMPLETED 
+                            || app.getStatus() == ApplicationStatus.EVICTED)
                 .collect(Collectors.toList());
         
-        return approvedApplications.stream()
+        return tenantApplications.stream()
                 .map(tenantMapper::toTenantSummary)
                 .collect(Collectors.toList());
     }
@@ -52,14 +55,16 @@ public class TenantService {
         Landlord landlord = (Landlord) userRepository.findById(landlordId)
                 .orElseThrow(() -> new RuntimeException("Landlord not found"));
         
-        // Get all approved applications for this landlord's listings
-        List<Application> approvedApplications = applicationRepository.findByListingLandlord(landlord)
+        // Get all tenant applications (APPROVED, COMPLETED, EVICTED) for this landlord's listings
+        List<Application> tenantApplications = applicationRepository.findByListingLandlord(landlord)
                 .stream()
-                .filter(app -> app.getStatus() == ApplicationStatus.APPROVED)
+                .filter(app -> app.getStatus() == ApplicationStatus.APPROVED 
+                            || app.getStatus() == ApplicationStatus.COMPLETED 
+                            || app.getStatus() == ApplicationStatus.EVICTED)
                 .collect(Collectors.toList());
         
         // Find the specific tenant by leaseId (which could be lease ID or application ID)
-        Application application = approvedApplications.stream()
+        Application application = tenantApplications.stream()
                 .filter(app -> {
                     // Try to find lease by application ID
                     var leaseOpt = leaseRepository.findByApplicationId(app.getId());

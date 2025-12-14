@@ -238,8 +238,13 @@ public class ApplicationService {
             throw new RuntimeException("Only landlords can view bookings");
         }
 
-        // Get all applications for landlord's listings
-        List<Application> applications = applicationRepository.findByListingLandlord(landlord);
+        // Get all applications for landlord's listings (excluding COMPLETED and EVICTED)
+        // COMPLETED and EVICTED applications should only appear in Tenants management, not Bookings
+        List<Application> applications = applicationRepository.findByListingLandlord(landlord)
+                .stream()
+                .filter(app -> app.getStatus() != ApplicationStatus.COMPLETED 
+                            && app.getStatus() != ApplicationStatus.EVICTED)
+                .toList();
 
         return applications.stream()
                 .map(this::buildBookingSummary)
