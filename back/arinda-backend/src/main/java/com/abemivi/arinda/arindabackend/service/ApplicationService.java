@@ -265,6 +265,16 @@ public class ApplicationService {
         if (application.getStatus() != ApplicationStatus.PENDING) {
             throw new RuntimeException("Only pending applications can be approved. Current status: " + application.getStatus());
         }
+        
+        // Check if student already has an active lease
+        Optional<Lease> existingActiveLease = leaseRepository.findByStudentIdAndLeaseStatus(
+                application.getStudent().getId(), 
+                LeaseStatus.ACTIVE
+        );
+        
+        if (existingActiveLease.isPresent()) {
+            throw new RuntimeException("This student already has an active lease and cannot book another property at this time");
+        }
 
         // Update application status
         application.setStatus(ApplicationStatus.APPROVED);
