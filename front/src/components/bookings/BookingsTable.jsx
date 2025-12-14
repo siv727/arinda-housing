@@ -7,6 +7,8 @@ const StatusBadge = ({ status }) => {
     APPROVED: { label: "Approved", bg: "bg-green-100 text-green-700", dot: "bg-green-500" },
     PENDING: { label: "Pending", bg: "bg-yellow-100 text-yellow-700", dot: "bg-yellow-500" },
     REJECTED: { label: "Rejected", bg: "bg-red-100 text-red-700", dot: "bg-red-500" },
+    COMPLETED: { label: "Completed", bg: "bg-blue-100 text-blue-700", dot: "bg-blue-500" },
+    EVICTED: { label: "Evicted", bg: "bg-red-100 text-red-700", dot: "bg-red-500" },
   };
   const style = statusMap[status] || { label: status, bg: "bg-gray-100 text-gray-700", dot: "bg-gray-400" };
   
