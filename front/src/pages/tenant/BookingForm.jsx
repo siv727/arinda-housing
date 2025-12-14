@@ -13,7 +13,7 @@ const BookingForm = () => {
   const navigate = useNavigate()
   const location = useLocation()
   
-  // Get moveInDate and leaseTerm from navigation state
+  // Get moveInDate and leaseTerm from navigation state (pre-selected from listing page)
   const { moveInDate: initialMoveInDate, leaseTerm: initialLeaseTerm } = location.state || {}
 
   // State
@@ -24,6 +24,10 @@ const BookingForm = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState(null)
+  
+  // Booking details state (editable in ListingSummaryCard)
+  const [moveInDate, setMoveInDate] = useState(initialMoveInDate || '')
+  const [leaseTerm, setLeaseTerm] = useState(initialLeaseTerm || '12')
 
   // Fetch listing and user profile on mount
   useEffect(() => {
@@ -57,6 +61,7 @@ const BookingForm = () => {
           applicationFee: data.pricingdetails?.appfee,
           amenities: data.amenities || [],
           inclusions: data.inclusions || [],
+          leaseterms: data.leaseterms || [],
           host: {
             name: data.hostname,
             email: data.hostemail,
@@ -66,6 +71,12 @@ const BookingForm = () => {
 
         setListing(mappedListing)
         setUserProfile(profileRes.data)
+        
+        // Set default lease term from listing if not already set
+        if (!initialLeaseTerm && data.leaseterms && data.leaseterms.length > 0) {
+          const firstTerm = parseInt(data.leaseterms[0]) || 12
+          setLeaseTerm(String(firstTerm).replace(' months', ''))
+        }
       } catch (err) {
         console.error('Failed to fetch data:', err)
         setError('Failed to load booking form. Please try again.')
@@ -80,15 +91,22 @@ const BookingForm = () => {
   }, [id])
 
   const handleFormSubmit = async (formData) => {
+    // Validate booking details
+    if (!moveInDate) {
+      setSubmitError('Please select a move-in date in the booking details panel.')
+      return
+    }
+    
     setSubmitting(true)
     setSubmitError(null)
     
     try {
       await submitApplication({
         listingId: listing.id,
-        moveInDate: formData.moveInDate,
+        moveInDate: moveInDate,
         phoneNumber: formData.phoneNumber,
-        applicantMessage: formData.additionalNotes
+        applicantMessage: formData.additionalNotes,
+        leaseTerm: parseInt(leaseTerm) || 12
       })
       setShowSuccessModal(true)
     } catch (err) {
@@ -133,13 +151,12 @@ const BookingForm = () => {
     )
   }
 
-  // Prepare initial form data from user profile and navigation state
+  // Prepare initial form data from user profile
   const initialFormData = {
     firstName: userProfile?.firstname || '',
     lastName: userProfile?.lastname || '',
     email: userProfile?.email || '',
-    phoneNumber: '', // User must enter
-    moveInDate: initialMoveInDate || '',
+    phoneNumber: '',
     studentId: userProfile?.studentid || '',
     university: userProfile?.school || '',
     additionalNotes: ''
@@ -159,23 +176,28 @@ const BookingForm = () => {
           Back to Listing
         </Link>
 
-        {/* Main Grid Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Main Grid Layout - Equal Width Columns */}
+        <div className="grid grid-cols-1 lg:grid-cols-11 gap-4">
           {/* Left Column - Booking Form */}
-          <div className="lg:col-span-2">
+          <div className="col-span-6">
             <BookingFormCard 
               listing={listing}
               initialData={initialFormData}
-              leaseTerm={initialLeaseTerm}
               onSubmit={handleFormSubmit}
               submitting={submitting}
               submitError={submitError}
             />
           </div>
 
-          {/* Right Column - Listing Summary */}
-          <div className="lg:col-span-1">
-            <ListingSummaryCard listing={listing} leaseTerm={initialLeaseTerm} />
+          {/* Right Column - Listing Summary with Editable Booking Details */}
+          <div className="col-span-5">
+            <ListingSummaryCard 
+              listing={listing} 
+              moveInDate={moveInDate}
+              leaseTerm={leaseTerm}
+              onMoveInDateChange={setMoveInDate}
+              onLeaseTermChange={setLeaseTerm}
+            />
           </div>
         </div>
       </div>
