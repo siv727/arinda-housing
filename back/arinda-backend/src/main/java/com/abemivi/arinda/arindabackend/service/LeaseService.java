@@ -73,9 +73,8 @@ public class LeaseService {
         
         if (today.isAfter(endDate)) {
             return "past";
-        } else if (today.isBefore(startDate)) {
-            return "upcoming";
         } else {
+            // Both upcoming and currently active leases are considered "current"
             return "current";
         }
     }
