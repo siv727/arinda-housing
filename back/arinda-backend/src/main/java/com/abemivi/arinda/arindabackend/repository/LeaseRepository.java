@@ -30,4 +30,8 @@ public interface LeaseRepository extends JpaRepository<Lease, Long> {
     // Custom query to count distinct students who have leases with this landlord
     @Query("SELECT COUNT(DISTINCT l.application.student.id) FROM Lease l WHERE l.application.listing.landlord.id = :landlordId")
     long countDistinctTenantsByLandlordId(@Param("landlordId") Long landlordId);
+    
+    // Find active lease by student ID and lease status
+    @Query("SELECT l FROM Lease l WHERE l.student.id = :studentId AND l.leaseStatus = :leaseStatus")
+    Optional<Lease> findByStudentIdAndLeaseStatus(@Param("studentId") Long studentId, @Param("leaseStatus") com.abemivi.arinda.arindabackend.entity.enums.LeaseStatus leaseStatus);
 }
