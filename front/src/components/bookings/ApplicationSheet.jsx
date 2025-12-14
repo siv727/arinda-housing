@@ -154,7 +154,7 @@ export default function ApplicationSheet({
               <p className="text-sm font-bold uppercase text-center text-gray-900">
                 <i class="fa-regular fa-house pr-1"></i>Property & Dates
               </p>
-
+            
               {/* Property  */}
               <div>
                 <label className="text-sm font-medium text-gray-700">

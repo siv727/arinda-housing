@@ -55,6 +55,7 @@ const TenantsTable = ({ bookings = [], onEndLease = () => {}, onEvict = () => {}
     setStatusMap(prev => ({ ...prev, [id]: status }))
   }
 
+  
   return (
     <>
       <div className="overflow-auto bg-white border border-[#EAD1C7] rounded-lg">

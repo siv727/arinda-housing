@@ -81,6 +81,16 @@ export default function TenantSheet({
     }).format(amount);
   };
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "-";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="sm:max-w-[550px] rounded-l-lg md:rounded-lg md:mr-3 md:mt-3 md:h-[97vh] flex flex-col">
@@ -109,10 +119,6 @@ export default function TenantSheet({
                   {tenant?.name?.split(" ").slice(1).join(" ") ?? ""}
                 </div>
               </div>
-
-              <div className="text-sm text-gray-500 text-center">
-                {tenant?.email}
-              </div>
             </div>
 
             <div className="flex items-center justify-center">
@@ -139,13 +145,17 @@ export default function TenantSheet({
                 <div>
                   <label className="text-xs text-gray-500">Move-in Date</label>
                   <div className="text-sm font-semibold">
-                    {booking?.startDate}
+                    {formatDate(booking?.startDate)}
                   </div>
                 </div>
                 <div>
                   <label className="text-xs text-gray-500">Lease Term</label>
                   <div className="text-sm font-semibold">
-                    {booking?.leaseTerm} months
+                    {booking?.leaseTerm
+                      ? `${booking.leaseTerm} month${
+                          booking.leaseTerm !== 1 ? "s" : ""
+                        }`
+                      : "-"}
                   </div>
                 </div>
               </div>
@@ -154,6 +164,9 @@ export default function TenantSheet({
 
           <hr className="my-4"></hr>
           <div className="mx-5 mb-10 space-y-4">
+            <p className="text-sm font-bold uppercase text-center text-gray-900">
+              <i class="fa-regular fa-house pr-1"></i>Property & Location
+            </p>
             <div>
               <label className="text-sm font-medium text-gray-700">
                 Property
@@ -172,35 +185,77 @@ export default function TenantSheet({
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm font-medium text-gray-700">
-                  University
-                </label>
-                <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50 overflow-x-auto whitespace-nowrap ">
-                  {tenant?.university || "-"}
-                  
+            <div class="pt-4 border-t">
+              <p className="text-sm font-bold uppercase text-center text-gray-900 mb-4">
+                <i class="fa-regular fa-house pr-1"></i>Vertification & Contract
+              </p>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium text-gray-700">
+                    Email Address
+                  </label>
+                  <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50 ">
+                    {tenant?.email || "-"}
+                  </div>
                 </div>
-              </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">
+                    Phone Number
+                  </label>
+                  <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50 ">
+                    {tenant?.phone || "-"}
+                  </div>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">
+                    University
+                  </label>
+                  <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50 overflow-x-auto whitespace-nowrap ">
+                    {tenant?.university || "-"}
+                  </div>
+                </div>
 
-              <div>
-                <label className="text-sm font-medium text-gray-700">
-                  Student ID
-                </label>
-                <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50 ">
+                <div>
+                  <label className="text-sm font-medium text-gray-700">
+                    Student ID
+                  </label>
+                  <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50 ">
                     {tenant?.studentId || "-"}
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div>
-              <label className="text-sm font-medium text-gray-700">
-                Phone Number
-              </label>
-              <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50 ">
-                {tenant?.phone || "-"}
+            {booking?.documentUrl && (
+              <div className="pt-4 border-t">
+                <p className="text-sm font-bold uppercase text-center text-gray-900 mb-4">
+                  <i className="fa-regular fa-file pr-1"></i>Documents
+                </p>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between p-3 bg-[#FFF8F2] border border-[#EAD1C7] rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center">
+                        <i className="fa-regular fa-file-pdf text-red-600"></i>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">
+                          Lease Agreement
+                        </p>
+                        <p className="text-xs text-gray-500">PDF Document</p>
+                      </div>
+                    </div>
+                    <a
+                      href={booking.documentUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-4 py-2 bg-[#F35E27] cursor-pointer text-white text-sm font-semibold rounded-lg hover:bg-[#e7521c] transition-colors"
+                    >
+                      Download
+                    </a>
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
