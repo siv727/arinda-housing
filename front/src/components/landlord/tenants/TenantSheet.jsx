@@ -46,7 +46,6 @@ export default function TenantSheet({
   const [status, setStatus] = useState(leaseStatus);
   const [confirmingEndLease, setConfirmingEndLease] = useState(false);
   const [confirmingEvict, setConfirmingEvict] = useState(false);
-  
 
   useEffect(() => {
     setStatus(leaseStatus);
@@ -74,13 +73,13 @@ export default function TenantSheet({
   };
 
   const formatCurrency = (amount) => {
-    if (!amount) return '-'
-    return new Intl.NumberFormat('en-PH', {
-      style: 'currency',
-      currency: 'PHP',
+    if (!amount) return "-";
+    return new Intl.NumberFormat("en-PH", {
+      style: "currency",
+      currency: "PHP",
       minimumFractionDigits: 0,
-    }).format(amount)
-  }
+    }).format(amount);
+  };
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -123,23 +122,31 @@ export default function TenantSheet({
 
           <div className="p-5 border rounded-lg bg-gray-50 m-5">
             <div className="mb-4">
-              <p className="text-sm font-medium text-gray-700">Lease Information</p>
+              <p className="text-sm font-medium text-gray-700">
+                Lease Information
+              </p>
             </div>
 
             <div className="space-y-3">
               <div>
                 <label className="text-xs text-gray-500">Monthly Rent</label>
-                <div className="text-sm font-semibold">{formatCurrency(booking?.price)}</div>
+                <div className="text-sm font-semibold">
+                  {formatCurrency(booking?.monthlyRent)}
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-xs text-gray-500">Move-in Date</label>
-                  <div className="text-sm font-semibold">{booking?.moveInDate }</div>
+                  <div className="text-sm font-semibold">
+                    {booking?.startDate}
+                  </div>
                 </div>
                 <div>
-                  <label className="text-xs text-gray-500">Lease Contract</label>
-                  <div className="text-sm font-semibold">{booking?.leaseTerm} months</div>
+                  <label className="text-xs text-gray-500">Lease Term</label>
+                  <div className="text-sm font-semibold">
+                    {booking?.leaseTerm} months
+                  </div>
                 </div>
               </div>
             </div>
@@ -147,35 +154,52 @@ export default function TenantSheet({
 
           <hr className="my-4"></hr>
           <div className="mx-5 mb-10 space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm font-medium text-gray-700">
-                  Property
-                </label>
-                <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
-                  {property?.title}
-                </div>
-              </div>
-
-              <div>
-                 <label className="text-sm font-medium text-gray-700">
-                Phone Number
+            <div>
+              <label className="text-sm font-medium text-gray-700">
+                Property
               </label>
-              <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50 ">
-                {tenant?.phone }
-              </div>
-
-               
+              <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
+                {property?.title}
               </div>
             </div>
 
             <div>
-               <label className="text-sm font-medium text-gray-700">
-                  Address
+              <label className="text-sm font-medium text-gray-700">
+                Address
+              </label>
+              <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
+                {property?.address}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-sm font-medium text-gray-700">
+                  University
                 </label>
-                <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50">
-                  {property?.address}
+                <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50 overflow-x-auto whitespace-nowrap ">
+                  {tenant?.university || "-"}
+                  
                 </div>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-gray-700">
+                  Student ID
+                </label>
+                <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50 ">
+                    {tenant?.studentId || "-"}
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-gray-700">
+                Phone Number
+              </label>
+              <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50 ">
+                {tenant?.phone || "-"}
+              </div>
             </div>
           </div>
         </div>
@@ -192,14 +216,18 @@ export default function TenantSheet({
               <button
                 onClick={() => setConfirmingEndLease(true)}
                 className="rounded-lg py-2 px-6 text-white transition bg-[#F35E27] hover:bg-[#e7521c] cursor-pointer "
-                disabled={status === 'Completed Tenant' || status === 'Evicted Tenant'}
+                disabled={
+                  status === "Completed Tenant" || status === "Evicted Tenant"
+                }
               >
                 End Lease <i className="fa-regular fa-note pl-2"></i>
               </button>
               <button
                 onClick={() => setConfirmingEvict(true)}
                 className="rounded-lg py-2 px-6 text-white transition border-[#a11313] border-2 bg-[#c92121] hover:bg-[#a71616] cursor-pointer "
-                disabled={status === 'Completed Tenant' || status === 'Evicted Tenant'}
+                disabled={
+                  status === "Completed Tenant" || status === "Evicted Tenant"
+                }
               >
                 Evict Tenant <i className="fa-solid fa-link-slash pl-2"></i>
               </button>
