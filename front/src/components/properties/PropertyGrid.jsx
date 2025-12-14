@@ -32,16 +32,23 @@ const PropertyGrid = ({ properties, onCardClick = () => {} }) => {
           </div>
 
           <div className="p-6">
-            <div className="flex items-center justify-between mb-2">
-              <h2 className="text-xl font-bold text-gray-900">{property.title}</h2>
-
-              <span className="bg-orange-100 text-orange-700 text-sm font-medium px-3 py-1 rounded-full">
+            {/* Title and Type - same line with proper constraints */}
+            <div className="flex items-center justify-between gap-3 mb-2">
+              <h2 className="text-xl font-bold text-gray-900 truncate flex-1 min-w-0" title={property.title}>
+                {property.title}
+              </h2>
+              <span className="bg-orange-100 text-orange-700 text-sm font-medium px-3 py-1 rounded-full flex-shrink-0">
                 {property.type}
               </span>
             </div>
 
-            <p className="text-gray-500 text-sm">{property.location}</p>
+            {/* Location with icon */}
+            <p className="text-gray-500 text-sm flex items-center gap-1">
+              <i className="fa-solid fa-location-dot text-xs"></i>
+              <span className="truncate" title={property.location}>{property.location}</span>
+            </p>
 
+            {/* Price */}
             <div className="mt-4">
               <span className="text-2xl font-bold text-gray-900">{property.price}</span>
             </div>
