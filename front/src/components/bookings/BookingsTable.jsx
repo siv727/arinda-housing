@@ -22,6 +22,7 @@ const BookingsTable = ({
   bookings = [],
   onAccept = () => {},
   onReject = () => {},
+  onError = () => {},
 }) => {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
@@ -140,7 +141,8 @@ const BookingsTable = ({
         booking={selectedBooking}
         loading={loadingDetails}
         onApprove={handleApprove} 
-        onReject={handleReject} 
+        onReject={handleReject}
+        onError={onError}
       />
     </>
   );

@@ -7,6 +7,7 @@ export default function Bookings() {
   const [bookings, setBookings] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [actionError, setActionError] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('All')
   const [showFilters, setShowFilters] = useState(false)
@@ -31,12 +32,18 @@ export default function Bookings() {
 
   const handleAccept = () => {
     // Refresh bookings after approval
+    setActionError(null)
     fetchBookings()
   }
 
   const handleReject = () => {
     // Refresh bookings after rejection
+    setActionError(null)
     fetchBookings()
+  }
+
+  const handleError = (errorMessage) => {
+    setActionError(errorMessage)
   }
 
   // Filter bookings based on search and status
@@ -111,7 +118,21 @@ export default function Bookings() {
         <BookingFilters status={statusFilter} setStatus={setStatusFilter} onClose={() => setShowFilters(false)} />
       )}
 
-      <BookingsTable bookings={filteredBookings} onAccept={handleAccept} onReject={handleReject} />
+      {/* Action Error Banner */}
+      {actionError && (
+        <div className="p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-3">
+          <i className="fa-solid fa-circle-exclamation text-red-500"></i>
+          <p className="text-red-700 flex-1">{actionError}</p>
+          <button 
+            onClick={() => setActionError(null)} 
+            className="text-red-500 hover:text-red-700 transition-colors"
+          >
+            <i className="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      )}
+
+      <BookingsTable bookings={filteredBookings} onAccept={handleAccept} onReject={handleReject} onError={handleError} />
     </div>
   )
 }

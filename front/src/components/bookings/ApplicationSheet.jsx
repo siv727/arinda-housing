@@ -52,27 +52,32 @@ export default function ApplicationSheet({
   loading,
   onApprove = () => {},
   onReject = () => {},
+  onError = () => {},
 }) {
   const tenant = booking?.tenant;
   const property = booking?.property;
   const [approvalOpen, setApprovalOpen] = useState(false);
   const [rejectionOpen, setRejectionOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
   const isActionSheetOpen = approvalOpen || rejectionOpen;
 
   const handleApprove = () => {
     if (!booking) return;
+    setError(null);
     setApprovalOpen(true);
   };
 
   const handleReject = () => {
     if (!booking) return;
+    setError(null);
     setRejectionOpen(true);
   };
 
   const handleApprovalConfirm = async (payload) => {
     try {
       setSubmitting(true);
+      setError(null);
       await approveApplication(booking.id, {
         message: payload.message,
         attachmentUrl: payload.file ? "uploaded-file-url" : null, // TODO: Handle file upload
@@ -80,9 +85,13 @@ export default function ApplicationSheet({
       });
       setApprovalOpen(false);
       onApprove();
+      onOpenChange(false);
     } catch (err) {
       console.error("Failed to approve application:", err);
-      alert(err.response?.data?.message || "Failed to approve application");
+      const errorMessage = err.response?.data?.message || "Failed to approve application";
+      setError(errorMessage);
+      onError(errorMessage);
+      setApprovalOpen(false);
     } finally {
       setSubmitting(false);
     }
@@ -91,14 +100,19 @@ export default function ApplicationSheet({
   const handleRejectionConfirm = async (payload) => {
     try {
       setSubmitting(true);
+      setError(null);
       await rejectApplication(booking.id, {
         message: payload.message,
       });
       setRejectionOpen(false);
       onReject();
+      onOpenChange(false);
     } catch (err) {
       console.error("Failed to reject application:", err);
-      alert(err.response?.data?.message || "Failed to reject application");
+      const errorMessage = err.response?.data?.message || "Failed to reject application";
+      setError(errorMessage);
+      onError(errorMessage);
+      setRejectionOpen(false);
     } finally {
       setSubmitting(false);
     }
@@ -129,6 +143,20 @@ export default function ApplicationSheet({
           </SheetHeader>
 
           <hr />
+
+          {/* Error Banner */}
+          {error && (
+            <div className="mx-5 mt-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2">
+              <i className="fa-solid fa-circle-exclamation text-red-500"></i>
+              <p className="text-red-700 text-sm flex-1">{error}</p>
+              <button 
+                onClick={() => setError(null)} 
+                className="text-red-500 hover:text-red-700"
+              >
+                <i className="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          )}
 
           {/* Scrollable content */}
           <div className="flex-1 overflow-y-auto px-5 space-y-4">
