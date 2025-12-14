@@ -16,6 +16,15 @@ import com.abemivi.arinda.arindabackend.entity.Student;
 @Repository
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
     List<Application> findByStudent(Student student);
+    
+    // Optimized query with JOIN FETCH to load listing and landlord
+    @Query("SELECT a FROM Application a " +
+           "JOIN FETCH a.listing l " +
+           "JOIN FETCH l.landlord " +
+           "WHERE a.student = :student " +
+           "ORDER BY a.createdAt DESC")
+    List<Application> findByStudentWithDetails(@Param("student") Student student);
+    
     boolean existsByStudentAndListing(Student student, Listing listing);
     Optional<Application> findByStudentAndListing(Student student, Listing listing);
     

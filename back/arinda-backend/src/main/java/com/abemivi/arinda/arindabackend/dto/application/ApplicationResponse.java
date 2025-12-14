@@ -24,5 +24,11 @@ public record ApplicationResponse(
         // Tenant info
         Long tenantId,
         String tenantName,
-        String tenantEmail
+        String tenantEmail,
+        
+        // Landlord info
+        Long landlordId,
+        String landlordName,
+        String landlordEmail,
+        String landlordPhone
 ) {}

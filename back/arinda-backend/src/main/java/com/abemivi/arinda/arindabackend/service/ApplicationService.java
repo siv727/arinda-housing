@@ -1,6 +1,5 @@
 package com.abemivi.arinda.arindabackend.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -166,7 +165,7 @@ public class ApplicationService {
             throw new RuntimeException("Only students can view applications");
         }
 
-        List<Application> applications = applicationRepository.findByStudent(student);
+        List<Application> applications = applicationRepository.findByStudentWithDetails(student);
 
         return applications.stream()
                 .map(this::buildApplicationResponse)
@@ -176,8 +175,11 @@ public class ApplicationService {
     private ApplicationResponse buildApplicationResponse(Application application) {
         Student student = application.getStudent();
         Listing listing = application.getListing();
+        Landlord landlord = listing.getLandlord();
+        
         String tenantName = student.getFirstname() + " " + student.getLastname();
         String listingAddress = listing.getLocation().getAddress() + ", " + listing.getLocation().getCity();
+        String landlordName = landlord.getFirstname() + " " + landlord.getLastname();
 
         return ApplicationResponse.builder()
                 .id(application.getId())
@@ -193,6 +195,10 @@ public class ApplicationService {
                 .tenantId(student.getId())
                 .tenantName(tenantName)
                 .tenantEmail(student.getEmail())
+                .landlordId(landlord.getId())
+                .landlordName(landlordName)
+                .landlordEmail(landlord.getEmail())
+                .landlordPhone(landlord.getPhonenumber())
                 .build();
     }
 
