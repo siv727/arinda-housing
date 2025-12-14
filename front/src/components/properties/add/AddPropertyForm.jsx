@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { createListing, uploadListingPhotos } from '../../../api/landlordListingApi'
+import { createListing, updateListing, uploadListingPhotos } from '../../../api/landlordListingApi'
 import BasicInfoStep from './steps/BasicInfoStep'
 import TypeStep from './steps/TypeStep'
 import LocationStep from './steps/LocationStep'
@@ -39,11 +39,18 @@ const ROOM_TYPE_MAP = {
 	'TwoBedRoom': '2-Bedroom'
 }
 
-export default function AddPropertyForm() {
+export default function AddPropertyForm({ editMode = false, listingId = null, initialData = {} }) {
 	const navigate = useNavigate()
 	const [current, setCurrent] = useState(0)
 	const [form, setForm] = useState({})
 	const [isSubmitting, setIsSubmitting] = useState(false)
+
+	// Initialize form with initialData in edit mode
+	useEffect(() => {
+		if (editMode && initialData) {
+			setForm(initialData)
+		}
+	}, [editMode, initialData])
 
 	const goNext = () => setCurrent((c) => Math.min(c + 1, steps.length - 1))
 	const goBack = () => setCurrent((c) => Math.max(c - 1, 0))
@@ -53,17 +60,32 @@ export default function AddPropertyForm() {
 	const submit = async () => {
 		setIsSubmitting(true)
 		try {
-			// 1. Upload Photos
 			let photoUrls = []
-			if (form.photos && form.photos.length > 0) {
-				const formData = new FormData()
-				form.photos.forEach((file) => {
-					formData.append('photos', file)
-				})
 
-				const photoResponse = await uploadListingPhotos(formData)
-				// Assuming backend returns { success: true, urls: [...] }
-				photoUrls = photoResponse.data.urls || []
+			// 1. Handle Photo Uploads
+			if (editMode) {
+				// In edit mode, keep existing photos and add new ones
+				photoUrls = [...(form.existingPhotos || [])]
+				
+				// Upload new photos if any
+				if (form.photos && form.photos.length > 0) {
+					const formData = new FormData()
+					form.photos.forEach((file) => {
+						formData.append('photos', file)
+					})
+					const photoResponse = await uploadListingPhotos(formData)
+					photoUrls = [...photoUrls, ...(photoResponse.data.urls || [])]
+				}
+			} else {
+				// In create mode, upload all photos
+				if (form.photos && form.photos.length > 0) {
+					const formData = new FormData()
+					form.photos.forEach((file) => {
+						formData.append('photos', file)
+					})
+					const photoResponse = await uploadListingPhotos(formData)
+					photoUrls = photoResponse.data.urls || []
+				}
 			}
 
 			// 2. Prepare Payload (Map Frontend State -> Backend DTO)
@@ -100,17 +122,20 @@ export default function AddPropertyForm() {
 				establishments: form.neighborhood || []   // Map 'neighborhood' -> 'establishments'
 			}
 
-			// 3. Create Listing
+			// 3. Create or Update Listing
 			console.log("Submitting payload:", payload)
-			await createListing(payload)
+			if (editMode) {
+				await updateListing(listingId, payload)
+			} else {
+				await createListing(payload)
+			}
 
 			// 4. Success Redirect
-			// alert('Property published successfully!')
 			navigate('/landlord/dashboard/properties')
 
 		} catch (error) {
-			console.error("Failed to create listing:", error)
-			alert('Failed to create listing. Please check your inputs and try again.')
+			console.error(`Failed to ${editMode ? 'update' : 'create'} listing:`, error)
+			alert(`Failed to ${editMode ? 'update' : 'create'} listing. Please check your inputs and try again.`)
 		} finally {
 			setIsSubmitting(false)
 		}
@@ -128,7 +153,9 @@ export default function AddPropertyForm() {
 			case 'pricing':
 				return Number(f.monthlyRent) > 0 && (f.securityDeposit !== undefined && f.securityDeposit !== '')
 			case 'photos':
-				return Array.isArray(f.photos) && f.photos.length >= 5
+				return (editMode && form.existingPhotos && form.existingPhotos.length >= 5) || 
+				       (Array.isArray(form.photos) && form.photos.length >= 5) ||
+				       ((form.existingPhotos?.length || 0) + (form.photos?.length || 0) >= 5)
 			default:
 				return true
 		}
@@ -143,8 +170,12 @@ export default function AddPropertyForm() {
 				<div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
 					<div className="bg-white p-6 rounded-lg shadow-xl text-center">
 						<i className="fa-solid fa-circle-notch fa-spin text-4xl text-[#F35E27] mb-4"></i>
-						<p className="text-lg font-medium">Publishing your property...</p>
-						<p className="text-sm text-gray-500">Uploading photos and saving details</p>
+						<p className="text-lg font-medium">
+							{editMode ? 'Updating your property...' : 'Publishing your property...'}
+						</p>
+						<p className="text-sm text-gray-500">
+							{editMode ? 'Saving changes' : 'Uploading photos and saving details'}
+						</p>
 					</div>
 				</div>
 			)}

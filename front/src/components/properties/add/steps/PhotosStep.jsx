@@ -3,8 +3,22 @@ import React from 'react'
 export default function PhotosStep({ form = {}, update }) {
   const onFiles = (e) => {
     const files = Array.from(e.target.files || [])
-    update({ photos: files })
+    update({ photos: [...(form.photos || []), ...files] })
   }
+
+  const removeExistingPhoto = (index) => {
+    const updated = [...(form.existingPhotos || [])]
+    updated.splice(index, 1)
+    update({ existingPhotos: updated })
+  }
+
+  const removeNewPhoto = (index) => {
+    const updated = [...(form.photos || [])]
+    updated.splice(index, 1)
+    update({ photos: updated })
+  }
+
+  const totalPhotos = (form.existingPhotos?.length || 0) + (form.photos?.length || 0)
 
   return (
      <div className="space-y-6">
@@ -43,18 +57,51 @@ export default function PhotosStep({ form = {}, update }) {
         />
 
         {/* Preview area */}
-        {form.photos?.length > 0 && (
-          <div className="mt-6 flex gap-3 flex-wrap justify-center">
-            {form.photos.map((f, i) => (
-              <div
-                key={i}
-                className="w-24 h-24 bg-gray-100 rounded-lg flex items-center justify-center text-xs text-gray-500"
-              >
-                {f.name || "photo"}
-              </div>
-            ))}
-          </div>
-        )}
+        <div className="w-full">
+          {totalPhotos > 0 && (
+            <div className="mt-6 flex gap-3 flex-wrap justify-center">
+              {/* Existing photos */}
+              {form.existingPhotos?.map((url, i) => (
+                <div
+                  key={`existing-${i}`}
+                  className="relative w-24 h-24 rounded-lg overflow-hidden group"
+                >
+                  <img 
+                    src={url} 
+                    alt={`Photo ${i + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                  <button
+                    onClick={() => removeExistingPhoto(i)}
+                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+              
+              {/* New photos */}
+              {form.photos?.map((f, i) => (
+                <div
+                  key={`new-${i}`}
+                  className="relative w-24 h-24 bg-gray-100 rounded-lg flex items-center justify-center text-xs text-gray-500 group"
+                >
+                  {f.name || "photo"}
+                  <button
+                    onClick={() => removeNewPhoto(i)}
+                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+          
+          <p className="text-center text-sm text-gray-600 mt-4">
+            {totalPhotos} photo{totalPhotos !== 1 ? 's' : ''} selected (minimum 5 required)
+          </p>
+        </div>
       </div>
     </div>
       
