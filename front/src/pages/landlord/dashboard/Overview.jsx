@@ -33,6 +33,7 @@ export default function Overview() {
                     id: b.id,
                     status: b.status, // "PENDING", "APPROVED"
                     bookedDate: new Date(b.dateBooked).toLocaleDateString(),
+                    moveInDate: new Date(b.moveInDate).toLocaleDateString(),
                     tenant: {
                         name: b.applicantName,
                         avatar: b.applicantPhotoUrl
