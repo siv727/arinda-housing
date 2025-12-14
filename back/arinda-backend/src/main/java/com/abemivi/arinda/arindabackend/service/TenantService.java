@@ -35,13 +35,11 @@ public class TenantService {
         Landlord landlord = (Landlord) userRepository.findById(landlordId)
                 .orElseThrow(() -> new RuntimeException("Landlord not found"));
         
-        // Get all tenant applications (APPROVED, COMPLETED, EVICTED) for this landlord's listings
-        // These are tenants who have been/are living in the landlord's properties
+        // Get all approved applications for this landlord's listings
+        // These are tenants who have approved leases (Application status stays APPROVED)
         List<Application> tenantApplications = applicationRepository.findByListingLandlord(landlord)
                 .stream()
-                .filter(app -> app.getStatus() == ApplicationStatus.APPROVED 
-                            || app.getStatus() == ApplicationStatus.COMPLETED 
-                            || app.getStatus() == ApplicationStatus.EVICTED)
+                .filter(app -> app.getStatus() == ApplicationStatus.APPROVED)
                 .collect(Collectors.toList());
         
         return tenantApplications.stream()
@@ -55,12 +53,10 @@ public class TenantService {
         Landlord landlord = (Landlord) userRepository.findById(landlordId)
                 .orElseThrow(() -> new RuntimeException("Landlord not found"));
         
-        // Get all tenant applications (APPROVED, COMPLETED, EVICTED) for this landlord's listings
+        // Get all approved applications for this landlord's listings
         List<Application> tenantApplications = applicationRepository.findByListingLandlord(landlord)
                 .stream()
-                .filter(app -> app.getStatus() == ApplicationStatus.APPROVED 
-                            || app.getStatus() == ApplicationStatus.COMPLETED 
-                            || app.getStatus() == ApplicationStatus.EVICTED)
+                .filter(app -> app.getStatus() == ApplicationStatus.APPROVED)
                 .collect(Collectors.toList());
         
         // Find the specific tenant by leaseId (which could be lease ID or application ID)
@@ -93,13 +89,7 @@ public class TenantService {
         Lease lease = leaseOpt.orElseThrow(() -> new RuntimeException("Lease not found"));
         lease.setLeaseStatus(LeaseStatus.COMPLETED);
         leaseRepository.save(lease);
-        
-        // Also update the Application status so tenant's view reflects the change
-        Application application = lease.getApplication();
-        if (application != null) {
-            application.setStatus(ApplicationStatus.COMPLETED);
-            applicationRepository.save(application);
-        }
+        // Note: Application status stays APPROVED - only Lease status changes
     }
 
     @Transactional
@@ -115,12 +105,6 @@ public class TenantService {
         Lease lease = leaseOpt.orElseThrow(() -> new RuntimeException("Lease not found"));
         lease.setLeaseStatus(LeaseStatus.EVICTED);
         leaseRepository.save(lease);
-        
-        // Also update the Application status so tenant's view reflects the change
-        Application application = lease.getApplication();
-        if (application != null) {
-            application.setStatus(ApplicationStatus.EVICTED);
-            applicationRepository.save(application);
-        }
+        // Note: Application status stays APPROVED - only Lease status changes
     }
 }

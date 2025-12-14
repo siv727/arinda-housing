@@ -17,8 +17,6 @@ export default function BookingFilters({ status, setStatus, onClose }) {
           <button type="button" onClick={() => setStatus('Pending')} className={`${btn('Pending')} cursor-pointer`}>Pending</button>
           <button type="button" onClick={() => setStatus('Approved')} className={`${btn('Approved')} cursor-pointer`}>Approved</button>
           <button type="button" onClick={() => setStatus('Rejected')} className={`${btn('Rejected')} cursor-pointer`}>Rejected</button>
-          <button type="button" onClick={() => setStatus('Completed')} className={`${btn('Completed')} cursor-pointer`}>Completed</button>
-          <button type="button" onClick={() => setStatus('Evicted')} className={`${btn('Evicted')} cursor-pointer`}>Evicted</button>
         </div>
       </div>
     </div>

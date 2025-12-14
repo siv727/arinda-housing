@@ -8,15 +8,11 @@ const StatusBadge = ({ status }) => {
     Approved: "bg-green-100 text-green-700",
     Pending: "bg-yellow-100 text-yellow-700",
     Rejected: "bg-red-100 text-red-700",
-    Completed: "bg-blue-100 text-blue-700",
-    Evicted: "bg-red-100 text-red-700",
   };
   const dot = {
     Approved: "bg-green-500",
     Pending: "bg-yellow-500",
     Rejected: "bg-red-500",
-    Completed: "bg-blue-500",
-    Evicted: "bg-red-500",
   };
   return (
     <div
