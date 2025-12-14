@@ -36,12 +36,13 @@ public class TenantService {
                 .orElseThrow(() -> new RuntimeException("Landlord not found"));
         
         // Get all approved applications for this landlord's listings
-        List<Application> approvedApplications = applicationRepository.findByListingLandlord(landlord)
+        // These are tenants who have approved leases (Application status stays APPROVED)
+        List<Application> tenantApplications = applicationRepository.findByListingLandlord(landlord)
                 .stream()
                 .filter(app -> app.getStatus() == ApplicationStatus.APPROVED)
                 .collect(Collectors.toList());
         
-        return approvedApplications.stream()
+        return tenantApplications.stream()
                 .map(tenantMapper::toTenantSummary)
                 .collect(Collectors.toList());
     }
@@ -53,13 +54,13 @@ public class TenantService {
                 .orElseThrow(() -> new RuntimeException("Landlord not found"));
         
         // Get all approved applications for this landlord's listings
-        List<Application> approvedApplications = applicationRepository.findByListingLandlord(landlord)
+        List<Application> tenantApplications = applicationRepository.findByListingLandlord(landlord)
                 .stream()
                 .filter(app -> app.getStatus() == ApplicationStatus.APPROVED)
                 .collect(Collectors.toList());
         
         // Find the specific tenant by leaseId (which could be lease ID or application ID)
-        Application application = approvedApplications.stream()
+        Application application = tenantApplications.stream()
                 .filter(app -> {
                     // Try to find lease by application ID
                     var leaseOpt = leaseRepository.findByApplicationId(app.getId());
@@ -88,6 +89,7 @@ public class TenantService {
         Lease lease = leaseOpt.orElseThrow(() -> new RuntimeException("Lease not found"));
         lease.setLeaseStatus(LeaseStatus.COMPLETED);
         leaseRepository.save(lease);
+        // Note: Application status stays APPROVED - only Lease status changes
     }
 
     @Transactional
@@ -103,5 +105,6 @@ public class TenantService {
         Lease lease = leaseOpt.orElseThrow(() -> new RuntimeException("Lease not found"));
         lease.setLeaseStatus(LeaseStatus.EVICTED);
         leaseRepository.save(lease);
+        // Note: Application status stays APPROVED - only Lease status changes
     }
 }

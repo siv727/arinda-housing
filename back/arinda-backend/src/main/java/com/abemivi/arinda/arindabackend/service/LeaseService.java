@@ -34,7 +34,7 @@ public class LeaseService {
 
     private LeaseResponse mapToLeaseResponse(Lease lease) {
         Listing listing = lease.getApplication().getListing();
-        String status = determineLeaseStatus(lease.getStartDate(), lease.getEndDate());
+        String status = determineLeaseStatus(lease);
         
         // Get first photo URL if available
         String photoUrl = listing.getPhotos().stream()
@@ -68,14 +68,14 @@ public class LeaseService {
                 .build();
     }
 
-    private String determineLeaseStatus(LocalDate startDate, LocalDate endDate) {
-        LocalDate today = LocalDate.now();
-        
-        if (today.isAfter(endDate)) {
-            return "past";
-        } else {
-            // Both upcoming and currently active leases are considered "current"
+    private String determineLeaseStatus(Lease lease) {
+        // Use the actual LeaseStatus enum to determine if current or past
+        // ACTIVE = current, COMPLETED/EVICTED = past
+        if (lease.getLeaseStatus() == com.abemivi.arinda.arindabackend.entity.enums.LeaseStatus.ACTIVE) {
             return "current";
+        } else {
+            // COMPLETED or EVICTED
+            return "past";
         }
     }
 

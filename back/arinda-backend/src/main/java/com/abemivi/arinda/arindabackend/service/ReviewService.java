@@ -114,14 +114,18 @@ public class ReviewService {
     }
 
     /**
-     * Check if student has an approved application for a listing (for review validation)
+     * Check if student has been a tenant at this listing (for review validation)
+     * Allows APPROVED, COMPLETED, or EVICTED tenants to leave reviews
      */
     public boolean hasApprovedApplication(Long listingId, Student student) {
         Listing listing = listingRepository.findById(listingId).orElse(null);
         if (listing == null) {
             return false;
         }
-        return applicationRepository.existsByStudentAndListingAndStatus(student, listing, ApplicationStatus.APPROVED);
+        // Allow current tenants (APPROVED) and past tenants (COMPLETED, EVICTED) to review
+        return applicationRepository.existsByStudentAndListingAndStatus(student, listing, ApplicationStatus.APPROVED)
+            || applicationRepository.existsByStudentAndListingAndStatus(student, listing, ApplicationStatus.COMPLETED)
+            || applicationRepository.existsByStudentAndListingAndStatus(student, listing, ApplicationStatus.EVICTED);
     }
 
     /**

@@ -102,8 +102,37 @@ public class ApplicationService {
      * Internal helper for eligibility checking - used by both createApplication and checkEligibility.
      */
     private ApplicationEligibilityResponse checkEligibilityInternal(Student student, Listing listing) {
-        // 0. GLOBAL CHECK: Check if student has an active lease on ANY property
-        // This prevents tenants from applying to new listings while they have an active lease anywhere
+        // 1. Check for pending application on THIS listing (highest priority per-listing check)
+        Optional<Application> pendingApp = applicationRepository.findPendingApplication(student, listing);
+        if (pendingApp.isPresent()) {
+            return ApplicationEligibilityResponse.builder()
+                    .canApply(false)
+                    .reason("PENDING")
+                    .blockedUntil(null)
+                    .hoursRemaining(null)
+                    .build();
+        }
+
+        // 2. Check for approved application with active lease ON THIS LISTING (shows "Active Lease" - blue)
+        // This must come BEFORE the global check so the correct listing shows "you live here"
+        Optional<Application> activeLeaseOnThisListing = applicationRepository.findActiveApprovedApplicationWithLease(student, listing);
+        if (activeLeaseOnThisListing.isPresent()) {
+            Application approvedApp = activeLeaseOnThisListing.get();
+            Lease lease = approvedApp.getLease();
+            // Convert lease end date to LocalDateTime for consistency
+            LocalDateTime leaseEndDateTime = lease.getEndDate().atStartOfDay();
+            long hoursRemaining = java.time.Duration.between(LocalDateTime.now(), leaseEndDateTime).toHours();
+            
+            return ApplicationEligibilityResponse.builder()
+                    .canApply(false)
+                    .reason("ACTIVE_LEASE")
+                    .blockedUntil(leaseEndDateTime)
+                    .hoursRemaining(Math.max(0, hoursRemaining))
+                    .build();
+        }
+
+        // 3. GLOBAL CHECK: Check if student has an active lease on ANY OTHER property
+        // This prevents tenants from applying to new listings while they have an active lease elsewhere
         Optional<Lease> anyActiveLease = leaseRepository.findByStudentIdAndLeaseStatus(
                 student.getId(), 
                 LeaseStatus.ACTIVE
@@ -117,34 +146,6 @@ public class ApplicationService {
             return ApplicationEligibilityResponse.builder()
                     .canApply(false)
                     .reason("HAS_ACTIVE_LEASE")
-                    .blockedUntil(leaseEndDateTime)
-                    .hoursRemaining(Math.max(0, hoursRemaining))
-                    .build();
-        }
-
-        // 1. Check for pending application on THIS listing
-        Optional<Application> pendingApp = applicationRepository.findPendingApplication(student, listing);
-        if (pendingApp.isPresent()) {
-            return ApplicationEligibilityResponse.builder()
-                    .canApply(false)
-                    .reason("PENDING")
-                    .blockedUntil(null)
-                    .hoursRemaining(null)
-                    .build();
-        }
-
-        // 2. Check for approved application with active lease (blocks until lease ends)
-        Optional<Application> activeLease = applicationRepository.findActiveApprovedApplicationWithLease(student, listing);
-        if (activeLease.isPresent()) {
-            Application approvedApp = activeLease.get();
-            Lease lease = approvedApp.getLease();
-            // Convert lease end date to LocalDateTime for consistency
-            LocalDateTime leaseEndDateTime = lease.getEndDate().atStartOfDay();
-            long hoursRemaining = java.time.Duration.between(LocalDateTime.now(), leaseEndDateTime).toHours();
-            
-            return ApplicationEligibilityResponse.builder()
-                    .canApply(false)
-                    .reason("ACTIVE_LEASE")
                     .blockedUntil(leaseEndDateTime)
                     .hoursRemaining(Math.max(0, hoursRemaining))
                     .build();
@@ -237,7 +238,7 @@ public class ApplicationService {
             throw new RuntimeException("Only landlords can view bookings");
         }
 
-        // Get all applications for landlord's listings
+        // Get all applications for landlord's listings (including all statuses for complete history)
         List<Application> applications = applicationRepository.findByListingLandlord(landlord);
 
         return applications.stream()
