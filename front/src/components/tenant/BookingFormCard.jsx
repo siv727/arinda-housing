@@ -20,10 +20,11 @@ const BookingFormCard = ({
   const [agreedToTerms, setAgreedToTerms] = useState(false)
   const [errors, setErrors] = useState({})
   const [preFilledFields, setPreFilledFields] = useState({})
+  const [isInitialized, setIsInitialized] = useState(false)
 
-  // Pre-fill form with initial data when it becomes available
+  // Pre-fill form with initial data ONLY ONCE when it first becomes available
   useEffect(() => {
-    if (initialData) {
+    if (initialData && !isInitialized) {
       const newFormData = {
         firstName: initialData.firstName || '',
         lastName: initialData.lastName || '',
@@ -43,8 +44,9 @@ const BookingFormCard = ({
         }
       })
       setPreFilledFields(filled)
+      setIsInitialized(true)
     }
-  }, [initialData])
+  }, [initialData, isInitialized])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -64,15 +66,7 @@ const BookingFormCard = ({
   const validateForm = () => {
     const newErrors = {}
 
-    if (!formData.firstName.trim()) newErrors.firstName = 'First name is required'
-    if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required'
-    
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required'
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid'
-    }
-    
+    // Only validate editable fields - identity fields come from profile
     if (!formData.phoneNumber.trim()) {
       newErrors.phoneNumber = 'Phone number is required'
     } else {
@@ -81,9 +75,6 @@ const BookingFormCard = ({
         newErrors.phoneNumber = 'Please enter a valid Philippine mobile number'
       }
     }
-    
-    if (!formData.studentId.trim()) newErrors.studentId = 'Student ID is required'
-    if (!formData.university.trim()) newErrors.university = 'University is required'
     
     if (!agreedToTerms) {
       newErrors.terms = 'You must agree to the terms and conditions'
@@ -101,15 +92,19 @@ const BookingFormCard = ({
     }
   }
 
-  // Helper to get input styling based on pre-filled status
-  const getInputClass = (fieldName) => {
-    const baseClass = 'w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:opacity-50 transition-colors'
-    const preFilledClass = preFilledFields[fieldName] ? 'bg-blue-50/50 border-blue-200' : 'bg-gray-50 border-gray-300'
+  // Helper to get input styling based on field type
+  const getInputClass = (fieldName, isDisabled = false) => {
+    const baseClass = 'w-full px-4 py-2 border rounded-lg focus:outline-none transition-colors'
     
     if (errors[fieldName]) {
       return `${baseClass} border-red-500 bg-red-50`
     }
-    return `${baseClass} ${preFilledClass}`
+    
+    if (isDisabled) {
+      return `${baseClass} bg-gray-100 border-gray-200 text-gray-600 cursor-not-allowed`
+    }
+    
+    return `${baseClass} bg-gray-50 border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent`
   }
 
   return (
@@ -117,11 +112,11 @@ const BookingFormCard = ({
       <h2 className="text-2xl font-bold text-gray-900 mb-2">Book Your Stay</h2>
       <p className="text-gray-600 mb-6">Complete the form below to submit your booking application</p>
 
-      {/* Pre-fill notice */}
-      <div className="mb-6 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center gap-2">
-        <i className="fa-solid fa-circle-info text-blue-500"></i>
-        <p className="text-blue-700 text-sm">
-          Some fields are pre-filled from your profile. Edit if needed.
+      {/* Profile info notice */}
+      <div className="mb-6 p-3 bg-gray-50 border border-gray-200 rounded-lg flex items-center gap-2">
+        <i className="fa-solid fa-user-check text-gray-500"></i>
+        <p className="text-gray-600 text-sm">
+          Your profile information is shown below. To update, visit your <a href="/tenant/settings" className="text-orange-600 hover:underline">Account Settings</a>.
         </p>
       </div>
 
@@ -137,12 +132,10 @@ const BookingFormCard = ({
               id="firstName"
               name="firstName"
               value={formData.firstName}
-              onChange={handleChange}
-              placeholder="Enter your first name"
-              disabled={submitting}
-              className={getInputClass('firstName')}
+              readOnly
+              disabled
+              className={getInputClass('firstName', true)}
             />
-            {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
           </div>
 
           <div>
@@ -154,12 +147,10 @@ const BookingFormCard = ({
               id="lastName"
               name="lastName"
               value={formData.lastName}
-              onChange={handleChange}
-              placeholder="Enter your last name"
-              disabled={submitting}
-              className={getInputClass('lastName')}
+              readOnly
+              disabled
+              className={getInputClass('lastName', true)}
             />
-            {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
           </div>
         </div>
 
@@ -174,12 +165,10 @@ const BookingFormCard = ({
               id="university"
               name="university"
               value={formData.university}
-              onChange={handleChange}
-              placeholder="Enter your university"
-              disabled={submitting}
-              className={getInputClass('university')}
+              readOnly
+              disabled
+              className={getInputClass('university', true)}
             />
-            {errors.university && <p className="text-red-500 text-xs mt-1">{errors.university}</p>}
           </div>
 
           <div>
@@ -191,12 +180,10 @@ const BookingFormCard = ({
               id="studentId"
               name="studentId"
               value={formData.studentId}
-              onChange={handleChange}
-              placeholder="Enter your student ID"
-              disabled={submitting}
-              className={getInputClass('studentId')}
+              readOnly
+              disabled
+              className={getInputClass('studentId', true)}
             />
-            {errors.studentId && <p className="text-red-500 text-xs mt-1">{errors.studentId}</p>}
           </div>
         </div>
 
@@ -211,12 +198,10 @@ const BookingFormCard = ({
               id="email"
               name="email"
               value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-              disabled={submitting}
-              className={getInputClass('email')}
+              readOnly
+              disabled
+              className={getInputClass('email', true)}
             />
-            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
           </div>
 
           <div>
@@ -265,7 +250,7 @@ const BookingFormCard = ({
               className="mt-1 w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500 cursor-pointer"
             />
             <span className="text-sm text-gray-700">
-              I agree to the <a href="#" className="text-orange-600 hover:underline">Terms and Conditions</a> and <a href="#" className="text-orange-600 hover:underline">Privacy Policy</a>. I understand that this application does not guarantee approval and that additional documentation may be required.
+              I understand that this application does not guarantee approval and that additional documentation may be required.
             </span>
           </label>
         </div>
