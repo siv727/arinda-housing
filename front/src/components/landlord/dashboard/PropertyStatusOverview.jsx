@@ -83,7 +83,7 @@ export default function PropertyStatusOverview({ properties = [] }) {
 
                   {/* Additional Info */}
                   <div className="flex items-center gap-2 mt-2 flex-wrap">
-                    <span className="inline-flex items-center px-2 py-1 rounded-md bg-gray-100 text-gray-600 text-xs">
+                    <span className="inline-flex items-center px-2 py-1 rounded-md bg-[#fff8f5] text-gray-600 text-xs">
                       <i className="fa-regular fa-home text-xs mr-1"></i>
                       {property.type}
                     </span>

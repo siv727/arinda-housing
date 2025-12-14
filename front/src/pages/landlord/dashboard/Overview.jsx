@@ -21,12 +21,12 @@ export default function Overview() {
                 <div className="bg-white rounded-2xl border border-[#EAD1C7] p-5 space-y-2">
                     <h2 className="text-sm text-[#F35E27] font-medium">Occupied Units</h2>
                     <p className="text-3xl font-semibold mt-1">12</p>
-                    <p className="text-sm text-gray-500">Confirmed tenants</p>
+                    <p className="text-sm text-gray-500">Active tenants</p>
                 </div>
                 <div className="bg-white rounded-2xl border border-[#EAD1C7] p-5 space-y-2">
-                    <h2 className="text-sm text-[#F35E27] font-medium">Available Units</h2>
+                    <h2 className="text-sm text-[#F35E27] font-medium">Total Applications</h2>
                     <p className="text-3xl font-semibold mt-1">3</p>
-                    <p className="text-sm text-gray-500">Visible to students</p>
+                    <p className="text-sm text-gray-500">All-time received</p>
                 </div>
                 <div className="bg-white rounded-2xl border border-[#EAD1C7] p-5 space-y-2">
                     <h2 className="text-sm text-[#F35E27] font-medium">Pending Requests</h2>

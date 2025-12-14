@@ -94,12 +94,12 @@ export default function RecentBookingRequests({ bookings = [] }) {
 
                   {/* Tags */}
                   <div className="flex items-center gap-2 mt-2 flex-wrap">
-                    <span className="inline-flex items-center px-2 py-1 rounded-md bg-gray-100 text-gray-600 text-xs">
+                    <span className="inline-flex items-center px-2 py-1 rounded-md bg-[#fff8f5] text-gray-600 text-xs">
                       <i className="fa-regular fa-calendar text-xs mr-1"></i>
-                      {booking.checkIn}
+                      {booking.moveIn}
                     </span>
                     <span className="text-xs text-gray-400">
-                      Applied {booking.bookedDate}
+                      Booked Date: {booking.bookedDate}
                     </span>
                   </div>
                 </div>
