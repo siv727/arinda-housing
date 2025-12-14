@@ -27,4 +27,17 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     
     // Check if student has an approved application for a listing (for review validation)
     boolean existsByStudentAndListingAndStatus(Student student, Listing listing, com.abemivi.arinda.arindabackend.entity.enums.ApplicationStatus status);
+    
+    // Find pending application for eligibility check
+    @Query("SELECT a FROM Application a WHERE a.student = :student AND a.listing = :listing AND a.status = 'PENDING'")
+    Optional<Application> findPendingApplication(@Param("student") Student student, @Param("listing") Listing listing);
+    
+    // Find approved application with active lease (lease not yet ended) - blocks until lease ends
+    @Query("SELECT a FROM Application a JOIN a.lease l " +
+           "WHERE a.student = :student AND a.listing = :listing " +
+           "AND a.status = 'APPROVED' AND l.endDate >= CURRENT_DATE")
+    Optional<Application> findActiveApprovedApplicationWithLease(@Param("student") Student student, @Param("listing") Listing listing);
+    
+    // Find all applications for a student-listing pair (handles multiple applications)
+    List<Application> findAllByStudentAndListing(Student student, Listing listing);
 }

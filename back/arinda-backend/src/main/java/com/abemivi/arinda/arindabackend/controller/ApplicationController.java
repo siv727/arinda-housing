@@ -1,5 +1,6 @@
 package com.abemivi.arinda.arindabackend.controller;
 
+import com.abemivi.arinda.arindabackend.dto.application.ApplicationEligibilityResponse;
 import com.abemivi.arinda.arindabackend.dto.application.ApplicationResponse;
 import com.abemivi.arinda.arindabackend.dto.application.CreateApplicationRequest;
 import com.abemivi.arinda.arindabackend.service.ApplicationService;
@@ -18,6 +19,24 @@ import java.util.List;
 public class ApplicationController {
 
     private final ApplicationService applicationService;
+
+    /**
+     * Check if the authenticated tenant is eligible to apply to a listing.
+     * Returns eligibility status with reason and cooldown info if blocked.
+     */
+    @GetMapping("/eligibility")
+    public ResponseEntity<?> checkEligibility(
+            @RequestParam Long listingId,
+            Authentication authentication) {
+        try {
+            String email = authentication.getName();
+            ApplicationEligibilityResponse response = applicationService.checkEligibility(email, listingId);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
 
     @PostMapping
     public ResponseEntity<?> submitApplication(
@@ -42,3 +61,4 @@ public class ApplicationController {
         return ResponseEntity.ok(applications);
     }
 }
+

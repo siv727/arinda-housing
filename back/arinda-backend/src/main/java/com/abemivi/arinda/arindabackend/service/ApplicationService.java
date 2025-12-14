@@ -1,5 +1,6 @@
 package com.abemivi.arinda.arindabackend.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -7,6 +8,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.abemivi.arinda.arindabackend.dto.application.ApplicationEligibilityResponse;
 import com.abemivi.arinda.arindabackend.dto.application.ApplicationResponse;
 import com.abemivi.arinda.arindabackend.dto.application.ApproveApplicationRequest;
 import com.abemivi.arinda.arindabackend.dto.application.BookingResponse;
@@ -51,26 +53,16 @@ public class ApplicationService {
         Listing listing = listingRepository.findById(request.listingId())
                 .orElseThrow(() -> new RuntimeException("Listing not found"));
 
-        // Check if student has a pending or approved application for this listing
-        Optional<Application> existingApplication = applicationRepository.findByStudentAndListing(student, listing);
-        if (existingApplication.isPresent()) {
-            Application app = existingApplication.get();
-            if (app.getStatus() == ApplicationStatus.PENDING || app.getStatus() == ApplicationStatus.APPROVED) {
-                throw new RuntimeException("You have already submitted an application for this listing");
-            }
-        }
-
-        // Check for 1-day cooldown after rejection
-        Optional<Application> recentRejection = applicationRepository.findMostRecentRejectedApplication(student, listing);
-        if (recentRejection.isPresent()) {
-            Application rejectedApp = recentRejection.get();
-            LocalDateTime rejectionTime = rejectedApp.getUpdatedAt();
-            LocalDateTime cooldownEnd = rejectionTime.plusDays(1);
-            
-            if (LocalDateTime.now().isBefore(cooldownEnd)) {
-                long hoursRemaining = java.time.Duration.between(LocalDateTime.now(), cooldownEnd).toHours();
-                throw new RuntimeException("You must wait " + hoursRemaining + " more hour(s) before reapplying to this listing");
-            }
+        // Check eligibility using shared logic
+        ApplicationEligibilityResponse eligibility = checkEligibilityInternal(student, listing);
+        if (!eligibility.canApply()) {
+            String message = switch (eligibility.reason()) {
+                case "PENDING" -> "You have already submitted a pending application for this listing";
+                case "ACTIVE_LEASE" -> "You have an active lease for this property";
+                case "COOLDOWN" -> "You must wait " + eligibility.hoursRemaining() + " more hour(s) before reapplying to this listing";
+                default -> "You cannot apply to this listing at this time";
+            };
+            throw new RuntimeException(message);
         }
 
         // Create application
@@ -85,6 +77,84 @@ public class ApplicationService {
         Application savedApplication = applicationRepository.save(application);
 
         return buildApplicationResponse(savedApplication);
+    }
+
+    /**
+     * Check if a student is eligible to apply to a listing.
+     * Returns structured info for the frontend to display appropriate UI.
+     */
+    @Transactional(readOnly = true)
+    public ApplicationEligibilityResponse checkEligibility(String email, Long listingId) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!(user instanceof Student student)) {
+            throw new RuntimeException("Only students can check eligibility");
+        }
+
+        Listing listing = listingRepository.findById(listingId)
+                .orElseThrow(() -> new RuntimeException("Listing not found"));
+
+        return checkEligibilityInternal(student, listing);
+    }
+
+    /**
+     * Internal helper for eligibility checking - used by both createApplication and checkEligibility.
+     */
+    private ApplicationEligibilityResponse checkEligibilityInternal(Student student, Listing listing) {
+        // 1. Check for pending application
+        Optional<Application> pendingApp = applicationRepository.findPendingApplication(student, listing);
+        if (pendingApp.isPresent()) {
+            return ApplicationEligibilityResponse.builder()
+                    .canApply(false)
+                    .reason("PENDING")
+                    .blockedUntil(null)
+                    .hoursRemaining(null)
+                    .build();
+        }
+
+        // 2. Check for approved application with active lease (blocks until lease ends)
+        Optional<Application> activeLease = applicationRepository.findActiveApprovedApplicationWithLease(student, listing);
+        if (activeLease.isPresent()) {
+            Application approvedApp = activeLease.get();
+            Lease lease = approvedApp.getLease();
+            // Convert lease end date to LocalDateTime for consistency
+            LocalDateTime leaseEndDateTime = lease.getEndDate().atStartOfDay();
+            long hoursRemaining = java.time.Duration.between(LocalDateTime.now(), leaseEndDateTime).toHours();
+            
+            return ApplicationEligibilityResponse.builder()
+                    .canApply(false)
+                    .reason("ACTIVE_LEASE")
+                    .blockedUntil(leaseEndDateTime)
+                    .hoursRemaining(Math.max(0, hoursRemaining))
+                    .build();
+        }
+
+        // 3. Check for rejection cooldown (1 day)
+        Optional<Application> recentRejection = applicationRepository.findMostRecentRejectedApplication(student, listing);
+        if (recentRejection.isPresent()) {
+            Application rejectedApp = recentRejection.get();
+            LocalDateTime rejectionTime = rejectedApp.getUpdatedAt();
+            LocalDateTime cooldownEnd = rejectionTime.plusDays(1);
+            
+            if (LocalDateTime.now().isBefore(cooldownEnd)) {
+                long hoursRemaining = java.time.Duration.between(LocalDateTime.now(), cooldownEnd).toHours();
+                return ApplicationEligibilityResponse.builder()
+                        .canApply(false)
+                        .reason("COOLDOWN")
+                        .blockedUntil(cooldownEnd)
+                        .hoursRemaining(Math.max(0, hoursRemaining))
+                        .build();
+            }
+        }
+
+        // 4. Eligible to apply
+        return ApplicationEligibilityResponse.builder()
+                .canApply(true)
+                .reason("ELIGIBLE")
+                .blockedUntil(null)
+                .hoursRemaining(null)
+                .build();
     }
 
     @Transactional(readOnly = true)
