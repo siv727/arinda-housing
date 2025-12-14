@@ -117,7 +117,8 @@ const ReviewsSection = ({ listing }) => {
       setReviews(reviewsRes.data);
       setRatingSummary(ratingRes.data);
     } catch (err) {
-      setError('Failed to load reviews. Please try again.');
+      const errorMsg = err.response?.data?.error || err.response?.data?.message || 'Failed to load reviews. Please try again.';
+      setError(errorMsg);
       console.error('Error fetching reviews:', err);
     } finally {
       setLoading(false);
@@ -142,16 +143,9 @@ const ReviewsSection = ({ listing }) => {
       setEditingReview(null);
       await fetchData();
     } catch (err) {
-      const errorMsg = err.response?.data?.error || err.response?.data?.message || 'Something went wrong';
-
-      // Handle specific error cases - show in modal
-      if (err.response?.status === 403) {
-        setModalError('You need to be a current or past tenant to review this property.');
-      } else if (err.response?.status === 409) {
-        setModalError('You have already reviewed this listing.');
-      } else {
-        setModalError(errorMsg);
-      }
+      // Use the error message from backend directly
+      const errorMsg = err.response?.data?.error || err.response?.data?.message || 'Something went wrong. Please try again.';
+      setModalError(errorMsg);
     } finally {
       setSubmitting(false);
     }

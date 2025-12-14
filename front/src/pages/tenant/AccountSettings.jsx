@@ -80,7 +80,8 @@ const AccountSettings = () => {
             })
         } catch (error) {
             console.error('Error fetching profile:', error)
-            setMessage({ type: 'error', text: 'Failed to load profile data' })
+            const errorMsg = error.response?.data?.error || error.response?.data?.message || 'Failed to load profile data'
+            setMessage({ type: 'error', text: errorMsg })
         } finally {
             setLoading(false)
         }
