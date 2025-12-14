@@ -134,18 +134,11 @@ export default function TenantSheet({
             </div>
 
             <div className="space-y-3">
-              <div>
-                <label className="text-xs text-gray-500">Monthly Rent</label>
-                <div className="text-sm font-semibold">
-                  {formatCurrency(booking?.monthlyRent)}
-                </div>
-              </div>
-
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs text-gray-500">Move-in Date</label>
+                  <label className="text-xs text-gray-500">Monthly Rent</label>
                   <div className="text-sm font-semibold">
-                    {formatDate(booking?.startDate)}
+                    {formatCurrency(booking?.monthlyRent)}
                   </div>
                 </div>
                 <div>
@@ -158,6 +151,22 @@ export default function TenantSheet({
                       : "-"}
                   </div>
                 </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs text-gray-500">Move-in Date (Start)</label>
+                  <div className="text-sm font-semibold">
+                    {formatDate(booking?.startDate)}
+                  </div>
+                </div>
+                <div>
+                  <label className="text-xs text-gray-500">Lease End Date</label>
+                  <div className="text-sm font-semibold">
+                    {formatDate(booking?.endDate)}
+                  </div>
+                </div>
+                
               </div>
             </div>
           </div>
@@ -203,7 +212,7 @@ export default function TenantSheet({
                     Phone Number
                   </label>
                   <div className="mt-1 px-4 py-2 border rounded-lg bg-gray-50 ">
-                    {tenant?.phone || "-"}
+                    {booking?.phoneNumber || "-"}
                   </div>
                 </div>
                 <div>
