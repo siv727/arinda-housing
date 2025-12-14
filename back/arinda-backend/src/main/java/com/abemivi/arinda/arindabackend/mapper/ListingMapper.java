@@ -50,14 +50,49 @@ public class ListingMapper {
                 .map(Photo::getUrl)
                 .orElse(null);
 
+        List<String> allPhotos = listing.getPhotos().stream()
+                .map(Photo::getUrl)
+                .collect(Collectors.toList());
+
+        List<Integer> terms = listing.getLeaseterms().stream()
+                .map(LeaseTerm::getMonths)
+                .sorted()
+                .collect(Collectors.toList());
+
         return LandlordListingDetails.builder()
                 .id(listing.getId())
                 .mainphotourl(photoUrl)
                 .title(listing.getTitle())
+                .description(listing.getDescription())
                 .location(listing.getLocation().getCity() + ", " + listing.getLocation().getProvince())
                 .propertytype(listing.getPropertytype())
+                .roomtype(listing.getRoomtype())
                 .status(listing.getListingstatus())
+
+                // Location
+                .unit(listing.getLocation().getUnit())
+                .building(listing.getLocation().getBuilding())
+                .address(listing.getLocation().getAddress())
+                .barangay(listing.getLocation().getBarangay())
+                .city(listing.getLocation().getCity())
+                .postcode(listing.getLocation().getPostcode())
+                .province(listing.getLocation().getProvince())
+
+                // Pricing
                 .monthlyrent("₱" + listing.getPrice().getMonthlyrent() + "/month")
+                .monthlyRentValue((double) listing.getPrice().getMonthlyrent())
+                .securitydeposit((double) listing.getPrice().getSecuritydeposit())
+                .appfee((double) listing.getPrice().getAppfee())
+                .petfee((double) listing.getPrice().getPetfee())
+                .advancerent(listing.getPrice().getAdvancerent())
+
+                // Lists
+                .photourls(allPhotos)
+                .leaseterms(terms)
+                .inclusions(new ArrayList<>(listing.getInclusions()))
+                .amenities(new ArrayList<>(listing.getAmenities()))
+                .establishments(new ArrayList<>(listing.getEstablishments()))
+
                 .reviewdetails(reviews)
                 .build();
     }
