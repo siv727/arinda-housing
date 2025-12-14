@@ -1,8 +1,30 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 export default function PhotosStep({ form = {}, update }) {
+  const [error, setError] = useState('')
+
   const onFiles = (e) => {
     const files = Array.from(e.target.files || [])
+    
+    // Validate file types
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+    const invalidFiles = files.filter(file => !validTypes.includes(file.type))
+    
+    if (invalidFiles.length > 0) {
+      setError(`Invalid file type(s): ${invalidFiles.map(f => f.name).join(', ')}. Only JPG, PNG, GIF, and WebP images are allowed.`)
+      return
+    }
+    
+    // Validate file size (e.g., max 10MB per file)
+    const maxSize = 10 * 1024 * 1024 // 10MB
+    const oversizedFiles = files.filter(file => file.size > maxSize)
+    
+    if (oversizedFiles.length > 0) {
+      setError(`File(s) too large: ${oversizedFiles.map(f => f.name).join(', ')}. Maximum size is 10MB per file.`)
+      return
+    }
+    
+    setError('')
     update({ photos: [...(form.photos || []), ...files] })
   }
 
@@ -52,6 +74,7 @@ export default function PhotosStep({ form = {}, update }) {
           id="file-upload"
           type="file"
           multiple
+          accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
           onChange={onFiles}
           className="hidden"
         />
@@ -101,6 +124,13 @@ export default function PhotosStep({ form = {}, update }) {
           <p className="text-center text-sm text-gray-600 mt-4">
             {totalPhotos} photo{totalPhotos !== 1 ? 's' : ''} selected (minimum 5 required)
           </p>
+          
+          {error && (
+            <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+              <i className="fa-solid fa-exclamation-triangle mr-2"></i>
+              {error}
+            </div>
+          )}
         </div>
       </div>
     </div>
