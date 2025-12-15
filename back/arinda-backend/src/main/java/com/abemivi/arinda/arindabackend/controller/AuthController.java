@@ -18,6 +18,7 @@ import com.abemivi.arinda.arindabackend.entity.Student;
 import com.abemivi.arinda.arindabackend.entity.User;
 import com.abemivi.arinda.arindabackend.repository.UserRepository;
 import com.abemivi.arinda.arindabackend.service.JwtService;
+import com.abemivi.arinda.arindabackend.service.SanitizationService; // 1. Import Service
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,15 +30,16 @@ public class AuthController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final SanitizationService sanitizer;
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest request) {
-        // 1. This line does the authentication check
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.email(), request.password()));
+        String cleanEmail = sanitizer.sanitizeStrict(request.email());
 
-        // 2. If successful, get user and generate token
-        var user = userRepository.findByEmail(request.email()).orElseThrow();
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(cleanEmail, request.password()));
+
+        var user = userRepository.findByEmail(cleanEmail).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
 
         AuthenticationResponse response = AuthenticationResponse.builder()
@@ -49,59 +51,57 @@ public class AuthController {
                 .lastname(user.getLastname())
                 .build();
 
-        // 3. Return the token
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         try {
-            // Check if user already exists
-            if (userRepository.findByEmail(request.email()).isPresent()) {
+            String cleanEmail = sanitizer.sanitizeStrict(request.email());
+            String cleanFirstName = sanitizer.sanitizeStrict(request.firstname());
+            String cleanLastName = sanitizer.sanitizeStrict(request.lastname());
+
+            // Check if user already exists using CLEAN email
+            if (userRepository.findByEmail(cleanEmail).isPresent()) {
                 return ResponseEntity.status(HttpStatus.CONFLICT)
                         .body("Email already registered");
             }
-            
-            // Check if student ID is already used (only for STUDENT role)
+
+            // Check student ID using CLEAN input
             if (request.role() == com.abemivi.arinda.arindabackend.entity.enums.Role.STUDENT) {
-                if (request.studentid() != null && userRepository.findByStudentid(request.studentid()).isPresent()) {
+                String cleanStudentId = sanitizer.sanitizeStrict(request.studentid());
+                if (cleanStudentId != null && userRepository.findByStudentid(cleanStudentId).isPresent()) {
                     return ResponseEntity.status(HttpStatus.CONFLICT)
                             .body("Student ID already registered");
                 }
             }
-            
-            
-            // 1. Create a new user object based on the role
+
             User user;
 
             switch (request.role()) {
                 case STUDENT:
                     Student student = new Student();
-                    // Set Student-specific fields from the request
-                    student.setSchool(request.school());
-                    student.setStudentid(request.studentid());
+                    student.setSchool(sanitizer.sanitizeStrict(request.school()));
+                    student.setStudentid(sanitizer.sanitizeStrict(request.studentid()));
                     user = student;
                     break;
                 case LANDLORD:
                     Landlord landlord = new Landlord();
-                    landlord.setPhonenumber(request.phonenumber());
+                    landlord.setPhonenumber(sanitizer.sanitizeStrict(request.phonenumber()));
                     user = landlord;
                     break;
                 default:
-                    return ResponseEntity.badRequest().body("Invalid role"); // Or throw exception
+                    return ResponseEntity.badRequest().body("Invalid role");
             }
 
-            // 2. Set common fields
-            user.setFirstname(request.firstname());
-            user.setLastname(request.lastname());
-            user.setEmail(request.email());
+            user.setFirstname(cleanFirstName);
+            user.setLastname(cleanLastName);
+            user.setEmail(cleanEmail);
             user.setPasswordhash(passwordEncoder.encode(request.passwordhash()));
             user.setRole(request.role());
 
-            // 3. Save the new user to the database
             userRepository.save(user);
 
-            // 4. Generate a token for the new user
             var jwtToken = jwtService.generateToken(user);
 
             AuthenticationResponse response = AuthenticationResponse.builder()
@@ -113,7 +113,6 @@ public class AuthController {
                     .lastname(user.getLastname())
                     .build();
 
-            // 5. Return the token
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
