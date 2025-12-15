@@ -12,7 +12,6 @@ const TenantRegisterForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Registering as tenant");
 
     // Gather form data
     const formData = new FormData(e.target);
@@ -52,14 +51,8 @@ const TenantRegisterForm = () => {
         passwordhash: password,
       });
 
-      console.log("Tenant registered successfully:", response.data);
       navigate("/tenant/listings");
     } catch (error) {
-      // Log full error for debugging
-      console.error("Full error object:", error);
-      console.error("Error response:", error.response);
-      console.error("Error response data:", error.response?.data);
-      
       // Extract error message from various backend response formats
       let errorMessage = "Registration failed. Please try again.";
       

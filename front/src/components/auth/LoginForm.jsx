@@ -22,7 +22,6 @@ const LoginForm = () => {
     try {
       const response = await login({ email, password });
 
-      console.log('User logged in successfully:', response.data)
       
       // Get role from localStorage (already stored by login function)
       const role = getUserRole();
@@ -34,11 +33,6 @@ const LoginForm = () => {
         navigate('/tenant/listings')
       }
     } catch (error) {
-      // Log full error for debugging
-      console.error("Full error object:", error);
-      console.error("Error response:", error.response);
-      console.error("Error response data:", error.response?.data);
-      
       // Extract error message from various backend response formats
       let errorMessage = "Invalid email or password. Please try again.";
       

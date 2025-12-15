@@ -42,7 +42,13 @@ public class SecurityConfig {
                 // 2. Enable CORS
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-                // 3. Define public (permitAll) and protected (authenticated) endpoints.
+                // 3. Security Headers (protection against clickjacking and MIME sniffing)
+                .headers(headers -> headers
+                        .frameOptions(frame -> frame.deny()) // Prevents embedding in iframes
+                        .contentTypeOptions(content -> {}) // Adds X-Content-Type-Options: nosniff
+                )
+
+                // 4. Define public (permitAll) and protected (authenticated) endpoints.
                 .authorizeHttpRequests(auth -> auth
                         // Allow preflight requests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
@@ -73,8 +79,9 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
+        // Include port 4173 for Vite preview mode (npm run preview)
         configuration
-                .setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8080", "http://localhost:5173"));
+                .setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8080", "http://localhost:5173", "http://localhost:4173"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);

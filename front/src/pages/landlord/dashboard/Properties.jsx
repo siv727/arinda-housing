@@ -47,7 +47,7 @@ export default function Properties() {
 
       setProperties(mappedData)
     } catch (error) {
-      console.error("Failed to fetch properties:", error)
+      // Error handled silently - UI shows loading state
     } finally {
       setLoading(false)
     }
@@ -93,7 +93,7 @@ export default function Properties() {
       }))
 
     } catch (error) {
-      console.error("Failed to fetch property details:", error)
+      // Error handled silently - UI shows optimistic data
     }
   }
 
@@ -102,7 +102,6 @@ export default function Properties() {
     // API call was already handled by PropertySheet, we just update UI
     setProperties(prev => prev.filter(p => p.id !== deletedId))
     setDialogOpen(false)
-    console.log('Property removed from view:', deletedId)
   }
 
   return (

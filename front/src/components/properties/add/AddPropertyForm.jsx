@@ -123,7 +123,6 @@ export default function AddPropertyForm({ editMode = false, listingId = null, in
 			}
 
 			// 3. Create or Update Listing
-			console.log("Submitting payload:", payload)
 			if (editMode) {
 				await updateListing(listingId, payload)
 			} else {
@@ -134,7 +133,6 @@ export default function AddPropertyForm({ editMode = false, listingId = null, in
 			navigate('/landlord/dashboard/properties')
 
 		} catch (error) {
-			console.error(`Failed to ${editMode ? 'update' : 'create'} listing:`, error)
 			alert(`Failed to ${editMode ? 'update' : 'create'} listing. Please check your inputs and try again.`)
 		} finally {
 			setIsSubmitting(false)

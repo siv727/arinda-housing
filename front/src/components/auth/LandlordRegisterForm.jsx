@@ -12,7 +12,6 @@ const LandlordRegisterForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log('Registering as landlord')
 
     // Gather form data
     const formData = new FormData(e.target)
@@ -50,14 +49,8 @@ const LandlordRegisterForm = () => {
         passwordhash: password,
       });
 
-      console.log('Landlord registered successfully:', response.data)
       navigate('/landlord/dashboard')
     } catch (error) {
-      // Log full error for debugging
-      console.error("Full error object:", error);
-      console.error("Error response:", error.response);
-      console.error("Error response data:", error.response?.data);
-      
       // Extract error message from various backend response formats
       let errorMessage = "Registration failed. Please try again.";
       
