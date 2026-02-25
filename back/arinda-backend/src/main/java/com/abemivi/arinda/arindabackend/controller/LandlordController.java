@@ -1,5 +1,24 @@
 package com.abemivi.arinda.arindabackend.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.abemivi.arinda.arindabackend.dto.listing.CreateListingRequest;
 import com.abemivi.arinda.arindabackend.dto.listing.ListingResponse;
 import com.abemivi.arinda.arindabackend.dto.listingcards.LandlordListingCard;
@@ -9,19 +28,12 @@ import com.abemivi.arinda.arindabackend.entity.User;
 import com.abemivi.arinda.arindabackend.entity.enums.ListingStatus;
 import com.abemivi.arinda.arindabackend.service.CloudinaryService;
 import com.abemivi.arinda.arindabackend.service.ListingService;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+@Slf4j
 @RestController
 @RequestMapping("/api/landlord/listings")
 @RequiredArgsConstructor
@@ -36,6 +48,7 @@ public class LandlordController {
             @AuthenticationPrincipal User user) {
 
         try {
+            log.info("Creating listing for user: {}", user != null ? user.getId() : "null");
             Listing listing = listingService.createListing(request, user.getId());
 
             ListingResponse response = new ListingResponse(
@@ -49,6 +62,7 @@ public class LandlordController {
 
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
+            log.error("Failed to create listing", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ListingResponse(null, null, null, null, null, null,
                             "Failed to create listing: " + e.getMessage()));
