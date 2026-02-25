@@ -48,6 +48,7 @@ back/arinda-backend/.sts4-cache
 
 # Maven wrapper and build
 back/arinda-backend/.mvn/
+back/arinda-backend/mvn/
 
 ### NetBeans
 /back/arinda-backend/nbproject/private/
@@ -71,8 +72,7 @@ back/arinda-backend/build/
 *.sw?
 
 ### Files sometimes added by IDEA module
-back/arinda-backend/src/main/resources/application.properties
-/src/main/resources/application.properties
+# Note: application.properties is now tracked in git. Secrets are externalized to environment variables.
 
 ### back/.idea/.gitignore entries (shelf and workspace)
 # These are covered by .idea/ above but left here for clarity
