@@ -30,6 +30,7 @@ public class CloudinaryService {
                 file.getBytes(),
                 ObjectUtils.asMap(
                         "folder", folder,
+                        "upload_preset", "ml_default",
                         "resource_type", "auto"));
         return uploadResult.get("secure_url").toString();
     }
